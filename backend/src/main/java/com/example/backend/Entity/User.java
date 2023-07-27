@@ -23,21 +23,12 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String phone;
     private String password;
-    @Column(nullable = false)
-    private String firstName;
-    @Column(nullable = false)
-    private String lastName;
-    @Column(nullable = false)
-    private int age;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    public User(String phone, String password, String firstName, String lastName, int age, List<Role> roles) {
+    public User(String phone, String password, List<Role> roles) {
         this.phone = phone;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
         this.roles = roles;
     }
 

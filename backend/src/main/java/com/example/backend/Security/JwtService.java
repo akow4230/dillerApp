@@ -43,7 +43,7 @@ public class JwtService {
         return jwt;
     }
 
-    private Key getSigningKey() {
+    public Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode("333aae7133c19eda8f7f61ce07e64281c295df67681b1ed47c9c270a488f94d0");
         return Keys.hmacShaKeyFor(keyBytes);
     }
