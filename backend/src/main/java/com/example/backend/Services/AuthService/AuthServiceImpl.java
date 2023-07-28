@@ -5,6 +5,7 @@ import com.example.backend.Entity.Role;
 import com.example.backend.Entity.User;
 import com.example.backend.Enums.UserRoles;
 import com.example.backend.Payload.req.LoginReq;
+import com.example.backend.Payload.req.ReqLogin;
 import com.example.backend.Repository.RoleRepo;
 import com.example.backend.Repository.UserRepo;
 import com.example.backend.Security.JwtService;
@@ -37,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
 
     @SneakyThrows
     @Override
-    public HttpEntity<?> register(LoginReq loginReq) {
+    public HttpEntity<?> register(ReqLogin loginReq) {
         List<Role> roles = new ArrayList<>();
         List<Role> roleUser = roleRepo.findAllByName(UserRoles.ROLE_USER.toString());
         if (roleUser == null) {
@@ -51,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
         return ResponseEntity.ok(token);
     }
 
-    private String getToken(LoginReq loginReq) throws Exception {
+    private String getToken(ReqLogin loginReq) throws Exception {
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginReq.getPhone());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 userDetails,
