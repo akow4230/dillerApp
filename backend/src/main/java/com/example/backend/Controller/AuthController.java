@@ -1,6 +1,6 @@
 package com.example.backend.Controller;
 import com.example.backend.DTO.UserDTO;
-import com.example.backend.Payload.req.LoginReq;
+import com.example.backend.Payload.req.ReqLogin;
 import com.example.backend.Security.JwtService;
 import com.example.backend.Services.AuthService.AuthService;
 import lombok.RequiredArgsConstructor;

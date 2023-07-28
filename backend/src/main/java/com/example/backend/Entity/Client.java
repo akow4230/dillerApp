@@ -15,6 +15,7 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     @OneToOne
     private Territory territory;
     private String name;
@@ -24,7 +25,8 @@ public class Client {
     private String companyName;
     private double longitude;
     private double latitude;
+
     @OneToOne
-    private CustomerCategory category
+    private CustomerCategory category;
 
 }
