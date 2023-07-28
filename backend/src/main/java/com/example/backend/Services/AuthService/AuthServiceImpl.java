@@ -35,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserDetailsService userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     @SneakyThrows
     @Override
@@ -46,10 +47,9 @@ public class AuthServiceImpl implements AuthService {
         } else {
             roles.add(roleUser.get(0));
         }
-        User user = new User(loginReq.getPhone(), loginReq.getPassword(), roles);
+        User user = new User(loginReq.getPhone(), passwordEncoder.encode(loginReq.getPassword()), roles);
         usersRepository.save(user);
-        String token = getToken(loginReq);
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(null);
     }
 
     private String getToken(ReqLogin loginReq) throws Exception {

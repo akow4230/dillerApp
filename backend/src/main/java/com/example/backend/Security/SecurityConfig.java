@@ -24,7 +24,6 @@ public class SecurityConfig {
     private final UserRepo userRepo;
     private final MyFilter myFilter;
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
