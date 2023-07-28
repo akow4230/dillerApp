@@ -1,6 +1,6 @@
 package com.example.backend.Controller;
 import com.example.backend.DTO.UserDTO;
-import com.example.backend.Payload.LoginReq;
+import com.example.backend.Payload.req.LoginReq;
 import com.example.backend.Security.JwtService;
 import com.example.backend.Services.AuthService.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public HttpEntity<?> register(@RequestBody LoginReq dto) {
+    public HttpEntity<?> register(@RequestBody ReqLogin dto) {
         return service.register(dto);
     }
 
@@ -35,5 +35,4 @@ public class AuthController {
         return service.decode(token);
     }
 
-    ;;
 }

@@ -4,7 +4,7 @@ import com.example.backend.DTO.UserDTO;
 import com.example.backend.Entity.Role;
 import com.example.backend.Entity.User;
 import com.example.backend.Enums.UserRoles;
-import com.example.backend.Payload.LoginReq;
+import com.example.backend.Payload.req.LoginReq;
 import com.example.backend.Repository.RoleRepo;
 import com.example.backend.Repository.UserRepo;
 import com.example.backend.Security.JwtService;
