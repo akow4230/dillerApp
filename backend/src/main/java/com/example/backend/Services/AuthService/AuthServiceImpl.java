@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
         List<Role> roles = new ArrayList<>();
         List<Role> roleUser = roleRepo.findAllByName(UserRoles.ROLE_USER.toString());
         if (roleUser == null) {
-            roles.add(roleRepo.save(new Role(1, UserRoles.ROLE_USER.toString())));
+            roles.add(roleRepo.save(new Role(1, UserRoles.ROLE_USER)));
         } else {
             roles.add(roleUser.get(0));
         }
