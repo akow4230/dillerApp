@@ -5,11 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginReq {
-    private String username;
+    private String phone;
     private String password;
     private String confirmationPassword;
 }

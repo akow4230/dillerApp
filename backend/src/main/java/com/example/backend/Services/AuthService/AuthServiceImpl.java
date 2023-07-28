@@ -3,6 +3,7 @@ package com.example.backend.Services.AuthService;
 import com.example.backend.DTO.UserDTO;
 import com.example.backend.Entity.Role;
 import com.example.backend.Entity.User;
+import com.example.backend.Enums.UserRoles;
 import com.example.backend.Payload.LoginReq;
 import com.example.backend.Repository.RoleRepo;
 import com.example.backend.Repository.UserRepo;
@@ -31,33 +32,30 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepo roleRepo;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final AuthenticationManager authenticationManager;
 
     @SneakyThrows
     @Override
-    public HttpEntity<?> register(LoginReq dto) {
+    public HttpEntity<?> register(LoginReq loginReq) {
         List<Role> roles = new ArrayList<>();
-        List<Role> roleUser = roleRepo.findAllByName("ROLE_USER");
+        List<Role> roleUser = roleRepo.findAllByName(UserRoles.ROLE_USER.toString());
         if (roleUser == null) {
-            roles.add(roleRepo.save(new Role(0, "ROLE_USER")));
+            roles.add(roleRepo.save(new Role(1, UserRoles.ROLE_USER.toString())));
         } else {
             roles.add(roleUser.get(0));
         }
-        User user = new User(
-                null,
-                dto.getUsername(),
-                dto.getPassword(),
-                roles
-        );
+        User user = new User(loginReq.getPhone(), loginReq.getPassword(), roles);
         usersRepository.save(user);
+        String token = getToken(loginReq);
+        return ResponseEntity.ok(token);
+    }
 
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getUsername());
+    private String getToken(LoginReq loginReq) throws Exception {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginReq.getPhone());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 userDetails,
-                dto.getPassword(),
+                loginReq.getPassword(),
                 userDetails.getAuthorities()
         );
 
@@ -70,24 +68,21 @@ public class AuthServiceImpl implements AuthService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(jwtService.getSigningKey())
                 .compact();
-        return ResponseEntity.ok(token);
+        return token;
     }
 
     @Override
-    public HttpEntity<?> login(UserDTO dto) {
+    public HttpEntity<?> login(UserDTO userDTO) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getPhone(), userDTO.getPassword()));
         } catch (BadCredentialsException e) {
             return ResponseEntity.ok("BAD_CREDENTIALS");
         }
-        ;
-        User users = usersRepository.findByPhone(dto.getUsername()).orElseThrow(() -> new RuntimeException("Cannot find User With Id:" + dto.getUsername()));
+        User users = usersRepository.findByPhone(userDTO.getPhone()).orElseThrow(() -> new RuntimeException("Cannot find User With Phone:" + userDTO.getPhone()));
         List<Role> roles = roleRepo.findAll();
-        String access_token = jwtService.generateJwtToken(users);
-        String refresh_token = jwtService.generateJwtRefreshToken(users);
         Map<String, Object> map = new HashMap<>();
-        map.put("access_token", access_token);
-        map.put("refresh_token", refresh_token);
+        map.put("access_token", jwtService.generateJwtToken(users));
+        map.put("refresh_token", jwtService.generateJwtRefreshToken(users));
         map.put("roles", roles);
         return ResponseEntity.ok(map);
     }
