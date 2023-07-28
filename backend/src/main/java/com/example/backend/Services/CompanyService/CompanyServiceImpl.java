@@ -15,9 +15,7 @@ public class CompanyServiceImpl implements CompanyService{
     private final CompanyRepo companyRepo;
     @Override
     public HttpEntity<?> getInfo() {
-        System.out.println("Heelo");
         List<DashboardProjection> dashboardInfo = companyRepo.getDashboardInfo();
-        System.out.println(dashboardInfo);
         return ResponseEntity.ok(dashboardInfo);
     }
 }
