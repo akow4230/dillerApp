@@ -1,8 +1,7 @@
 package com.example.backend.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.example.backend.Enums.UserRoles;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +14,13 @@ import org.springframework.security.core.GrantedAuthority;
 public class Role implements GrantedAuthority {
     @Id
     private int id;
+
     @Column(unique = true, nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private UserRoles name;
 
     @Override
     public String getAuthority() {
-        return name;
+        return name.name();
     }
 }

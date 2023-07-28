@@ -5,7 +5,6 @@ import com.example.backend.Entity.Role;
 import com.example.backend.Entity.User;
 import com.example.backend.Enums.UserRoles;
 import com.example.backend.Payload.req.ReqLogin;
-import com.example.backend.Payload.req.ReqLogin;
 import com.example.backend.Repository.RoleRepo;
 import com.example.backend.Repository.UserRepo;
 import com.example.backend.Security.JwtService;
@@ -20,7 +19,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -43,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
         List<Role> roles = new ArrayList<>();
         List<Role> roleUser = roleRepo.findAllByName(UserRoles.ROLE_USER.toString());
         if (roleUser == null) {
-            roles.add(roleRepo.save(new Role(1, UserRoles.ROLE_USER.toString())));
+            roles.add(roleRepo.save(new Role(1, UserRoles.ROLE_USER)));
         } else {
             roles.add(roleUser.get(0));
         }
