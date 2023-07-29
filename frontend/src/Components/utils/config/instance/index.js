@@ -20,7 +20,7 @@ export default function (url, method, data) {
     }).catch((err) => {
         if (err.response.status === 401) {
             console.log()
-          
+            
             // Returning the inner promise
             return axios({
                 url: `http://localhost:8080/api/v1/auth/refresh?refreshToken=${localStorage.getItem("refresh_token")}`,
