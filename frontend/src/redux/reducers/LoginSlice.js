@@ -36,6 +36,7 @@ export const loginSlice = createSlice({
     }
   }
 });
+
 export const {
   setFormData,
   UserLogIn,
