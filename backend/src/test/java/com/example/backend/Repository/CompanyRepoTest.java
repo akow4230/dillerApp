@@ -27,7 +27,7 @@ class CompanyRepoTest {
                 "BUXORO",
                 "SHIFTACADEMY",
                 save,
-                "123",
+                "+9998901234567",
                 "123",
                 "BUXORO"
         ));

@@ -27,23 +27,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
+                .cors() // Enable CORS configuration
+                .and()
+                .csrf().disable()
                 .authorizeHttpRequests(
-                auth->auth
-                        .requestMatchers("/api/v1/auth/register").permitAll()
-                        .requestMatchers("/api/v1/auth/login").permitAll()
-                        .requestMatchers("/api/v1/auth/student").permitAll()
-                        .anyRequest()
-                        .authenticated()
-        ).addFilterBefore(myFilter, UsernamePasswordAuthenticationFilter.class);
+                        auth -> auth
+                                .requestMatchers("/api/v1/auth/register").permitAll()
+                                .requestMatchers("/api/v1/auth/login").permitAll()
+                                .requestMatchers("/api/v1/auth/student").permitAll()
+                                .anyRequest().authenticated()
+                )
+                .addFilterBefore(myFilter, UsernamePasswordAuthenticationFilter.class); // Add your custom filter before the default Spring Security filter
+
         return http.build();
     }
-
     @Bean
     public UserDetailsService users() {
         return username -> {
-            return userRepo.findByPhone(username).orElseThrow();
+            User user = userRepo.findByPhone(username).orElseThrow();
+            return user;
         };
     }
 
@@ -57,17 +59,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
