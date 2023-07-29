@@ -73,20 +73,26 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public HttpEntity<?> login(UserDTO userDTO) {
+        Optional<User> users = usersRepository.findByPhone(userDTO.getPhone());
+        ResponseEntity<String> Phone_or_password_incorrect = validationUser(userDTO, users);
+        if (Phone_or_password_incorrect != null) return Phone_or_password_incorrect;
+        User userByPhone = users.orElseThrow();
+        List<Role> roles = roleRepo.findAll();
+        Map<String, Object> map = new HashMap<>();
+        map.put("access_token", jwtService.generateJwtToken(userByPhone));
+        if(userDTO.isRememberMe()) map.put("refresh_token", jwtService.generateJwtRefreshToken(userByPhone));
+        map.put("roles", roles);
+        return ResponseEntity.ok(map);
+    }
+
+    private ResponseEntity<String> validationUser(UserDTO userDTO, Optional<User> users) {
+        if(users.isEmpty()) return ResponseEntity.ok("Phone or password incorrect");
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getPhone(), userDTO.getPassword()));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.ok("BAD_CREDENTIALS");
+            return ResponseEntity.ok("Phone or password incorrect");
         }
-        User users = usersRepository.findByPhone(userDTO.getPhone()).orElseThrow(() -> new RuntimeException("Cannot find User With Phone:" + userDTO.getPhone()));
-        List<Role> roles = roleRepo.findAll();
-        Map<String, Object> map = new HashMap<>();
-        map.put("access_token", jwtService.generateJwtToken(users));
-        if(userDTO.isRememberMe()) {
-            map.put("refresh_token", jwtService.generateJwtRefreshToken(users));
-        }
-        map.put("roles", roles);
-        return ResponseEntity.ok(map);
+        return null;
     }
 
     @Override
