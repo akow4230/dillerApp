@@ -44,21 +44,17 @@ public class AutoRun implements CommandLineRunner {
                     .build();
 
             userRepo.save(user);
-            saveUserCompany(user);
+            Company company = Company.builder()
+                    .region("Bukhara")
+                    .company_name("Shift Academy")
+                    .user(user)
+                    .support_phone("+9998901234567")
+                    .email("example@gmail.com")
+                    .address("Dunyo binosi")
+                    .build();
+
+            companyRepo.save(company);
         }
-    }
-
-    private void saveUserCompany(User user) {
-        Company company = Company.builder()
-                .region("Bukhara")
-                .name("Shift Academy")
-                .owner(user)
-                .supportPhone("+9998901234567")
-                .email("example@gmail.com")
-                .address("Dunyo binosi")
-                .build();
-
-        companyRepo.save(company);
     }
 
     private List<Role> saveRoles(List<Role> allRoles, List<Role> savedRoles) {

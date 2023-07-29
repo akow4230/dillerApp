@@ -16,6 +16,6 @@ public class CompanyServiceImpl implements CompanyService{
     @Override
     public HttpEntity<?> getInfo() {
         List<DashboardProjection> dashboardInfo = companyRepo.getDashboardInfo();
-        return ResponseEntity.ok(dashboardInfo);
+        return ResponseEntity.ok(dashboardInfo.get(0));
     }
 }
