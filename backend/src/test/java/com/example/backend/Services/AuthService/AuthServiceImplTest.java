@@ -1,11 +1,9 @@
 package com.example.backend.Services.AuthService;
 
-import com.example.backend.DTO.UserDTO;
 import com.example.backend.Repository.RoleRepo;
 import com.example.backend.Repository.UserRepo;
 import com.example.backend.Security.JwtService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
