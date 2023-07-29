@@ -50,7 +50,7 @@ public class AutoRun implements CommandLineRunner {
                     .owner(user)
                     .supportPhone("+9998901234567")
                     .email("example@gmail.com")
-                    .address("Dunyo binosi")
+                    .territory(new ArrayList<>())
                     .build();
 
             companyRepo.save(company);

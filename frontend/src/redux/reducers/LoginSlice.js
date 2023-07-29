@@ -20,7 +20,8 @@ export const loginSlice = createSlice({
     },
     UserLogIn(state, action) {
       console.log(action.payload);
-      state.formData = action.payload;
+      state.formData = action.payload.formData;
+      state.navigation = action.payload.navigate;
     },
     UserSuccess(state, action) {
       state.isLoading = false;

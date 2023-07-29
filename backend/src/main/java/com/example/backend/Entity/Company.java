@@ -6,7 +6,9 @@ package com.example.backend.Entity;
     import lombok.Data;
     import lombok.NoArgsConstructor;
 
-    @AllArgsConstructor
+    import java.util.List;
+
+@AllArgsConstructor
     @NoArgsConstructor
     @Data
     @Entity
@@ -22,5 +24,6 @@ package com.example.backend.Entity;
         private User owner;
         private String supportPhone;
         private String email;
-        private String address;
+        @OneToMany
+        private List<Territory> territory;
     }

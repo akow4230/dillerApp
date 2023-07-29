@@ -7,10 +7,10 @@ function* workLoginUser(action) {
   try {
     yield put(signUserStart());
     const response = yield call(() =>
-      axios.post(
-        "http://localhost:8080/api/v1/auth/login",
-        action.payload.formData
-      )
+        axios.post(
+            "http://localhost:8080/api/v1/auth/login",
+            action.payload.formData
+        )
     );
     console.log(response.data);
     if (response.data.refresh_token) {
@@ -20,6 +20,8 @@ function* workLoginUser(action) {
       localStorage.setItem("access_token", response.data.access_token);
     }
     yield put(UserSuccess());
+
+    // Call the navigate function from the payload directly
     if (response.data.roles[0].name === "ROLE_SUPER_ADMIN") {
       action.payload.navigate("/dashboard");
     }
@@ -27,6 +29,7 @@ function* workLoginUser(action) {
     yield put(UserFailure(error.data));
   }
 }
+
 export default function* loginSaga() {
   yield takeLatest(UserLogIn.type, workLoginUser);
 }
