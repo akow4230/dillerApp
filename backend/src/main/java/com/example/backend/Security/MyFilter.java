@@ -29,7 +29,7 @@ public class MyFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
-        System.out.println(token);
+//        System.out.println(token);
         if (token != null) {
             String subject = jwtService.extractSubjectFromJwt(token);
             UserDetails userDetails = userRepo.findById(UUID.fromString(subject)).orElseThrow();
