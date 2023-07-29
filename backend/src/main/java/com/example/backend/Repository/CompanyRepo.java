@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CompanyRepo extends JpaRepository<Company, Integer> {
-    @Query(value = "SELECT support_phone as support_phone, current_timestamp as current_date_and_time FROM company", nativeQuery = true)
+    @Query(value = "SELECT support_phone as support_phone, now() as current_date_and_time FROM company", nativeQuery = true)
     List<DashboardProjection> getDashboardInfo();
 }
