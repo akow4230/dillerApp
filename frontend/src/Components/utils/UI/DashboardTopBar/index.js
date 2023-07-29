@@ -6,7 +6,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-function Index(props) {
+function Index({data}) {
+    console.log(data)
     const [userBox, setUserBox] = useState(false)
     return (
         <div className={"dashboardTopBar"}>
@@ -65,7 +66,7 @@ function Index(props) {
                     justifyContent: "center",
                     background: "#219ebc"
                 }}>
-                    <b style={{fontSize: 20, color: "white"}}><i className="fa-solid fa-calendar-days"></i> </b>
+                    <b style={{fontSize: 20, color: "white"}}><i className="fa-solid fa-calendar-days"><p>{data.currentDateAndTime[2]}-{data.currentDateAndTime[1]}-{data.currentDateAndTime[0]}</p></i> </b>
                 </div>
                 <div style={{
                     marginLeft: 15,
@@ -75,7 +76,7 @@ function Index(props) {
                     alignItems: "center",
                     justifyContent: "center"
                 }}>
-                    <b style={{fontSize: 20, color: "white"}}>+998 99 994 55 75 </b>
+                    <b style={{fontSize: 20, color: "white"}}>{data.supportPhone} </b>
                 </div>
                 <div style={{
                     cursor: "pointer",
@@ -115,7 +116,7 @@ function Index(props) {
                             height: 40,
                             display: "flex",
                             alignItems: "center",
-                            paddingLeft:10
+                            paddingLeft: 10
                         }}>
                             <b style={{color: "white"}}><i className="fa-solid fa-key"></i> Change login and
                                 password</b>
@@ -126,7 +127,7 @@ function Index(props) {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "left",
-                            paddingLeft:10
+                            paddingLeft: 10
                         }}>
                             <b style={{color: "white"}}><i className="fa-solid fa-calculator"></i> Billing</b>
                         </div>
@@ -136,7 +137,7 @@ function Index(props) {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "left",
-                            paddingLeft:10
+                            paddingLeft: 10
                         }}>
                             <b style={{color: "white"}}><i className="fa-solid fa-power-off"></i> Exit</b>
                         </div>

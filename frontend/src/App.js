@@ -1,8 +1,7 @@
 import Login from "./Components/Login";
 import {Route, Routes} from "react-router-dom";
 import Dashboard from "./Components/Dashboard";
-import {useEffect} from "react";
-import axios from "axios";
+
 
 
 function App() {
