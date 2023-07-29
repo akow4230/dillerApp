@@ -15,7 +15,7 @@ export default function (url, method, data) {
         if (err.response.status === 401) {
             axios({
                 url: `http://localhost:8080/api/v1/auth/refresh?refreshToken=${localStorage.getItem("refresh_token")}`,
-                method: "GET"
+                method: "POST"
             }).then((res) => {
                 localStorage.setItem("access_token", res.data)
                 axios({
