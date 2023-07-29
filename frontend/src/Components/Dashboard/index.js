@@ -10,7 +10,6 @@ function Index(props) {
 
     async function getDashboardData() {
         dispatch({type: 'dashboard/getDashboardData'})
-        console.log(data)
     }
 
     useEffect(() => {
@@ -19,7 +18,7 @@ function Index(props) {
     return (
         <div className={"dashboard"}>
             <div className="top-bar">
-                <DashboardTopBar/>
+                <DashboardTopBar data={data.data}/>
             </div>
             <div className="bottom-bar">
                 <div className="left-menu">
