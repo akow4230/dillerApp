@@ -37,6 +37,7 @@ class CompanyRepoTest {
     @Test
     void itShouldGetDashboardInfo() {
         DashboardProjection dashboardProjection = underTest.getDashboardInfo().get(0);
+        System.out.println(underTest.getDashboardInfo());
         Assertions.assertEquals(company.getSupportPhone(), dashboardProjection.getSupportPhone());
     }
 }

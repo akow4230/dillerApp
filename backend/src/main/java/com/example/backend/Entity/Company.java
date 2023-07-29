@@ -2,6 +2,7 @@ package com.example.backend.Entity;
 
     import jakarta.persistence.*;
     import lombok.AllArgsConstructor;
+    import lombok.Builder;
     import lombok.Data;
     import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ package com.example.backend.Entity;
     @NoArgsConstructor
     @Data
     @Entity
+    @Builder
     @Table(name = "company")
     public class Company {
         @Id
