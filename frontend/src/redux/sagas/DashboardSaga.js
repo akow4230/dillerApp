@@ -1,6 +1,7 @@
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
-import { getDashboardDataStart, getDashboardFailure, getDashboardSuccess, navigateTo } from "../reducers/DashboardSlice";
+import {all, call, fork, put, takeLatest} from 'redux-saga/effects';
+import {getDashboardDataStart, getDashboardFailure, getDashboardSuccess} from "../reducers/DashboardSlice";
 import DashboardService from "../services/DashboardService";
+import {push} from "connected-react-router";
 
 function* getDashboardData() {
     try {
@@ -8,11 +9,8 @@ function* getDashboardData() {
         const response = yield call(DashboardService.getMainData);
         yield put(getDashboardSuccess(response))
     } catch (error) {
-        yield put(getDashboardFailure(error.response.data));
-        if (error.response.status === 401) {
-            // Dispatch the navigation action with the path to navigate
-            yield put(navigateTo('/login'));
-        }
+        yield put(getDashboardFailure(error.response.data))
+        yield put(push('/'))
     }
 }
 
