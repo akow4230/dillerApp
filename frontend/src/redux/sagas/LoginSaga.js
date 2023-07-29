@@ -1,12 +1,7 @@
-import { call, put, takeLatest } from "redux-saga/effects";
-import {
-  UserLogIn,
-  UserFailure,
-  UserSuccess,
-  signUserStart
-} from "../reducers/LoginSlice";
+import {call, put, takeLatest} from "redux-saga/effects";
+import {signUserStart, UserFailure, UserLogIn, UserSuccess} from "../reducers/LoginSlice";
 import axios from "axios";
-// import { push } from "connected-react-router";
+import { push } from "connected-react-router";
 
 function* workLoginUser(action) {
   try {

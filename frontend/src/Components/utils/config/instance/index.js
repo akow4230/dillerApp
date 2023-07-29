@@ -10,7 +10,10 @@ export default function (url, method, data) {
             "Authorization": token
         }
     }).then((res) => {
-        return res.data
+        return {
+            error: false,
+            data: res.data
+        }
     }).catch((err) => {
         if (err.response.status === 401) {
             axios({
@@ -19,22 +22,39 @@ export default function (url, method, data) {
             }).then((res) => {
                 localStorage.setItem("access_token", res.data)
                 axios({
-                    url: "http://localhost:8080/" + url,
+                    url: "http://localhost:8080" + url,
                     method: method,
-                    data: data
+                    data: data,
+                    headers: {
+                        "Authorization": localStorage.getItem("access_token")
+                    }
                 }).then((res) => {
-                    return res.data;
+                    return {
+                        error: false,
+                        data: res.data
+                    }
                 }).catch((err) => {
-                    console.error(err)
-                    return err;
+                    return {
+                        error: true,
+                        data: err.response?.data
+                    }
                 })
             }).catch((err) => {
-                console.error(err)
-                return err;
+
+                return {
+                    error: true,
+                    data: err.response.data
+                }
             })
         } else {
-            console.error(err)
-            return err;
+            return {
+                error: true,
+                data: err.response.data
+            }
+        }
+        return {
+            error: true,
+            data: err.response?.data
         }
     })
 }

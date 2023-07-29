@@ -6,10 +6,11 @@ import {useSelector, useDispatch} from 'react-redux';
 
 function Index(props) {
     const dispatch = useDispatch();
-    const data = useSelector((state) => state.dashboard);
+    const response = useSelector((state) => state.dashboard);
 
     async function getDashboardData() {
         dispatch({type: 'dashboard/getDashboardData'})
+        console.log(response)
     }
 
     useEffect(() => {
@@ -18,7 +19,7 @@ function Index(props) {
     return (
         <div className={"dashboard"}>
             <div className="top-bar">
-                <DashboardTopBar data={data.data}/>
+                <DashboardTopBar data={response?.data}/>
             </div>
             <div className="bottom-bar">
                 <div className="left-menu">

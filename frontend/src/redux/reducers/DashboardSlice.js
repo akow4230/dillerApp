@@ -13,12 +13,18 @@ export const dashboardSlice = createSlice({
             state.isLoading = true;
         },
         getDashboardSuccess: (state, action) => {
+            console.log(action.payload.data)
             state.isLoading = false;
-            state.data = action.payload
+            if (!action.payload.error) {
+                state.data = action.payload.data
+            }
         },
         getDashboardFailure: (state, action) => {
             state.isLoading = false;
             state.error = action.payload
+            if (action.payload.error) {
+                state.data = action.payload.data
+            }
         }
     }
 })

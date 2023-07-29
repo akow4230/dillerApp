@@ -66,7 +66,7 @@ function Index({data}) {
                     justifyContent: "center",
                     background: "#219ebc"
                 }}>
-                    <b style={{fontSize: "16pt", gap:"10px", color: "white", display:"flex", justifyContent:"center", alignItems:"center"}}><i className="fa-solid fa-calendar-days"></i><p style={{marginTop:"20px"}}>{data.currentDateAndTime?(data.currentDateAndTime[2]+"-"+data.currentDateAndTime[1]+"-"+data.currentDateAndTime[0]):""}</p> </b>
+                    <b style={{fontSize: "16pt", gap:"10px", color: "white", display:"flex", justifyContent:"center", alignItems:"center"}}><i className="fa-solid fa-calendar-days"></i><p style={{marginTop:"20px"}}>{data?.currentDateAndTime?(data?.currentDateAndTime[2]+"-"+data?.currentDateAndTime[1]+"-"+data?.currentDateAndTime[0]):""}</p> </b>
 
                 </div>
                 <div style={{
@@ -77,7 +77,7 @@ function Index({data}) {
                     alignItems: "center",
                     justifyContent: "center"
                 }}>
-                    <b style={{fontSize: 20, color: "white"}}>{data.supportPhone} </b>
+                    <b style={{fontSize: 20, color: "white"}}>{data?.supportPhone} </b>
                 </div>
                 <div style={{
                     cursor: "pointer",
