@@ -8,10 +8,12 @@ import com.example.backend.Payload.req.ReqLogin;
 import com.example.backend.Repository.RoleRepo;
 import com.example.backend.Repository.UserRepo;
 import com.example.backend.Security.JwtService;
+import com.example.backend.exceptions.InvalidCredentialsException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.*;
 
@@ -71,29 +74,35 @@ public class AuthServiceImpl implements AuthService {
         return token;
     }
 
+
+
     @Override
     public HttpEntity<?> login(UserDTO userDTO) {
         Optional<User> users = usersRepository.findByPhone(userDTO.getPhone());
-        ResponseEntity<String> Phone_or_password_incorrect = validationUser(userDTO, users);
-        if (Phone_or_password_incorrect != null) return Phone_or_password_incorrect;
+
+        if (users.isEmpty())  throw new InvalidCredentialsException();
+
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getPhone(), userDTO.getPassword()));
+        } catch (BadCredentialsException e) {
+            throw new InvalidCredentialsException();
+        }
+
         User userByPhone = users.orElseThrow();
+
         List<Role> roles = roleRepo.findAll();
         Map<String, Object> map = new HashMap<>();
         map.put("access_token", jwtService.generateJwtToken(userByPhone));
-        if(userDTO.isRememberMe()) map.put("refresh_token", jwtService.generateJwtRefreshToken(userByPhone));
+
+        if (userDTO.isRememberMe()) {
+            map.put("refresh_token", jwtService.generateJwtRefreshToken(userByPhone));
+        }
+
         map.put("roles", roles);
         return ResponseEntity.ok(map);
     }
 
-    private ResponseEntity<String> validationUser(UserDTO userDTO, Optional<User> users) {
-        if(users.isEmpty()) return ResponseEntity.ok("Phone or password incorrect");
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getPhone(), userDTO.getPassword()));
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.ok("Phone or password incorrect");
-        }
-        return null;
-    }
 
     @Override
     public HttpEntity<?> refreshToken(String refreshToken) {
