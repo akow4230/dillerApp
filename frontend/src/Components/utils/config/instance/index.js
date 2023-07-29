@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default function myAxiosFunction(url, method, data) {
+export default function instance(url, method, data) {
     const token = localStorage.getItem("access_token");
 
     const instance = axios.create({
