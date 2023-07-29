@@ -1,7 +1,9 @@
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 export default function (url, method, data) {
     let token = localStorage.getItem("access_token");
+    const navigate = useNavigate();
     return axios({
         url: "http://localhost:8080" + url,
         method: method,
@@ -18,7 +20,11 @@ export default function (url, method, data) {
         }
     }).catch((err) => {
         if (err.response.status === 401) {
+            console.log()
             // Returning the inner promise
+            if (localStorage.getItem("refresh_token")===null){
+                navigate("/")
+            }
             return axios({
                 url: `http://localhost:8080/api/v1/auth/refresh?refreshToken=${localStorage.getItem("refresh_token")}`,
                 method: "POST"
