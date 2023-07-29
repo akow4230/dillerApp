@@ -1,0 +1,39 @@
+.Login-box {
+    position: relative;
+    margin: 70px auto;
+    border-radius: 10px;
+    max-width: 350px;
+    min-height: 460px;
+    box-shadow: 0px 0px 39px -3px rgba(34, 60, 80, 0.2);
+}
+
+.shiftLogo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute;
+    top: -50px;
+    left: 125px;
+}
+
+.information {
+    padding: 10px;
+    border: 1px solid greenyellow;
+    font-size: 15px;
+    text-align: start;
+    background-color: rgb(197, 244, 214);
+}
+
+.body {
+    padding: 10px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 70px;
+}
+
+.Support-service {
+    text-align: start;
+    font-size: small;
+    color: gray;
+}
