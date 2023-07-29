@@ -21,7 +21,7 @@ public class JwtService {
         UUID id = user.getId();
         Map<String, Object> claims = new HashMap<>();
         String jwt = Jwts.builder()
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 120))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60*2))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setSubject(id.toString())
                 .addClaims(claims)

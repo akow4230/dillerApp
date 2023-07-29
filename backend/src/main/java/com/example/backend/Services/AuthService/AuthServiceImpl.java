@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -81,7 +82,9 @@ public class AuthServiceImpl implements AuthService {
         List<Role> roles = roleRepo.findAll();
         Map<String, Object> map = new HashMap<>();
         map.put("access_token", jwtService.generateJwtToken(users));
-        map.put("refresh_token", jwtService.generateJwtRefreshToken(users));
+        if(userDTO.isRememberMe()) {
+            map.put("refresh_token", jwtService.generateJwtRefreshToken(users));
+        }
         map.put("roles", roles);
         return ResponseEntity.ok(map);
     }
