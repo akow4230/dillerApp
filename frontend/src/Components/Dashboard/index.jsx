@@ -4,15 +4,16 @@ import './style.css';
 import DashboardTopBar from "../utils/UI/DashboardTopBar";
 import DashboardLeftMenu from "../utils/UI/DashboardLeftMenu";
 import { useSelector, useDispatch } from 'react-redux';
-import { navigateTo } from "../../redux/reducers/DashboardSlice"; // Import the navigateTo action creator
+import { navigateTo } from "../../redux/reducers/DashboardSlice";
+import {useNavigate} from "react-router-dom"; // Import the navigateTo action creator
 
 function Index(props) {
     const dispatch = useDispatch();
     const response = useSelector((state) => state.dashboard);
-
+    const navigate = useNavigate();
     async function getDashboardData() {
         // Call the getDashboardData action and return the promise
-        return dispatch({ type: 'dashboard/getDashboardData' });
+        return dispatch({ type: 'dashboard/getDashboardData', navigate });
     }
 
     useEffect(() => {
