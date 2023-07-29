@@ -46,9 +46,9 @@ public class AutoRun implements CommandLineRunner {
             userRepo.save(user);
             Company company = Company.builder()
                     .region("Bukhara")
-                    .company_name("Shift Academy")
-                    .user(user)
-                    .support_phone("+9998901234567")
+                    .name("Shift Academy")
+                    .owner(user)
+                    .supportPhone("+9998901234567")
                     .email("example@gmail.com")
                     .address("Dunyo binosi")
                     .build();

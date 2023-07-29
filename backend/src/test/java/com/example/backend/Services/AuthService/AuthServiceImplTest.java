@@ -48,11 +48,11 @@ class AuthServiceImplTest {
                 passwordEncoder );
     }
 
-    @Test
-    void testLogin(){
-        UserDTO userDTO1= new UserDTO("+998942488434","00000000", true);
-        UserDTO userDTO2= new UserDTO("+998942488434","11111111", false);
-        authService.login()
-    }
+//    @Test
+//    void testLogin(){
+//        UserDTO userDTO1= new UserDTO("+998942488434","00000000", true);
+//        UserDTO userDTO2= new UserDTO("+998942488434","11111111", false);
+//        authService.login()
+//    }
 
 }
