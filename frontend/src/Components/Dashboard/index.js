@@ -1,9 +1,21 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './style.css'
 import DashboardTopBar from "../utils/UI/DashboardTopBar";
 import DashboardLeftMenu from "../utils/UI/DashboardLeftMenu";
+import {useSelector, useDispatch} from 'react-redux';
 
 function Index(props) {
+    const dispatch = useDispatch();
+    const data = useSelector((state) => state.dashboard);
+
+    async function getDashboardData() {
+        dispatch({type: 'dashboard/getDashboardData'})
+        console.log(data)
+    }
+
+    useEffect(() => {
+        getDashboardData()
+    }, [])
     return (
         <div className={"dashboard"}>
             <div className="top-bar">

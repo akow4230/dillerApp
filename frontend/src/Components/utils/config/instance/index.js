@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default function (url, method, data) {
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem("access_token");
     return axios({
         url: "http://localhost:8080" + url,
         method: method,
@@ -17,7 +17,7 @@ export default function (url, method, data) {
                 url: `http://localhost:8080/api/v1/auth/refresh?refreshToken=${localStorage.getItem("refresh_token")}`,
                 method: "GET"
             }).then((res) => {
-                localStorage.setItem("token", res.data)
+                localStorage.setItem("access_token", res.data)
                 axios({
                     url: "http://localhost:8080/" + url,
                     method: method,
@@ -26,10 +26,15 @@ export default function (url, method, data) {
                     return res.data;
                 }).catch((err) => {
                     console.error(err)
+                    return err;
                 })
             }).catch((err) => {
                 console.error(err)
+                return err;
             })
+        } else {
+            console.error(err)
+            return err;
         }
     })
 }

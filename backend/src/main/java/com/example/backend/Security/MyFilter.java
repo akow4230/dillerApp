@@ -25,24 +25,25 @@ public class MyFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserRepo userRepo;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
-
-        if(token!=null){
+        System.out.println(token);
+        if (token != null) {
             String subject = jwtService.extractSubjectFromJwt(token);
-            UserDetails userDetails= userRepo.findById(UUID.fromString(subject)).orElseThrow();
+            UserDetails userDetails = userRepo.findById(UUID.fromString(subject)).orElseThrow();
             System.out.println(userDetails.getUsername());
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities()
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
 
-            );
+                    );
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         }
-       filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 }

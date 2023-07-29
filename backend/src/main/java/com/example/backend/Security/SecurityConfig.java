@@ -43,8 +43,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService users() {
         return username -> {
-            User user = userRepo.findByPhone(username).orElseThrow();
-            return user;
+            return userRepo.findByPhone(username).orElseThrow();
         };
     }
 
