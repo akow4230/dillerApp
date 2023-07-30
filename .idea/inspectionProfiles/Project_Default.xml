@@ -18,6 +18,7 @@
       <option name="customHeaders">
         <set>
           <option value="token" />
+          <option value="access_token" />
         </set>
       </option>
     </inspection_tool>

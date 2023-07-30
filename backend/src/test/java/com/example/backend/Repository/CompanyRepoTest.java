@@ -18,26 +18,27 @@ class CompanyRepoTest {
     @Autowired
     private UserRepo userRepo;
     private Company company;
+    private User user;
 
     @BeforeEach
     void setUp() {
-        User save = userRepo.save(new User("+9989051089066", "123", null));
+        user = userRepo.save(new User("+9989051089066", "123", null));
         company = underTest.save(new Company(
                 1,
                 "BUXORO",
                 "SHIFTACADEMY",
-                save,
+                user,
                 "+9998901234567",
                 "123",
-                "BUXORO"
+                null
         ));
 
     }
 
     @Test
     void itShouldGetDashboardInfo() {
-        DashboardProjection dashboardProjection = underTest.getDashboardInfo().get(0);
-        System.out.println(underTest.getDashboardInfo());
+        DashboardProjection dashboardProjection = underTest.getDashboardInfo(user.getId());
+        System.out.println(underTest.getDashboardInfo(user.getId()));
         Assertions.assertEquals(company.getSupportPhone(), dashboardProjection.getSupportPhone());
     }
 }

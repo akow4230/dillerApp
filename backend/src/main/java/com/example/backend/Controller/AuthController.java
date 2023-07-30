@@ -5,6 +5,7 @@ import com.example.backend.Security.JwtService;
 import com.example.backend.Services.AuthService.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,7 +33,7 @@ public class AuthController {
 
     @GetMapping("/decode")
     public HttpEntity<?> decode(@RequestHeader("token") String token) {
-        return service.decode(token);
+        return ResponseEntity.ok(service.decode(token));
     }
 
 }

@@ -13,7 +13,6 @@ import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,7 +22,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.*;
 
@@ -77,22 +75,17 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public HttpEntity<?> login(UserDTO userDTO) {
+    public HttpEntity<Map> login(UserDTO userDTO) {
         Optional<User> users = usersRepository.findByPhone(userDTO.getPhone());
-
         if (users.isEmpty())  throw new InvalidCredentialsException();
-
-
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getPhone(), userDTO.getPassword()));
         } catch (BadCredentialsException e) {
             throw new InvalidCredentialsException();
         }
-
         User userByPhone = users.orElseThrow();
         Map<String, Object> map = new HashMap<>();
         map.put("access_token", jwtService.generateJwtToken(userByPhone));
-
         if (userDTO.isRememberMe()) {
             map.put("refresh_token", jwtService.generateJwtRefreshToken(userByPhone));
         }
@@ -111,13 +104,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public HttpEntity<?> decode(String token) {
+    public User decode(String token) {
         boolean isExpired = jwtService.validateToken(token);
         User user = null;
         if (isExpired) {
             String userId = jwtService.extractSubjectFromJwt(token);
             user = usersRepository.findById(UUID.fromString(userId)).orElseThrow(() -> new RuntimeException("Cannot find User With Id:" + userId));
         }
-        return ResponseEntity.ok(user);
+        return user;
     }
 }
