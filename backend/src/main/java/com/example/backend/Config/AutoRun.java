@@ -26,12 +26,12 @@ public class AutoRun implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String adminPhone="123";
-        List<Role> allRoles = roleRepo.findAll();
+        String adminPhone="+998918280598";
+        List<Role> savedRoles=saveRoles();
+        System.out.println(savedRoles);
         Optional<User> userByPhone = userRepo.findByPhone(adminPhone);
-        List<Role> savedRoles=new ArrayList<>();
-        savedRoles = saveRoles(allRoles, savedRoles);
         saveUser(adminPhone, userByPhone, savedRoles);
+        System.out.println();
     }
 
 
@@ -40,9 +40,8 @@ public class AutoRun implements CommandLineRunner {
             User user = User.builder()
                     .phone(adminPhone)
                     .password(passwordEncoder.encode("00000000"))
-                    .roles(savedRoles)
+                    .roles(List.of(roleRepo.findByName(UserRoles.ROLE_SUPER_ADMIN)))
                     .build();
-
             userRepo.save(user);
             Company company = Company.builder()
                     .region("Bukhara")
@@ -57,15 +56,11 @@ public class AutoRun implements CommandLineRunner {
         }
     }
 
-    private List<Role> saveRoles(List<Role> allRoles, List<Role> savedRoles) {
-        if(allRoles.size()==0) {
-            List<Role> tempRoles = new ArrayList<>(List.of(
-                    new Role(1, UserRoles.ROLE_ADMIN),
-                    new Role(1, UserRoles.ROLE_USER),
-                    new Role(1, UserRoles.ROLE_SUPER_ADMIN)
-            ));
-           savedRoles = roleRepo.saveAll(tempRoles);
-        }
-        return savedRoles;
+    private List<Role> saveRoles() {
+        return roleRepo.saveAll(new ArrayList<>(List.of(
+                    new Role(1,UserRoles.ROLE_ADMIN),
+                    new Role(2,UserRoles.ROLE_USER),
+                    new Role(3,UserRoles.ROLE_SUPER_ADMIN))));
     }
+
 }

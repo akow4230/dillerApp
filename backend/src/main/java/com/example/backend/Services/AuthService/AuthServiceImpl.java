@@ -90,16 +90,14 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User userByPhone = users.orElseThrow();
-
-        List<Role> roles = roleRepo.findAll();
         Map<String, Object> map = new HashMap<>();
         map.put("access_token", jwtService.generateJwtToken(userByPhone));
 
         if (userDTO.isRememberMe()) {
             map.put("refresh_token", jwtService.generateJwtRefreshToken(userByPhone));
         }
-
-        map.put("roles", roles);
+        System.out.println(userByPhone.getRoles());
+        map.put("roles", userByPhone.getRoles());
         return ResponseEntity.ok(map);
     }
 
