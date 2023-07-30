@@ -19,9 +19,13 @@ export default function (url, method, data) {
         }
     }).catch((err) => {
         if (err.response.status === 401) {
-            console.log()
-            
-            // Returning the inner promise
+            console.log(localStorage.getItem("refresh_token")===null)
+            if (localStorage.getItem("refresh_token")===null){
+                return {
+                    error: true,
+                    data: err.response.data
+                };
+            }
             return axios({
                 url: `http://localhost:8080/api/v1/auth/refresh?refreshToken=${localStorage.getItem("refresh_token")}`,
                 method: "POST"
