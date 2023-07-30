@@ -13,6 +13,8 @@ function* workLoginUser(action) {
         )
     );
     console.log(response.data);
+    localStorage.removeItem("access_token")
+    localStorage.removeItem("refresh_token")
     if (response.data.refresh_token) {
       localStorage.setItem("access_token", response.data.access_token);
       localStorage.setItem("refresh_token", response.data.refresh_token);
@@ -20,11 +22,12 @@ function* workLoginUser(action) {
       localStorage.setItem("access_token", response.data.access_token);
     }
     yield put(UserSuccess());
+    console.log(response.data.roles[0].name)
 
-    // Call the navigate function from the payload directly
-    if (response.data.roles[0].name === "ROLE_SUPER_ADMIN") {
+    // if (response.data.roles[0].name === "ROLE_SUPER_ADMIN") {
+      console.log("Hello")
       action.payload.navigate("/dashboard");
-    }
+    // }
   } catch (error) {
     yield put(UserFailure(error.data));
   }
