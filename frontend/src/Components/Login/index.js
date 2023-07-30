@@ -1,95 +1,146 @@
-import React from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import shiftLogo from "../images/shiftLogo.jpg";
 import { UserLogIn, setFormData } from "../../redux/reducers/LoginSlice";
 import { useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
+import { useForm, Controller } from "react-hook-form";
+// import PhoneInput from "react-phone-input-2";
+// import "react-phone-input-2/lib/style.css";
+import PhoneInput from "react-phone-number-input";
+import { CgSpinner } from "react-icons/cg";
 
 function Index() {
-  const { formData, isLoading, error } = useSelector(state => state.login);
+  const { formData, isLoading, error } = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleInputChange = e => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
-    dispatch(setFormData({ ...formData, [name]: newValue }));
+  const {
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm();
+  const loginUser = (formData) => {
+    if (formData.phone.startsWith("+998")) {
+      if (formData.phone.length === 13) {
+        if (formData.password.length >= 8) {
+          dispatch(UserLogIn({ formData, navigate }));
+        } else {
+          toast.error(
+            "Password should be at least 8 characters long for secure"
+          );
+        }
+      } else {
+        toast.error("Phone number must be 13 digits like +998 XX XXX XXXX");
+      }
+    } else {
+      toast.error("Please choose Uzbekistan");
+    }
   };
-  function loginUser() {
-    if (formData.phone === "" && formData.password === "") {
-      alert("Please fill all dates");
-      return;
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
     }
-    if (formData.password === "") {
-      alert("Please fill password");
-    }
-    if (formData.phone === "") {
-      alert("Please fill phone");
-    }
-    dispatch(UserLogIn({ formData, navigate }));
-  }
+  }, [error]);
   return (
-    <div className="Father-Login">
-      <div className="Login-box">
+    <div className='Father-Login'>
+      <ToastContainer />
+      <div className='Login-box'>
         <div>
           <img
-            className="shiftLogo"
+            className='shiftLogo'
             src={shiftLogo}
             width={100}
             height={100}
-            alt=""
+            alt=''
           />
         </div>
-        <div className="body">
+        <div className='body'>
           <div>
-            <p className="information">
+            <p className='information'>
               We improve the process-your disturbition
             </p>
           </div>
-          <div>
-            <input
-              value={formData.phone}
-              onChange={handleInputChange}
-              placeholder="Phone Number"
-              name="phone"
-              type="number"
-              required={true}
-              className="form-control my-2"
-            />
-            <input
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Password"
-              name="password"
-              type="password"
-              required={true}
-              className="form-control my-2"
-            />
+          <form onSubmit={handleSubmit(loginUser)}>
             <div>
-              <p className="information">Shift Academy</p>
+              <Controller
+                name='phone'
+                control={control}
+                defaultValue=''
+                rules={{ required: "Phone Number is required" }}
+                render={({ field }) => (
+                  <div className='my-3 '>
+                    <PhoneInput
+                      {...field}
+                      defaultCountry='UZ'
+                      limitMaxLength={true}
+                      placeholder='+998'
+                    />
+                    {errors.phone && (
+                      <p className='error-message'>{errors.phone.message}!</p>
+                    )}
+                  </div>
+                )}
+              />
+
+              <Controller
+                name='password'
+                control={control}
+                defaultValue=''
+                rules={{ required: "Password is required" }}
+                render={({ field }) => (
+                  <div className='my-3'>
+                    <input
+                      {...field}
+                      placeholder='Password'
+                      type='password'
+                      className='form-control my-1'
+                    />
+                    {errors.password && (
+                      <p className='error-message'>
+                        {errors.password.message}!
+                      </p>
+                    )}
+                  </div>
+                )}
+              />
+
+              <div>
+                <p className='information'>Shift Academy</p>
+              </div>
+
+              <div className='d-flex justify-content-start align-items-center my-2'>
+                <label className='ml-2'>
+                  <Controller
+                    name='rememberMe'
+                    control={control}
+                    defaultValue={false}
+                    render={({ field }) => (
+                      <>
+                        <input {...field} type='checkbox' />
+                        Remember me
+                      </>
+                    )}
+                  />
+                </label>
+              </div>
+
+              <button
+                className='w-100 btn btn-lg btn btn-success mt-2'
+                type='submit'
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <CgSpinner className='animate-spin' size={30} />
+                ) : (
+                  "Login"
+                )}
+              </button>
+              <hr />
+              <div className='Support-service'>
+                <p>Support service: +998 94 121-00-41</p>
+              </div>
             </div>
-            <div className="d-flex justify-content-start align-items-center">
-              <label className="ml-2">
-                <input
-                  name="rememberMe"
-                  value={formData.rememberMe}
-                  onChange={handleInputChange}
-                  type="checkbox"
-                />
-                Remember me
-              </label>
-            </div>
-            <button
-              className="w-100 btn btn-lg btn btn-success mt-2"
-              disabled={isLoading}
-              onClick={loginUser}
-              type="submit"
-            >
-              {isLoading ? "Loading..." : "Login"}
-            </button>
-            <hr />
-            <div className="Support-service">
-              <p>Support service: +998 94 121-00-41</p>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

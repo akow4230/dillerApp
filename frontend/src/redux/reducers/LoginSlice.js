@@ -19,13 +19,13 @@ export const loginSlice = createSlice({
       state.formData = action.payload;
     },
     UserLogIn(state, action) {
-      console.log(action.payload);
       state.formData = action.payload.formData;
       state.navigation = action.payload.navigate;
     },
     UserSuccess(state, action) {
       state.isLoading = false;
       state.loggedIn = true;
+      state.error = null;
     },
     UserFailure(state, action) {
       state.error = action.payload;
@@ -33,6 +33,7 @@ export const loginSlice = createSlice({
     },
     signUserStart: state => {
       state.isLoading = true;
+      state.error = null;
     }
   }
 });

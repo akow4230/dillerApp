@@ -2,6 +2,7 @@ import React from "react";
 import Login from "./Components/Login/index";
 import { Route, Routes } from "react-router-dom"; // Removed unused imports
 import "./Components/Login/index.css";
+import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Components/Dashboard/index";
 
 function App() {
