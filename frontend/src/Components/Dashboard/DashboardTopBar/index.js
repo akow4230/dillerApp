@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import './style.css'
-import logo from '../../../images/img.png'
+import logo from '../../images/img.png'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 function Index({data}) {
-    console.log(data)
     const [userBox, setUserBox] = useState(false)
     return (
         <div className={"dashboardTopBar"}>

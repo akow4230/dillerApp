@@ -1,5 +1,4 @@
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
 
 export default function (url, method, data) {
     let token = localStorage.getItem("access_token");
@@ -19,7 +18,6 @@ export default function (url, method, data) {
         }
     }).catch((err) => {
         if (err.response.status === 401) {
-            console.log(localStorage.getItem("refresh_token")===null)
             if (localStorage.getItem("refresh_token")===null){
                 return {
                     error: true,
