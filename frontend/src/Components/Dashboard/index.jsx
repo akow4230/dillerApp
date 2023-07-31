@@ -5,6 +5,7 @@ import DashboardTopBar from "../utils/UI/DashboardTopBar";
 import DashboardLeftMenu from "../utils/UI/DashboardLeftMenu";
 import { useSelector, useDispatch } from 'react-redux';
 import { navigateTo } from "../../redux/reducers/DashboardSlice";
+import {Outlet} from "react-router-dom";
 // import {useNavigate} from "react-router-dom"; // Import the navigateTo action creator
 
 function Index(props) {
@@ -16,14 +17,7 @@ function Index(props) {
     }, [dispatch]);
 
     useEffect(() => {
-        console.log(response);
-        // Check if there's an error in the response
-        console.log(response)
         if (response?.error) {
-            console.log("Hello")
-
-            console.log(response)
-            console.log("Hello")
             dispatch(navigateTo("/"));
         }
     }, [response, dispatch]);
@@ -33,9 +27,12 @@ function Index(props) {
             <div className="top-bar">
                 <DashboardTopBar data={response?.data} />
             </div>
-            <div className="bottom-bar">
+            <div className="bottom-bar d-flex">
                 <div className="left-menu">
                     <DashboardLeftMenu />
+                </div>
+                <div className={"right-menu w-100 p-4"} style={{background:"#c2c5d5"}}>
+                    <Outlet />
                 </div>
             </div>
         </div>

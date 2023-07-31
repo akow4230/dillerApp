@@ -48,7 +48,7 @@ function Index(props) {
             }} className="fa-solid fa-signal"></i>
                 <p style={{marginLeft: 18, color: "white"}}>Reports</p>
             </div>
-            <div onClick={()=>navigate("/settings")} className="box"><i style={{
+            <div onClick={()=>navigate("/dashboard/settings")} className="box"><i style={{
                 color: "white", fontSize: 50,
                 marginLeft: 18,
                 marginTop: 10

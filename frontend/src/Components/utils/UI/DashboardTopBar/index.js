@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './style.css'
 import logo from '../../../images/img.png'
 import InputLabel from '@mui/material/InputLabel';
@@ -8,7 +8,21 @@ import Select from '@mui/material/Select';
 
 function Index({data}) {
     console.log(data)
-    const [userBox, setUserBox] = useState(false)
+    const [userBox, setUserBox] = useState(false);
+    const userBoxRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (userBoxRef.current && !userBoxRef.current.contains(event.target)) {
+                setUserBox(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <div className={"dashboardTopBar"}>
             <img src={logo} alt="Image Not Found" width={70} height={70} style={{borderRadius: "50%"}}/>
@@ -90,7 +104,7 @@ function Index({data}) {
                 }}>
                     <b style={{fontSize: 20, color: "white"}}><i className="fa-solid fa-bell"></i> </b>
                 </div>
-                <div onClick={() => setUserBox(!userBox)} style={{
+                <div ref={userBoxRef} onClick={() => setUserBox(!userBox)} style={{
                     cursor: "pointer",
                     marginLeft: 45,
                     width: 50,

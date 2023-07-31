@@ -6,13 +6,16 @@ import {Provider} from "react-redux";
 import {store} from "./redux/store"
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import {YMaps} from "react-yandex-maps";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <BrowserRouter>
-        <Provider store={store}>
-            <App/>
-        </Provider>
-    </BrowserRouter>
+    <YMaps>
+        <BrowserRouter>
+            <Provider store={store}>
+                <App/>
+            </Provider>
+        </BrowserRouter>
+    </YMaps>
 );
 
 
