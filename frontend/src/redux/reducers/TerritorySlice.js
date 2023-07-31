@@ -11,7 +11,6 @@ const initialState = {
     formData: {
         title:"",
         code:"",
-        sorting:"",
         active:false,
         longitude:0,
         latitude:0

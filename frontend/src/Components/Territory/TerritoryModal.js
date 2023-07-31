@@ -92,11 +92,6 @@ function TerritoryModal(props) {
                                 </label>
                                 {errors.code && <span className="error-message">{errors.code.message}</span>}
                                 <label className={"d-flex gap-2"}>
-                                    Sorting
-                                    <input type="text" className={"form-control my-2"} {...register("sorting", { required: "Sorting is required" })} />
-                                </label>
-                                {errors.sorting && <span className="error-message">{errors.sorting.message}</span>}
-                                <label className={"d-flex gap-2"}>
                                     Active
                                     <input type="checkbox" className={"form-check"} {...register("active", { required: "Active is required" })} />
                                 </label>
