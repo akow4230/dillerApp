@@ -1,29 +1,18 @@
-package com.example.backend.Entity;
+package com.example.backend.Payload.req;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Table(name = "territory")
-@Entity
-@Builder
-public class Territory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+public class ReqTerritory {
     private String region;
     private String title;
     private String code;
+    private int sorting;
     private boolean active;
     private double longitude;
     private double latitude;
-
 }
-

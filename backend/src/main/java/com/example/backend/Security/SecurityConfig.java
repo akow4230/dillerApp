@@ -36,6 +36,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/v1/auth/refresh").permitAll()
                                 .requestMatchers("/api/v1/auth/student").permitAll()
+                                .requestMatchers("/api/v1/territory/getExcel").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(myFilter, UsernamePasswordAuthenticationFilter.class); // Add your custom filter before the default Spring Security filter
