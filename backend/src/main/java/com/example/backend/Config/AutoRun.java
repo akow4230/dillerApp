@@ -26,7 +26,7 @@ public class AutoRun implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String adminPhone="+998918280598";
+        String adminPhone="+998999999999";
         List<Role> savedRoles=saveRoles();
         System.out.println(savedRoles);
         Optional<User> userByPhone = userRepo.findByPhone(adminPhone);
