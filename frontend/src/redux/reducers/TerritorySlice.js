@@ -5,6 +5,7 @@ const initialState = {
     error: false,
     navigation:"",
     modalVisible:false,
+    editModalVisible:false,
     placeName: "",
     latitude: "",
     longitude: "",
@@ -13,7 +14,8 @@ const initialState = {
         code:"",
         active:false,
         longitude:0,
-        latitude:0
+        latitude:0,
+        region:""
     }
 }
 export const territorySlice = createSlice({
@@ -22,6 +24,9 @@ export const territorySlice = createSlice({
     reducers: {
         setModalVisible(state, action) {
             state.modalVisible = action.payload
+        },
+        setEditModalVisible(state, action) {
+            state.editModalVisible = action.payload
         },
         setPlaceName: (state, action) => {
             state.placeName = action.payload;
@@ -36,7 +41,10 @@ export const territorySlice = createSlice({
             state.placeName = "";
             state.latitude = "";
             state.longitude = "";
-        }
+        },
+        setRegion: (state, action) => {
+            state.region = action.payload;
+        },
     }
 });
 export const {
@@ -44,6 +52,7 @@ export const {
     setLatitude,
     setLongitude,
     setPlaceName,
-    resetTerritory
+    resetTerritory,
+    setEditModalVisible
 } = territorySlice.actions
 export default territorySlice.reducer;

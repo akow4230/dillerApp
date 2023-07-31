@@ -11,9 +11,22 @@ function TerritoryModal(props) {
     const territory = useSelector((state) => state.territory);
     const defValues = [41.3775, 64.5853];
     const [template, setTemplate] = useState(null);
-
     const { handleSubmit, register, control, formState: { errors }, reset } = useForm();
     const [mapState, setMapState] = useState({center: defValues, zoom: 5});
+    useEffect(()=>{
+        if (props.isEditing){
+            reset({
+                title:props.data.title,
+                code:props.data.code,
+                active:props.data.active
+            })
+            dispatch(setLatitude(props.data.latitude))
+            dispatch(setLongitude(props.data.longitude))
+            setTemplate([props.data.latitude, props.data.longitude])
+            setMapState({ center: [props.data.latitude, props.data.longitude], zoom: 5 });
+            console.log(props.data.longitude)
+        }
+    },[props.visible])
     useEffect(() => {
         function handleClickOutside(event) {
             if (props.visible && !event.target.closest(".modal-content")) {
@@ -25,7 +38,6 @@ function TerritoryModal(props) {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [props]);
-
     if (!props.visible) {
         return null;
     }
@@ -53,17 +65,22 @@ function TerritoryModal(props) {
 
     function saveTerritory(data) {
         if (territory.longitude && territory.longitude){
+            if (props.isEditing){
+                const newData = {...data, longitude:territory.longitude, latitude:territory.latitude, id:props.data.id}
+                dispatch({ type: 'territory/editTerritory', payload: newData });
+                dispatch(setModalVisible(false))
+                toast.success("Territory edited successfully")
+            }else {
+                const newData = {...data, longitude:territory.longitude, latitude:territory.latitude}
+                dispatch({ type: 'territory/saveTerritory', payload: newData });
+                dispatch(setModalVisible(false))
+                toast.success("Territory saved successfully")
+            }
             reset({
                 title:"",
                 code:"",
-                sorting:"",
                 active:false
             })
-            const newData = {...data, longitude:territory.longitude, latitude:territory.latitude}
-            dispatch({ type: 'territory/saveTerritory', payload: newData });
-            dispatch(setModalVisible(false))
-            toast.success("Territory saved successfully")
-
         }else {
             toast.error("You must select territory")
         }
@@ -86,6 +103,11 @@ function TerritoryModal(props) {
                                     <input type="text" className={"form-control my-2"} {...register("title", { required: "Title is required" })} />
                                 </label>
                                 {errors.title && <span className="error-message">{errors.title.message}</span>}
+                                <label className={"d-flex gap-4"}>
+                                    Region
+                                    <input type="text" className={"form-control my-2"} {...register("region", { required: "Region is required" })} />
+                                </label>
+                                {errors.region && <span className="error-message">{errors.region.message}</span>}
                                 <label className={"d-flex gap-4"}>
                                     Code
                                     <input type="text" className={"form-control my-2"} {...register("code", { required: "Code is required" })} />
