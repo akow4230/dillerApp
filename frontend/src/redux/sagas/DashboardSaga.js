@@ -1,6 +1,6 @@
 // DashboardSaga.js
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
-import { getDashboardDataStart, getDashboardFailure, getDashboardSuccess, navigateTo } from "../reducers/DashboardSlice";
+import {all, call, fork, put, takeLatest} from 'redux-saga/effects';
+import {getDashboardDataStart, getDashboardFailure, getDashboardSuccess} from "../reducers/DashboardSlice";
 import DashboardService from "../services/DashboardService";
 
 function* getDashboardData() {
@@ -10,7 +10,6 @@ function* getDashboardData() {
         yield put(getDashboardSuccess(response));
     } catch (error) {
         yield put(getDashboardFailure(error.response.data));
-        // Pass the error object to the catch block
         return error;
     }
 }

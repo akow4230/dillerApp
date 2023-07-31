@@ -1,0 +1,26 @@
+.tableUI {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
+.tableUI .topUI {
+    width: 100%;
+    height: 70px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.tableUI .bottomUI {
+    width: 100%;
+    height: 88%;
+    margin-top: 10px;
+    border: 1px solid;
+    overflow-y: auto;
+}
+
+.tableUI .bottomUI .hidden {
+    visibility: hidden;
+}

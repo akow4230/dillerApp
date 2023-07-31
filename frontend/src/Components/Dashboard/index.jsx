@@ -1,38 +1,74 @@
 // Index.js
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import './style.css';
-import DashboardTopBar from "../utils/UI/DashboardTopBar";
-import DashboardLeftMenu from "../utils/UI/DashboardLeftMenu";
-import { useSelector, useDispatch } from 'react-redux';
-import { navigateTo } from "../../redux/reducers/DashboardSlice";
-import {Outlet} from "react-router-dom";
-// import {useNavigate} from "react-router-dom"; // Import the navigateTo action creator
+import DashboardTopBar from "./DashboardTopBar";
+import DashboardLeftMenu from "./DashboardLeftMenu";
+import {useDispatch, useSelector} from 'react-redux';
+import {navigateTo} from "../../redux/reducers/DashboardSlice";
+import {useNavigate} from "react-router-dom";
+import Table from "../UniversalUI/Table/Table";
 
 function Index(props) {
     const dispatch = useDispatch();
     const response = useSelector((state) => state.dashboard);
-    // const navigate = useNavigate();
-    useEffect(() => {
-        dispatch({ type: 'dashboard/getDashboardData' });
-    }, [dispatch]);
+    const navigate = useNavigate();
+    const columns = [
+        {
+            id: 1,
+            title: "Id",
+            key: "id",
+            type: "int",
+            show: true,
+        },
+        {
+            id: 2,
+            title: "Title",
+            key: "title",
+            type: "string",
+            show: true,
+        },
+        {
+            id: 3,
+            title: "Url",
+            key: "url",
+            type: "string",
+            show: true
+        }]
+
+    async function getDashboardData() {
+        return dispatch({type: 'dashboard/getDashboardData', navigate});
+    }
 
     useEffect(() => {
-        if (response?.error) {
-            dispatch(navigateTo("/"));
-        }
-    }, [response, dispatch]);
+        getDashboardData()
+            .then((res) => {
+                // Check if there's an error in the response
+                if (res?.error) {
+                    dispatch(navigateTo("/login"));
+                }
+            })
+            .catch((err) => {
+                dispatch(navigateTo("/login"));
+            });
+    }, [dispatch]);
+
 
     return (
         <div className={"dashboard"}>
             <div className="top-bar">
-                <DashboardTopBar data={response?.data} />
+                <DashboardTopBar data={response?.data}/>
             </div>
-            <div className="bottom-bar d-flex">
+            <div className="bottom-bar">
                 <div className="left-menu">
-                    <DashboardLeftMenu />
+                    <DashboardLeftMenu/>
                 </div>
-                <div className={"right-menu w-100 p-4"} style={{background:"#c2c5d5"}}>
-                    <Outlet />
+                <div className="right-menu">
+                    <Table
+                        isPageNation={true}
+                        isDark={false}
+                        requestApi={"/api/v1/test"}
+                        columns={columns}
+                    />
                 </div>
             </div>
         </div>

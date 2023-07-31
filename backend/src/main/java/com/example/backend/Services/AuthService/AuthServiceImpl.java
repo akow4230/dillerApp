@@ -89,7 +89,7 @@ public class AuthServiceImpl implements AuthService {
         if (userDTO.isRememberMe()) {
             map.put("refresh_token", jwtService.generateJwtRefreshToken(userByPhone));
         }
-        System.out.println(userByPhone.getRoles());
+//        System.out.println(userByPhone.getRoles());
         map.put("roles", userByPhone.getRoles());
         return ResponseEntity.ok(map);
     }

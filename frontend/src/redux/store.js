@@ -3,19 +3,19 @@ import createSagaMiddleware from "redux-saga";
 import rootSaga from "./sagas";
 import login from "./reducers/LoginSlice"
 import {dashboardSlice} from "./reducers/DashboardSlice";
-import territory from "./reducers/TerritorySlice"
+import tableSlice from "./reducers/TableSlice";
 
 const sagaMiddleware = createSagaMiddleware();
 const rootReducer = combineReducers({
     login,
     dashboard: dashboardSlice.reducer,
-    territory
+    table: tableSlice
 });
 
 export const store = configureStore({
     reducer: rootReducer,
     middleware: getDefaultMiddleware => {
-        return getDefaultMiddleware({serializableCheck:false}).concat(sagaMiddleware);
+        return getDefaultMiddleware({serializableCheck: false}).concat(sagaMiddleware);
     }
 });
 sagaMiddleware.run(rootSaga);
