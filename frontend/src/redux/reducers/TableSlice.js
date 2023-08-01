@@ -79,16 +79,14 @@ export const {
     getTableDataSuccess,
     changeTableDataSize,
     changeTableDataPage,
-    changeTableColumns,
     setCurrentDragingColumn,
     changeOrder,
     saveColumnsOrders,
-    toggleModal
+    toggleModal,
     changeTableColumns,
-    changeSearchParams
+    changeSearchParams,
+    getSearchData
 } = tableSlice.actions
 
 export default tableSlice.reducer
 
-export class getSearchData {
-}

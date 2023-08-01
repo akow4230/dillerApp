@@ -17,8 +17,10 @@ import {
 import Pagination from '@mui/material/Pagination';
 import {styled} from '@mui/material/styles';
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
+import Filter from "../filter/Filter";
 
 function Table({isPageNation, isDark, columns, requestApi}) {
+    console.log(requestApi)
     const dispatch = useDispatch()
     const [settings, setSettings] = useState(false)
     const {pageSize, darkTheme, currentPage, data, modalColumns, modal} = useSelector((state) => state.table);
@@ -29,6 +31,7 @@ function Table({isPageNation, isDark, columns, requestApi}) {
 
     return (
         <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
+            <Filter obj={['active']}/>
             <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
                     className="fa-solid fa-sliders"></i></Button>
