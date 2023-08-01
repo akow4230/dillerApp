@@ -134,11 +134,12 @@ function Table({isPageNation, isDark, columns, requestApi}) {
                     alignItems: "center",
                     justifyContent: "center",
                     width: "100%",
-                    height: 60,
-                    border:"1px solid"
+                    height: 40
                 }}>
                     <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))} page={currentPage}
                                 count={data.totalPage}
+                                color={'secondary'}
+                                style={{border:"1px solid"}}
                                 variant="outlined" shape="rounded"/>
                 </div>
             </div>
