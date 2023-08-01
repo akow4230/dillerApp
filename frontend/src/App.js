@@ -6,7 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Components/Dashboard/index";
 import Territory from "./Components/Territory/Territory";
 import Settings from "./Components/Settings/Settings";
-
+import Filter from './Components/UniversalUI/filter/Filter'
+import TestKeraksiz from "./Components/UniversalUI/filter/TestKeraksiz";
 function App() {
     return (
         <div className="App">
@@ -18,6 +19,7 @@ function App() {
                     </Route>
                 </Route>
                 <Route path="/filter" element={<Filter />} />
+                <Route path="/keraksiz" element={<TestKeraksiz />} />
 
             </Routes>
         </div>

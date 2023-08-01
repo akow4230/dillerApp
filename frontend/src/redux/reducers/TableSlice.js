@@ -12,8 +12,16 @@ const initialState = {
         totalElements: 0,
         totalPage: 0,
         columns: []
+    },
+    searchParams:{
+        active:'',
+        city:[],
+        weekDays: [],
+        customerCategories: [],
+        tin:'',
+        week:'',
+        quickSearch:''
     }
-
 };
 const tableSlice = createSlice({
     name: "table",
@@ -48,6 +56,13 @@ const tableSlice = createSlice({
                     break;
                 }
             }
+        },
+        changeSearchParams(state, action){
+            state.searchParams=action.payload
+            console.log(action.payload)
+        },
+        getSearchData(state, action){
+
         }
     }
 })
@@ -56,7 +71,11 @@ export const {
     getTableDataSuccess,
     changeTableDataSize,
     changeTableDataPage,
-    changeTableColumns
+    changeTableColumns,
+    changeSearchParams
 } = tableSlice.actions
 
 export default tableSlice.reducer
+
+export class getSearchData {
+}

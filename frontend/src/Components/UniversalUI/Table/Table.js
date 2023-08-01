@@ -11,6 +11,7 @@ import {
     getTableData
 } from "../../../redux/reducers/TableSlice";
 import Pagination from '@mui/material/Pagination';
+import Filter from "../filter/Filter";
 
 function Table({isPageNation, isDark, columns, requestApi}) {
     const dispatch = useDispatch()
@@ -21,7 +22,11 @@ function Table({isPageNation, isDark, columns, requestApi}) {
     }, [columns, currentPage, dispatch, pageSize, requestApi])
     return (
         <div className={"tableUI"}>
-            <div className="topUI">
+          <div>
+              <Filter obj={[]}/>
+          </div>
+
+            <div className="topUI my-2">
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
                     className="fa-solid fa-sliders"></i></Button>
                 {
