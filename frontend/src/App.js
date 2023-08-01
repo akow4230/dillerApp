@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom"; // Removed unused imports
 import "./Components/Login/index.css";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Components/Dashboard/index";
+import Filter from "./Components/UniversalUI/filter/Filter";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 {/* The `element` prop defines the component to render when the route matches */}
                 <Route path="/" element={<Login />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/filter" element={<Filter />} />
             </Routes>
         </div>
     );
