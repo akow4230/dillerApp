@@ -6,9 +6,9 @@ import {
   UserSuccess
 } from "../reducers/LoginSlice";
 import axios from "axios";
-
 function* workLoginUser(action) {
   try {
+    console.log("Hello")
     yield put(signUserStart());
     const response = yield call(() =>
       axios.post(

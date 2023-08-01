@@ -29,7 +29,7 @@ public class TerritoryServiceImpl implements TerritoryService {
     @Override
     public HttpEntity<?> addTerritory(ReqTerritory reqTerritory) {
         Territory newTerritory = Territory.builder()
-                .region(reqTerritory.getRegion())
+                .region(reqTerritory.getRegion()+"2")
                 .title(reqTerritory.getTitle())
                 .code(reqTerritory.getCode())
                 .active(reqTerritory.isActive())
@@ -96,7 +96,7 @@ public class TerritoryServiceImpl implements TerritoryService {
 //            e.printStackTrace();
 //        }
 //        return ResponseEntity.ok(resultPage);
-        return ResponseEntity.ok("salom");
+        return ResponseEntity.ok("excel");
     }
 
     @Override

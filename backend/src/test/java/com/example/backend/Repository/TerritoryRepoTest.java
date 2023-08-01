@@ -28,18 +28,42 @@ import static org.mockito.Mockito.when;
 class TerritoryRepoTest {
     @Mock
     private TerritoryRepo territoryRepo;
-    @InjectMocks
-    private TerritoryService territoryService;
 
     @Test
     void itShouldFindAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase() {
+        Territory territory = new Territory(
+                null, "1reg", "1title", "1code", true, 1.1, 1.2
+        );
+        Territory territory2 = new Territory(
+                null, "2reg", "2title", "2code", true, 1.1, 1.2
+        );
+        boolean active = true;
+        String search = "tit";
+        PageRequest pageable = PageRequest.of(1, 5);
+        Page<Territory> mockPage = new PageImpl<>(Arrays.asList(territory, territory2), pageable, 2);
+        when(territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(active, search, pageable)).thenReturn(mockPage);
+
+        Page<Territory> territoryPage = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(active, search, pageable);
+        assertEquals(mockPage, territoryPage);
 
     }
 
     @Test
     void itShouldFindAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase() {
-        //Given
-        //When
-        //Then
+        Territory territory = new Territory(
+                null, "1reg", "1title", "1code", true, 1.1, 1.2
+        );
+        Territory territory2 = new Territory(
+                null, "2reg", "2title", "2code", true, 1.1, 1.2
+        );
+        String title = "tit";
+        String region = "reg";
+        PageRequest pageable = PageRequest.of(1, 5);
+        Page<Territory> mockPage = new PageImpl<>(Arrays.asList(territory, territory2), pageable, 2);
+
+        when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(title, region, pageable)).thenReturn(mockPage);
+
+        Page<Territory> territoryPage = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(title, region, pageable);
+        assertEquals(mockPage, territoryPage);
     }
 }

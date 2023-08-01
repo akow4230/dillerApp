@@ -1,5 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {useCustomNavigate} from "./useCustomNavigate"; // Import the useNavigate hook
+import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     isLoading: false,
@@ -11,7 +10,6 @@ export const dashboardSlice = createSlice({
     initialState,
     reducers: {
         navigateTo(state, action) {
-            // Handle the navigation action here
             const { payload } = action;
             window.location.href = payload; // Use window.location.href for navigation
         },
@@ -19,7 +17,6 @@ export const dashboardSlice = createSlice({
             state.isLoading = true;
         },
         getDashboardSuccess: (state, action) => {
-            console.log(action.payload.data);
             state.isLoading = false;
             if (!action.payload.error) {
                 state.data = action.payload.data;
@@ -30,7 +27,6 @@ export const dashboardSlice = createSlice({
         getDashboardFailure: (state, action) => {
             state.isLoading = false;
             state.error = action.payload;
-            console.log("HEl")
             if (action.payload.error) {
                 state.data = action.payload.data;
             }
