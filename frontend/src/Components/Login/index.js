@@ -1,17 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import shiftLogo from "../images/shiftLogo.jpg";
-import { UserLogIn, setFormData } from "../../redux/reducers/LoginSlice";
+import { UserLogIn } from "../../redux/reducers/LoginSlice";
 import { useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
-// import PhoneInput from "react-phone-input-2";
-// import "react-phone-input-2/lib/style.css";
 import PhoneInput from "react-phone-number-input";
 import { CgSpinner } from "react-icons/cg";
 
 function Index() {
-  const { formData, isLoading, error } = useSelector((state) => state.login);
+  const {  isLoading, error } = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -57,7 +55,7 @@ function Index() {
         <div className='body'>
           <div>
             <p className='information'>
-              We improve the process-your disturbition
+              We improve the process-your disturbution
             </p>
           </div>
           <form onSubmit={handleSubmit(loginUser)}>
@@ -65,7 +63,7 @@ function Index() {
               <Controller
                 name='phone'
                 control={control}
-                defaultValue=''
+                defaultValue='+998'
                 rules={{ required: "Phone Number is required" }}
                 render={({ field }) => (
                   <div className='my-3 '>
