@@ -1,7 +1,7 @@
 import {call, put, takeLatest} from "redux-saga/effects";
 import instance from "../../Components/utils/config/instance";
 import {
-    changeOrder,
+    changeOrder, changeSearchParams,
     changeTableColumns,
     changeTableDataPage,
     changeTableDataSize,
@@ -12,6 +12,7 @@ import {
 
 function* watchGetTableData(action) {
     try {
+        console.log(action.payload)
         const response = yield call(() => instance(action.payload.url, "GET"));
         yield put(getTableDataSuccess({
             data: response.data.content,
@@ -44,14 +45,18 @@ function* watchSaveColumnsOrders(action) {
 function* watchToggleModal(action) {
 }
 
+function* watchChangeSearchParams(action) {
+}
+
 
 export default function* tableSaga() {
     yield takeLatest(getTableData.type, watchGetTableData)
     yield takeLatest(changeTableDataSize.type, watchChangeTableDataSize)
     yield takeLatest(changeTableDataPage.type, watchChangeTableDataPage)
     yield takeLatest(changeTableColumns.type, watchChangeTableColumns)
-    yield takeLatest(setCurrentDragingColumn.type, watchSetCurrentDragingColumn)
-    yield takeLatest(changeOrder.type, watchChangeOrder)
-    yield takeLatest(saveColumnsOrders.type, watchSaveColumnsOrders)
-    yield takeLatest(toggleModal.type, watchToggleModal)
+    yield takeLatest('table/setCurrentDragingColumn', watchSetCurrentDragingColumn)
+    yield takeLatest('table/changeOrder', watchChangeOrder)
+    yield takeLatest('table/saveColumnsOrders', watchSaveColumnsOrders)
+    yield takeLatest('table/toggleModal', watchToggleModal)
+    yield takeLatest(changeSearchParams.type, watchChangeSearchParams)
 }

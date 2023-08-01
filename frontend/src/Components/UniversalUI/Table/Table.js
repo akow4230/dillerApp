@@ -19,8 +19,7 @@ import {styled} from '@mui/material/styles';
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import Filter from "../filter/Filter";
 
-function Table({isPageNation, isDark, columns, requestApi}) {
-    console.log(requestApi)
+function Table({ isDark, columns, requestApi}) {
     const dispatch = useDispatch()
     const [settings, setSettings] = useState(false)
     const {pageSize, darkTheme, currentPage, data, modalColumns, modal} = useSelector((state) => state.table);
@@ -141,9 +140,9 @@ function Table({isPageNation, isDark, columns, requestApi}) {
                 }}>
                     <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))} page={currentPage}
                                 count={data.totalPage}
-                                color={'secondary'}
+                                color={'primary'}
                                 style={{border:"1px solid"}}
-                                variant="outlined" shape="rounded"/>
+                                 shape="rounded"/>
                 </div>
             </div>
             <Modal isOpen={modal} toggle={() => dispatch(toggleModal())}>

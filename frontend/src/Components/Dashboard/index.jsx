@@ -59,7 +59,7 @@ function Index(props) {
                 </div>
                 <div className={"right-menu w-100 p-4"} style={{background: "#c2c5d5"}}>
                     <Table
-                        isDark={true}
+                        isDark={false}
                         requestApi={"/api/v1/test?page={page}&size={limit}"}
                         columns={columns}
                     />

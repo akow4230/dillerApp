@@ -16,14 +16,14 @@ const initialState = {
         totalPage: 0,
         columns: []
     },
-    searchParams:{
-        active:'',
-        city:[],
+    searchParams: {
+        active: '',
+        city: [],
         weekDays: [],
         customerCategories: [],
-        tin:'',
-        week:'',
-        quickSearch:''
+        tin: '',
+        week: '',
+        quickSearch: ''
     }
 
 };
@@ -31,7 +31,7 @@ const tableSlice = createSlice({
     name: "table",
     initialState,
     reducers: {
-        getTableData: function (state, action) {
+        getTableData: (state, action) => {
             state.modalColumns = action.payload.columns;
             action.payload.url = action.payload.url.replaceAll("{page}", action.payload.page)
             action.payload.url = action.payload.url.replaceAll("{limit}", action.payload.size)
@@ -65,12 +65,9 @@ const tableSlice = createSlice({
                 }
             }
         },
-        changeSearchParams(state, action){
-            state.searchParams=action.payload
+        changeSearchParams(state, action) {
+            state.searchParams = action.payload
             console.log(action.payload)
-        },
-        getSearchData(state, action){
-
         }
     }
 })
@@ -84,8 +81,7 @@ export const {
     saveColumnsOrders,
     toggleModal,
     changeTableColumns,
-    changeSearchParams,
-    getSearchData
+    changeSearchParams
 } = tableSlice.actions
 
 export default tableSlice.reducer
