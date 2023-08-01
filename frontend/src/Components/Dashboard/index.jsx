@@ -1,12 +1,12 @@
 // Index.js
 import React, {useEffect} from 'react';
 import './style.css';
-import DashboardTopBar from "./DashboardTopBar";
-import DashboardLeftMenu from "./DashboardLeftMenu";
 import {useDispatch, useSelector} from 'react-redux';
 import {navigateTo} from "../../redux/reducers/DashboardSlice";
 import {useNavigate} from "react-router-dom";
 import Table from "../UniversalUI/Table/Table";
+import DashboardTopBar from "./DashboardTopBar";
+import DashboardLeftMenu from "./DashboardLeftMenu";
 
 function Index(props) {
     const dispatch = useDispatch();
@@ -66,7 +66,7 @@ function Index(props) {
                     <Table
                         isPageNation={true}
                         isDark={false}
-                        requestApi={"/api/v1/test"}
+                        requestApi={"/api/v1/test?page={page}&size={limit}"}
                         columns={columns}
                     />
                 </div>

@@ -20,14 +20,13 @@ public class JwtService {
     public String generateJwtToken(User user) {
         UUID id = user.getId();
         Map<String, Object> claims = new HashMap<>();
-        String jwt = Jwts.builder()
+        return Jwts.builder()
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60*60))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setSubject(id.toString())
                 .addClaims(claims)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
-        return jwt;
     }
 
     public String generateJwtRefreshToken(User user) {

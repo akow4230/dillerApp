@@ -1,6 +1,12 @@
 import {call, put, takeLatest} from "redux-saga/effects";
 import instance from "../../Components/utils/config/instance";
-import {changeTableDataSize, getTableData, getTableDataSuccess} from "../reducers/TableSlice";
+import {
+    changeTableColumns,
+    changeTableDataPage,
+    changeTableDataSize,
+    getTableData,
+    getTableDataSuccess
+} from "../reducers/TableSlice";
 
 
 function* watchGetTableData(action) {
@@ -17,11 +23,18 @@ function* watchGetTableData(action) {
 }
 
 function* watchChangeTableDataSize(action) {
-    console.log(action.payload)
+}
+
+function* watchChangeTableDataPage(action) {
+}
+
+function* watchChangeTableColumns(action) {
 }
 
 
 export default function* tableSaga() {
     yield takeLatest(getTableData.type, watchGetTableData)
     yield takeLatest(changeTableDataSize.type, watchChangeTableDataSize)
+    yield takeLatest(changeTableDataPage.type, watchChangeTableDataPage)
+    yield takeLatest(changeTableColumns.type, watchChangeTableColumns)
 }
