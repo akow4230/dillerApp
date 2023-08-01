@@ -1,5 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {useCustomNavigate} from "./useCustomNavigate"; // Import the useNavigate hook
+import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     isLoading: false,
@@ -28,7 +27,6 @@ export const dashboardSlice = createSlice({
         getDashboardFailure: (state, action) => {
             state.isLoading = false;
             state.error = action.payload;
-            console.log("HEl")
             if (action.payload.error) {
                 state.data = action.payload.data;
             }

@@ -6,7 +6,6 @@ import {changeSearchParams} from "../../../redux/reducers/TableSlice";
 function Filter(props) {
     const {obj} = props;
     const dispatch = useDispatch();
-    const object = props.obj
     const [options] = useState([
         {value: '10', label: 'Option 1️⃣'},
         {value: '20', label: 'Option 2️⃣'},
@@ -152,7 +151,6 @@ function Filter(props) {
         customerCategories,
     };
 
-    console.log(object);
 
     return (
         <div className="">

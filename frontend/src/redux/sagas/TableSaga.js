@@ -1,18 +1,18 @@
 import {call, put, takeLatest} from "redux-saga/effects";
 import instance from "../../Components/utils/config/instance";
 import {
-    changeOrder, changeSearchParams,
+    changeSearchParams,
     changeTableColumns,
     changeTableDataPage,
     changeTableDataSize,
+    changeTheme,
     getTableData,
-    getTableDataSuccess, saveColumnsOrders, setCurrentDragingColumn, toggleModal
+    getTableDataSuccess
 } from "../reducers/TableSlice";
 
 
 function* watchGetTableData(action) {
     try {
-        console.log(action.payload)
         const response = yield call(() => instance(action.payload.url, "GET"));
         yield put(getTableDataSuccess({
             data: response.data.content,
@@ -45,6 +45,9 @@ function* watchSaveColumnsOrders(action) {
 function* watchToggleModal(action) {
 }
 
+function* watchChangeTheme(action) {
+}
+
 function* watchChangeSearchParams(action) {
 }
 
@@ -59,4 +62,5 @@ export default function* tableSaga() {
     yield takeLatest('table/saveColumnsOrders', watchSaveColumnsOrders)
     yield takeLatest('table/toggleModal', watchToggleModal)
     yield takeLatest(changeSearchParams.type, watchChangeSearchParams)
+    yield takeLatest(changeTheme.type, watchChangeTheme)
 }

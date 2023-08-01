@@ -8,7 +8,7 @@ import {
     changeOrder,
     changeTableColumns,
     changeTableDataPage,
-    changeTableDataSize,
+    changeTableDataSize, changeTheme,
     getTableData,
     saveColumnsOrders,
     setCurrentDragingColumn,
@@ -19,7 +19,7 @@ import {styled} from '@mui/material/styles';
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import Filter from "../filter/Filter";
 
-function Table({ isDark, columns, requestApi}) {
+function Table({isDark, columns, requestApi}) {
     const dispatch = useDispatch()
     const [settings, setSettings] = useState(false)
     const {pageSize, darkTheme, currentPage, data, modalColumns, modal} = useSelector((state) => state.table);
@@ -29,9 +29,9 @@ function Table({ isDark, columns, requestApi}) {
     }, [columns, currentPage, dispatch, isDark, pageSize, requestApi])
 
     return (
-        <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
+        <div className={"tableUI"}>
             <Filter obj={['active']}/>
-            <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
+            <div className={'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
                     className="fa-solid fa-sliders"></i></Button>
                 {
@@ -43,9 +43,10 @@ function Table({ isDark, columns, requestApi}) {
                         <Button type={"dashed"} onClick={() => dispatch(toggleModal())}><i
                             className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
                         <FormControlLabel
+                            checked={darkTheme}
                             control={<MaterialUISwitch sx={{m: 1}} defaultChecked/>}
                             label="Dark Mode"
-                            onChange={(e) => console.log(e.target.checked)}
+                            onChange={(e) => dispatch(changeTheme(e.target.checked))}
                         />
                         {
                             data.columns?.map((item, index) => {
@@ -104,8 +105,8 @@ function Table({ isDark, columns, requestApi}) {
                     </div>
                 }
             </div>
-            <div className={darkTheme ? 'bottomUI-dark' : 'bottomUI'}>
-                <div className={darkTheme ? 'my-table-dark' : 'my-table'}>
+            <div className={'bottomUI'}>
+                <div className={'my-table'}>
                     <table className={darkTheme ? 'table table-dark table-striped' : 'table'}>
                         <thead>
                         <tr>
@@ -138,18 +139,18 @@ function Table({ isDark, columns, requestApi}) {
                     width: "100%",
                     height: 40
                 }}>
-                    <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))} page={currentPage}
+                    <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page, theme: darkTheme}))}
+                                page={currentPage}
                                 count={data.totalPage}
-                                color={'primary'}
-                                style={{border:"1px solid"}}
-                                 shape="rounded"/>
+                                variant={'outlined'}
+                                shape="rounded"/>
                 </div>
             </div>
             <Modal isOpen={modal} toggle={() => dispatch(toggleModal())}>
                 <ModalHeader toggle={() => dispatch(toggleModal())}>Menu Control</ModalHeader>
                 <ModalBody>
                     {
-                        modalColumns.map((item, index) => <div
+                        modalColumns?.map((item, index) => <div
                             onDragStart={(e) => dispatch(setCurrentDragingColumn(index))}
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={(e) => dispatch(changeOrder(index))}

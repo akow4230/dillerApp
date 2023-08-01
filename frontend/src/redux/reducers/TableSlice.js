@@ -55,6 +55,29 @@ const tableSlice = createSlice({
         changeTableDataPage(state, action) {
             state.currentPage = action.payload.page
         },
+        toggleModal(state, action) {
+            state.modal = !state.modal
+        },
+        setCurrentDragingColumn: (state, action) => {
+            state.currentDragingColumn = action.payload;
+            console.log(state.currentDragingColumn)
+        },
+        changeOrder: (state, action) => {
+            const draggedElementIndex = state.currentDragingColumn;
+            const droppedElementIndex = action.payload;
+
+            [
+                state.modalColumns[draggedElementIndex],
+                state.modalColumns[droppedElementIndex],
+            ] = [
+                state.modalColumns[droppedElementIndex],
+                state.modalColumns[draggedElementIndex],
+            ];
+        },
+        saveColumnsOrders: (state, action) => {
+            state.data.columns = state.modalColumns;
+            state.modal = false
+        },
         changeTableColumns(state, action) {
             state.data.columns = action.payload.columns;
             // Find the column object with the matching ID and update its checked property
@@ -64,6 +87,9 @@ const tableSlice = createSlice({
                     break;
                 }
             }
+        },
+        changeTheme(state, action) {
+            state.darkTheme = action.payload
         },
         changeSearchParams(state, action) {
             state.searchParams = action.payload
@@ -81,7 +107,8 @@ export const {
     saveColumnsOrders,
     toggleModal,
     changeTableColumns,
-    changeSearchParams
+    changeSearchParams,
+    changeTheme
 } = tableSlice.actions
 
 export default tableSlice.reducer
