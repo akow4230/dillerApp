@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { navigateTo } from "../../redux/reducers/DashboardSlice";
 import {Outlet} from "react-router-dom";
 import Table from "../UniversalUI/Table/Table";
+import UModal from "../UniversalUI/Modal/Modal";
+import button from "bootstrap/js/src/button";
 // import {useNavigate} from "react-router-dom"; // Import the navigateTo action creator
 
 function Index(props) {
@@ -32,6 +34,11 @@ function Index(props) {
             type: "string",
             show: true
         }]
+    const elements = [{
+        name:"Input",
+        key:"input",
+        data:<button>Hello</button>
+    }]
     const dispatch = useDispatch();
     const response = useSelector((state) => state.dashboard);
     // const navigate = useNavigate();
@@ -55,12 +62,13 @@ function Index(props) {
                     <DashboardLeftMenu />
                 </div>
                 <div className={"right-menu w-100 p-4"} style={{background:"#c2c5d5"}}>
-                    <Table
-                        isDark={false}
-                        requestApi={"/api/v1/test?page={page}&size={limit}"}
-                        columns={columns}
-                    />
-                    {/*<Outlet />*/}
+                    {/*<Table*/}
+                    {/*    isDark={false}*/}
+                    {/*    requestApi={"/api/v1/test?page={page}&size={limit}"}*/}
+                    {/*    columns={columns}*/}
+                    {/*/>*/}
+                    {/*<UModal elements={elements} title={"Modal"}/>*/}
+                    <Outlet />
                 </div>
             </div>
         </div>

@@ -31,7 +31,7 @@ function Territory(props) {
                 active:false,
                 longitude:64.2337375,
                 latitude:41.747159671564035
-            }} isEditing={true} visible={editModalVisible} visibleEdit={editModalVisible} onClose={closeEditModal} />
+            }} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
         </div>
     );
 }

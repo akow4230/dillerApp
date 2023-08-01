@@ -11,6 +11,7 @@ export default function (url, method, data) {
         }
     }).then((res) => {
         if (res.data) {
+            console.log(res.data)
             return {
                 error: false,
                 data: res.data
