@@ -63,12 +63,12 @@ function Index(props) {
                     <DashboardLeftMenu/>
                 </div>
                 <div className="right-menu">
-                    <Table
-                        isPageNation={true}
-                        isDark={false}
-                        requestApi={"/api/v1/test?page={page}&size={limit}"}
-                        columns={columns}
-                    />
+                    {/*<Table*/}
+                    {/*    isPageNation={true}*/}
+                    {/*    isDark={false}*/}
+                    {/*    requestApi={"/api/v1/test?page={page}&size={limit}"}*/}
+                    {/*    columns={columns}*/}
+                    {/*/>*/}
                     <Outlet />
                 </div>
             </div>
