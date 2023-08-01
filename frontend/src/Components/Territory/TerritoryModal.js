@@ -129,7 +129,7 @@ function TerritoryModal(props) {
                                     console.log(e);
                                 }}
                                 width={500}
-                                height={500}
+                                height={400}
                                 onClick={handleMapClick}
                                 state={mapState}
                                 modules={['templateLayoutFactory']}
@@ -138,7 +138,6 @@ function TerritoryModal(props) {
                                 {template && territory.longitude !== "" && territory.latitude !== "" && (
                                     <Placemark
                                         geometry={mapState.center}
-                                        options={{ balloonContentLayout: template }}
                                         modules={['geoObject.addon.balloon']}
                                     />
                                 )}
@@ -146,11 +145,11 @@ function TerritoryModal(props) {
                             <div>
                                 <label>
                                     Long <br />
-                                    <input type="text" disabled={true} value={territory.longitude} />
+                                    <input className='form-control' type="text" disabled={true} value={territory.longitude} />
                                 </label>
                                 <label className={"mx-4 my-2"}>
                                     Lat <br />
-                                    <input type="text" disabled={true} value={territory.latitude} />
+                                    <input className='form-control' type="text" disabled={true} value={territory.latitude} />
                                 </label> <br />
                                 <button className="btn btn-danger" onClick={handleMapClear}>clear</button>
                             </div>

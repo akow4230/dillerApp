@@ -4,13 +4,15 @@ import rootSaga from "./sagas";
 import login from "./reducers/LoginSlice"
 import {dashboardSlice} from "./reducers/DashboardSlice";
 import tableSlice from "./reducers/TableSlice";
+import settings from "./reducers/SettingsSlice";
 import territory from "./reducers/TerritorySlice"
 const sagaMiddleware = createSagaMiddleware();
 const rootReducer = combineReducers({
     login,
     dashboard: dashboardSlice.reducer,
     table: tableSlice,
-    territory
+    territory,
+    settings,
 });
 
 export const store = configureStore({

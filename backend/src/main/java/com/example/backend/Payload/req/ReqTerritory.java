@@ -11,7 +11,6 @@ public class ReqTerritory {
     private String region;
     private String title;
     private String code;
-    private int sorting;
     private boolean active;
     private double longitude;
     private double latitude;

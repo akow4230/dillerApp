@@ -6,10 +6,13 @@ import DashboardLeftMenu from "./DashboardLeftMenu/index";
 import {useDispatch, useSelector} from 'react-redux';
 import {navigateTo} from "../../redux/reducers/DashboardSlice";
 import Table from "../UniversalUI/Table/Table";
+import {Outlet} from "react-router-dom";
 
 // import {useNavigate} from "react-router-dom"; // Import the navigateTo action creator
 
 function Index(props) {
+    const dispatch = useDispatch();
+    const response = useSelector((state) => state.dashboard);
     const columns = [
         {
             id: 1,
@@ -35,9 +38,6 @@ function Index(props) {
             show: true,
             order: 3
         }]
-    const dispatch = useDispatch();
-    const response = useSelector((state) => state.dashboard);
-    // const navigate = useNavigate();
     useEffect(() => {
         dispatch({type: 'dashboard/getDashboardData'});
     }, [dispatch]);
@@ -57,13 +57,8 @@ function Index(props) {
                 <div className="left-menu">
                     <DashboardLeftMenu/>
                 </div>
-                <div className={"right-menu w-100 p-4"} style={{background: "#c2c5d5"}}>
-                    <Table
-                        isDark={false}
-                        requestApi={"/api/v1/test?page={page}&size={limit}"}
-                        columns={columns}
-                    />
-                    {/*<Outlet />*/}
+                <div className={"right-menu w-100 p-1"} style={{background: "#c2c5d5"}}>
+                    <Outlet/>
                 </div>
             </div>
         </div>
