@@ -11,7 +11,6 @@ export const dashboardSlice = createSlice({
     initialState,
     reducers: {
         navigateTo(state, action) {
-            // Handle the navigation action here
             const { payload } = action;
             window.location.href = payload; // Use window.location.href for navigation
         },
@@ -19,7 +18,6 @@ export const dashboardSlice = createSlice({
             state.isLoading = true;
         },
         getDashboardSuccess: (state, action) => {
-            console.log(action.payload.data);
             state.isLoading = false;
             if (!action.payload.error) {
                 state.data = action.payload.data;

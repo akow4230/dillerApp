@@ -3,10 +3,13 @@ import {createSlice} from "@reduxjs/toolkit";
 const initialState = {
     isLoading: false,
     error: null,
+    darkTheme: false,
     url: "",
-
+    modal: false,
     pageSize: 10,
     currentPage: 1,
+    modalColumns: [],
+    currentDragingColumn: 0,
     data: {
         data: [],
         totalElements: 0,
@@ -22,18 +25,23 @@ const initialState = {
         week:'',
         quickSearch:''
     }
+
 };
 const tableSlice = createSlice({
     name: "table",
     initialState,
     reducers: {
         getTableData: function (state, action) {
+            state.modalColumns = action.payload.columns;
             action.payload.url = action.payload.url.replaceAll("{page}", action.payload.page)
             action.payload.url = action.payload.url.replaceAll("{limit}", action.payload.size)
             state.url = action.payload.url
             state.data.columns = action.payload.columns
             state.currentPage = action.payload.page
             state.pageSize = action.payload.size
+            if (action.payload.isDark !== undefined) {
+                state.darkTheme = action.payload.isDark
+            }
         },
         getTableDataSuccess(state, action) {
             state.data.data = action.payload.data
@@ -71,6 +79,11 @@ export const {
     getTableDataSuccess,
     changeTableDataSize,
     changeTableDataPage,
+    changeTableColumns,
+    setCurrentDragingColumn,
+    changeOrder,
+    saveColumnsOrders,
+    toggleModal
     changeTableColumns,
     changeSearchParams
 } = tableSlice.actions
