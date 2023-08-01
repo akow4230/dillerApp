@@ -30,6 +30,14 @@ public class MyFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String token = request.getHeader("Authorization");
+        String requestPath = request.getRequestURI();
+
+        // Allow requests to "/api/v1/auth/login" without Authorization header
+        if (requestPath.equals("/api/v1/auth/login")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (token != null) {
             try {
                 String subject = jwtService.extractSubjectFromJwt(token);
@@ -53,6 +61,12 @@ public class MyFilter extends OncePerRequestFilter {
                 response.getWriter().flush();
                 return;
             }
+        } else {
+            // No Authorization header found, throw 401 Unauthorized error
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+            response.getWriter().write("Authorization header missing");
+            response.getWriter().flush();
+            return;
         }
         filterChain.doFilter(request, response);
     }

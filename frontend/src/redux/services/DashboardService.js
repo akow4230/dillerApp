@@ -1,3 +1,4 @@
+//SERVICE
 import instance from "../../Components/utils/config/instance";
 
 const DashboardService = {

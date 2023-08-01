@@ -21,7 +21,7 @@ public class TestController {
 
     @GetMapping
     public HttpEntity<?> getMockData(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<Test> all = testRepo.findAll(pageable);
         return ResponseEntity.ok(all);
     }
