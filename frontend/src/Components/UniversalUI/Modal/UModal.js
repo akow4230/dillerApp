@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {hideModal} from "../../../redux/reducers/ModalSlice";
-import "./index.scss"
+import "./index.css"
 function UModal(props) {
     const dispatch = useDispatch();
     const { handleSubmit, register, control, formState: { errors }, reset } = useForm();
