@@ -31,7 +31,7 @@ function Table({isDark, columns, requestApi}) {
     }, [columns, currentPage, dispatch, isDark, pageSize, requestApi,])
 
     return (
-        <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
+        <div className={darkTheme ? "tableUI-dark" : "tableUI"} style={{height:"100%"}}>
             <Filter obj={['active']} func={getData}/>
             <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
@@ -47,7 +47,7 @@ function Table({isDark, columns, requestApi}) {
                         <FormControlLabel
                             control={<MaterialUISwitch sx={{m: 1}} defaultChecked/>}
                             label="Dark Mode"
-                            onChange={(e) => console.log(e.target.checked)}
+                            onChange={(e) => dispatch(changeTheme(e.target.checked))}
                         />
                         {
                             data.columns?.map((item, index) => {
