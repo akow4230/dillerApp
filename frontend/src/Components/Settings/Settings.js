@@ -44,7 +44,7 @@ function Settings() {
         </div>
           {
               isLoading?"Loading...":(<div style={{display: "flex", flexDirection: "column", gap: "5px"}}>
-                  {settingsArray.map((item, index) =>
+                  {settingsArray.length!==0&&settingsArray.map((item, index) =>
                       <Link
                           to={item.url}
                           key={item.id}

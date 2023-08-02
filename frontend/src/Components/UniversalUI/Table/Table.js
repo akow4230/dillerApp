@@ -18,6 +18,7 @@ import Pagination from '@mui/material/Pagination';
 import {styled} from '@mui/material/styles';
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import Filter from "../filter/Filter";
+import instance from "../../utils/config/instance";
 
 function Table({isDark, columns, requestApi}) {
     const dispatch = useDispatch()
@@ -29,6 +30,19 @@ function Table({isDark, columns, requestApi}) {
     useEffect(() => {
         getData(searchParams)
     }, [columns, currentPage, dispatch, isDark, pageSize, requestApi,])
+
+    function downloadExcel() {
+        instance("api/v1/territory/getExcel", "GET").then(res=>{
+            const blob = new Blob([res.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "user_data.xlsx";
+            a.click();
+            window.URL.revokeObjectURL(url);
+            console.log("Excel file downloaded successfully!");
+        })
+    }
 
     return (
         <div className={darkTheme ? "tableUI-dark" : "tableUI"} style={{height:"100%"}}>
@@ -45,7 +59,7 @@ function Table({isDark, columns, requestApi}) {
                         <Button type={"dashed"} onClick={() => dispatch(toggleModal())}><i
                             className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
                         <FormControlLabel
-                            control={<MaterialUISwitch sx={{m: 1}} defaultChecked/>}
+                            control={<MaterialUISwitch sx={{m: 1}}/>}
                             label="Dark Mode"
                             onChange={(e) => dispatch(changeTheme(e.target.checked))}
                         />
@@ -102,7 +116,7 @@ function Table({isDark, columns, requestApi}) {
                                 },
                             ]}
                         />
-                        <Button type={"dashed"}><i className="fa-solid fa-table"></i> &nbsp; Excel</Button>
+                        <Button type={"dashed"} onClick={downloadExcel}><i className="fa-solid fa-table"></i> &nbsp; Excel</Button>
                     </div>
                 }
             </div>

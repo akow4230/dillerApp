@@ -72,7 +72,7 @@ function Index(props) {
                     <DashboardLeftMenu />
                 </div>
                 <div className={"right-menu w-100 p-4"} style={{background:"#c2c5d5"}}>
-                    {/*<UModal elements={elements} title={"Modal"}/>*/}
+                    {/*<UModal isSaving={false} hasSaveButton={true} elements={elements} title={"Modal"}/>*/}
                     <Outlet />
                 </div>
             </div>

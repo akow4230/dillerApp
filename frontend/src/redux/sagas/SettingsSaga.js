@@ -4,8 +4,8 @@ import { getSettings, getSettingsSuccess } from "../reducers/SettingsSlice";
 
 function* workgetSettings(action) {
   try {
-    const response = yield call(() => instance("/api/v1/settings", "GET"));
-    yield put(getSettingsSuccess(response.data));
+    const response = yield call(instance, "api/v1/setting", 'GET');;
+    yield put(getSettingsSuccess(response?.data));
     console.log(response.data);
   } catch (error) {
     yield takeEvery(getSettings.type, workgetSettings);
