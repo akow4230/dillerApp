@@ -4,7 +4,8 @@ import loginSaga from "./LoginSaga";
 import tableSaga from "./TableSaga";
 import {territorySaga} from "./TerritorySaga";
 import settingsSaga from "./SettingsSaga";
+import {modalSaga} from "./ModalSaga";
 
 export default function* rootSaga() {
-    yield all([dashboardSaga(),loginSaga(),tableSaga(), territorySaga(),settingsSaga()])
+    yield all([dashboardSaga(),loginSaga(),tableSaga(), territorySaga(),settingsSaga(), modalSaga()])
 }

@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Components/Dashboard/index";
 import Territory from "./Components/Territory/Territory";
 import Settings from "./Components/Settings/Settings";
-import {useNavigate} from "react-router";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import instance from "./Components/utils/config/instance";
 import ErrorPage from "./Components/404/ErrorPage";
@@ -23,10 +23,13 @@ function App() {
         async function checkSecurity(){
             if (blockedPages.some((blockedPage) => location.pathname.startsWith(blockedPage))) {
                 let accessToken = localStorage.getItem("access_token");
+                const res = await instance("/api/v1/security", "GET")
                 if (accessToken !== null) {
-                    const res = await instance("/api/v1/security", "GET")
-                    if (res.data[0].name!=="ROLE_SUPER_ADMIN"){
-                        navigate("/404")
+                    if (res?.data!==401&&res?.error){
+                        console.log("Hello")
+                        if (res?.data[0].name!=="ROLE_SUPER_ADMIN" ){
+                            navigate("/404")
+                        }
                     }
                 } else {
                     navigate("/login");

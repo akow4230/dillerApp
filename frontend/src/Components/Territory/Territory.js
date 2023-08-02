@@ -1,16 +1,24 @@
 import React from 'react';
 import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { setModalVisible, setEditModalVisible } from "../../redux/reducers/TerritorySlice";
+import {
+    setModalVisible,
+    setEditModalVisible,
+    setLongitude,
+    setLatitude,
+    setMapState
+} from "../../redux/reducers/TerritorySlice";
 import TerritoryModal from "./TerritoryModal";
 
 function Territory(props) {
     const dispatch = useDispatch();
-    const { modalVisible, editModalVisible } = useSelector((state) => state.territory);
+    const { modalVisible, editModalVisible, defValueOfMap, mapState } = useSelector((state) => state.territory);
     const closeModal = () => {
+        dispatch({ type: 'territory/handleMapClear', payload: { mapState: mapState, defValueOfMap: defValueOfMap } });
         dispatch(setModalVisible(false));
     };
     const closeEditModal = () =>{
+        dispatch({ type: 'territory/handleMapClear', payload: { mapState: mapState, defValueOfMap: defValueOfMap } });
         dispatch(setEditModalVisible(false))
     }
     return (
@@ -25,12 +33,13 @@ function Territory(props) {
             }}> Edit Territory</button>
             <TerritoryModal action={"Add territory"} visible={modalVisible} onClose={closeModal} />
             <TerritoryModal action={"Edit territory"} data={{
-                id:1,
-                title:"Nimadir",
-                code:"123",
-                active:false,
-                longitude:64.2337375,
-                latitude:41.747159671564035
+                id:"a03c748d-551b-4bd9-9dc4-bc372143cc09",
+                title:"Shift Academy",
+                region:"Buxoro2",
+                code:"1111111",
+                active:true,
+                longitude:64.45346406250006,
+                latitude:39.7420392241709
             }} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
         </div>
     );

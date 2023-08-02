@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { navigateTo } from "../../redux/reducers/DashboardSlice";
 import {Outlet} from "react-router-dom";
 import Table from "../UniversalUI/Table/Table";
-import UModal from "../UniversalUI/Modal/Modal";
+import UModal from "../UniversalUI/Modal/UModal";
 import button from "bootstrap/js/src/button";
 // import {useNavigate} from "react-router-dom"; // Import the navigateTo action creator
 
@@ -35,10 +35,16 @@ function Index(props) {
             show: true
         }]
     const elements = [{
-        name:"Input",
-        key:"input",
-        data:<button>Hello</button>
-    }]
+        name:"Name",
+        key:"name",
+        type:"text"
+    },
+        {
+            name:"Age",
+            key:"age",
+            type:"number"
+        }
+    ]
     const dispatch = useDispatch();
     const response = useSelector((state) => state.dashboard);
     // const navigate = useNavigate();

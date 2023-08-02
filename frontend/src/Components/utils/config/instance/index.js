@@ -22,7 +22,7 @@ export default function (url, method, data) {
             if (localStorage.getItem("refresh_token")===null){
                 return {
                     error: true,
-                    data: err.response.data
+                    data: err.response.status
                 };
             }
             return axios({

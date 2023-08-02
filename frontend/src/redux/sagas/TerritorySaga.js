@@ -4,7 +4,7 @@ import {
     saveTerritoryAction,
     editTerritoryAction,
     resetTerritory,
-    setModalVisible, setMapState, setLongitude, setLatitude, setTemplate,
+    setModalVisible, setMapState, setLongitude, setLatitude, setTemplate, setEditModalVisible,
 } from "../reducers/TerritorySlice";
 import { toast } from "react-toastify";
 function* saveTerritoryAsync(action) {
@@ -33,6 +33,7 @@ function* saveTerritoryAsync(action) {
         toast.success(`Territory ${isEditing ? "edited" : "saved"} successfully`);
 
         yield put(setModalVisible(false));
+        yield put(setEditModalVisible(false));
     } catch (error) {
         toast.error("An error occurred. Please try again later.");
     }

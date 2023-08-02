@@ -14,10 +14,11 @@ function TerritoryModal(props) {
         if (props.isEditing && props.visible){
             reset({
                 title:props.data.title,
+                region:props.data.region,
                 code:props.data.code,
                 active:props.data.active
             })
-            dispatch(setMapState([props.data.longitude, props.data.latitude]))
+            dispatch(setMapState({ center:[props.data.longitude, props.data.latitude], zoom: 5 }))
             dispatch(setLatitude(props.data.latitude))
             dispatch(setLongitude(props.data.longitude))
             dispatch(setTemplate([props.data.longitude, props.data.latitude]))
@@ -38,8 +39,10 @@ function TerritoryModal(props) {
         return null;
     }
     function handleSearchResult(event) {
-        const searchResultCoords = event.get('result').geometry.getCoordinates();
-        dispatch(setMapState({ center: searchResultCoords, zoom: 15 }));
+        const searchResultCoords = event.get('result')?.geometry?.getCoordinates(); // Use optional chaining here
+        if (searchResultCoords) {
+            dispatch(setMapState({ center: searchResultCoords, zoom: 15 }));
+        }
     }
 
     function handleMapClick(event) {
