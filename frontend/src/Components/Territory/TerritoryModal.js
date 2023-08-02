@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Map, Placemark, SearchControl } from 'react-yandex-maps';
+import {
+    FullscreenControl,
+    GeolocationControl,
+    Map,
+    Placemark,
+    SearchControl,
+    TrafficControl, TypeSelector,
+    ZoomControl
+} from 'react-yandex-maps';
 import { useForm } from 'react-hook-form';
 import {setLatitude, setLongitude, resetTerritory, setModalVisible, setTemplate, setMapState, saveTerritoryAction, editTerritoryAction} from '../../redux/reducers/TerritorySlice';
 import "./styles.css"
@@ -110,7 +118,12 @@ function TerritoryModal(props) {
                                  state={territory.mapState}
                                  modules={['templateLayoutFactory']}
                              >
-                                 <SearchControl onResultSelect={handleSearchResult} />
+                                 <FullscreenControl options={{ float: "left" }} />
+                                 <GeolocationControl options={{ float: "right" }} />
+                                 <TrafficControl options={{ float: "right" }} />
+                                 <ZoomControl options={{ float: "left" }} />
+                                 <TypeSelector options={{ float: "right" }} />
+                                 <SearchControl options={{ float: "left" }} />
                                  {territory.template && territory.longitude !== "" && territory.latitude !== "" && (
                                      <Placemark
                                          geometry={territory.mapState.center}

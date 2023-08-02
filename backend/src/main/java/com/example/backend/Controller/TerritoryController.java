@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -24,6 +25,7 @@ public class TerritoryController {
     public HttpEntity<?> addTerritory(@RequestBody ReqTerritory reqTerritory) {
         return territoryService.addTerritory(reqTerritory);
     }
+
     @PreAuthorize("hasRole(#UserRoles.ROLE_SUPER_ADMIN)")
     @PutMapping("/{id}")
     public void editTerritory(@PathVariable UUID id, @RequestBody ReqEditTerritory reqEditTerritory) {
@@ -47,11 +49,15 @@ public class TerritoryController {
     }
 
     @GetMapping("/getExcel")
-    public HttpEntity<?> getExcel(HttpServletResponse response,
-                                  @RequestParam(defaultValue = "") String active,
-                                  @RequestParam(defaultValue = "") String quickSearch,
-                                  @RequestParam(defaultValue = "1") Integer page,
-                                  @RequestParam(defaultValue = "5") Integer size) {
-        return territoryService.getExcel(response, active, quickSearch, page, size);
+    public void getExcel(HttpServletResponse response,
+                         @RequestParam(defaultValue = "") String active,
+                         @RequestParam(defaultValue = "") String quickSearch,
+                         @RequestParam(defaultValue = "1") Integer page,
+                         @RequestParam(defaultValue = "5") Integer size) throws IOException {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment;filename=company.xls";
+        response.setHeader(headerKey, headerValue);
+        territoryService.getExcel(response, active, quickSearch, page, size);
     }
 }

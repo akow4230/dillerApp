@@ -7,7 +7,6 @@ import Dashboard from "./Components/Dashboard/index";
 import Territory from "./Components/Territory/Territory";
 import Settings from "./Components/Settings/Settings";
 import {useNavigate} from "react-router-dom";
-import axios from "axios";
 import instance from "./Components/utils/config/instance";
 import ErrorPage from "./Components/404/ErrorPage";
 
@@ -27,11 +26,11 @@ function App() {
                     if (res?.data!==401&&res?.error){
                         console.log("Hello")
                         if (res?.data[0].name!=="ROLE_SUPER_ADMIN"){
-                            // navigate("/404")
+                            navigate("/404")
                         }
                     }
                 } else {
-                    navigate("/login");
+                    navigate("/");
                 }
             }
         }

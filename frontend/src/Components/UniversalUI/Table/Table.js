@@ -28,27 +28,24 @@ function Table({isDark, columns, requestApi}) {
     }
     useEffect(() => {
         getData(searchParams)
-        // getData()
-    }, [columns, currentPage, dispatch, isDark, pageSize, requestApi])
+    }, [columns, currentPage, dispatch, isDark, pageSize, requestApi,])
 
+    function downloadExcel() {
+        instance("api/v1/territory/getExcel", "GET").then(res=>{
+            const blob = new Blob([res.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "user_data.xlsx";
+            a.click();
+            window.URL.revokeObjectURL(url);
+            console.log("Excel file downloaded successfully!");
+        })
+    }
 
-    const param=[
-        {
-         id:1,
-         name:'active',
-         multi:false,
-         options:[
-             {value: '', label: 'All'},
-             {value: 'true', label: 'Active'},
-             {value: 'false', label: 'NoActive'}
-         ],
-         defaultValue:{value: '', label: 'All'},
-            placeholder:''
-        },
-     ]
     return (
         <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
-            <Filter param={param}  func={getData}/>
+            <Filter obj={['active']} func={getData}/>
             <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
                     className="fa-solid fa-sliders"></i></Button>
@@ -61,9 +58,9 @@ function Table({isDark, columns, requestApi}) {
                         <Button type={"dashed"} onClick={() => dispatch(toggleModal())}><i
                             className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
                         <FormControlLabel
-                            control={<MaterialUISwitch sx={{m: 1}} defaultChecked/>}
+                            control={<MaterialUISwitch sx={{m: 1}}/>}
                             label="Dark Mode"
-                            onChange={(e) => console.log(e.target.checked)}
+                            onChange={(e) => dispatch(changeTheme(e.target.checked))}
                         />
                         {
                             data.columns?.map((item, index) => {
@@ -118,7 +115,7 @@ function Table({isDark, columns, requestApi}) {
                                 },
                             ]}
                         />
-                        <Button type={"dashed"}><i className="fa-solid fa-table"></i> &nbsp; Excel</Button>
+                        <Button type={"dashed"} onClick={downloadExcel}><i className="fa-solid fa-table"></i> &nbsp; Excel</Button>
                     </div>
                 }
             </div>
@@ -141,6 +138,7 @@ function Table({isDark, columns, requestApi}) {
                             data?.data?.map(item => <tr key={item?.id}>
                                 {
                                     data?.columns?.map((col) => <td key={col?.id}>{
+                                        col.type==="jsx"?col.data:
                                         <p className={col?.show ? "" : "hidden"}>{item[col?.key]}</p>
                                     }</td>)
                                 }
