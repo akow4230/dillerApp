@@ -18,20 +18,56 @@ import Pagination from '@mui/material/Pagination';
 import {styled} from '@mui/material/styles';
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import Filter from "../filter/Filter";
+import instance from "../../utils/config/instance";
+import {toast, ToastContainer} from "react-toastify";
 
 function Table({isDark, columns, requestApi}) {
     const dispatch = useDispatch()
     const [settings, setSettings] = useState(false)
-    const {pageSize, darkTheme, currentPage, data, modalColumns, modal, searchParams} = useSelector((state) => state.table);
-    function getData(search){
-        dispatch(getTableData({url: requestApi, page: currentPage, size: pageSize, columns: columns, isDark: isDark, search}))
+    const {
+        pageSize,
+        darkTheme,
+        currentPage,
+        data,
+        modalColumns,
+        modal,
+        searchParams
+    } = useSelector((state) => state.table);
+
+    function getData(search) {
+        dispatch(getTableData({
+            url: requestApi,
+            page: currentPage,
+            size: pageSize,
+            columns: columns,
+            isDark: isDark,
+            search
+        }))
     }
+
     useEffect(() => {
         getData(searchParams)
     }, [columns, currentPage, dispatch, isDark, pageSize, requestApi,])
 
+    function getExcel() {
+        instance("/api/v1/territory/getExcel", "GET").then((res) => {
+            const blob = new Blob([res.data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "user_data.xlsx";
+            a.click();
+            window.URL.revokeObjectURL(url);
+            console.log("Excel file downloaded successfully!");
+            toast.success("Downloaded successfully")
+        })
+    }
+
     return (
         <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
+            <ToastContainer/>
             <Filter obj={['active']} func={getData}/>
             <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
@@ -102,7 +138,8 @@ function Table({isDark, columns, requestApi}) {
                                 },
                             ]}
                         />
-                        <Button type={"dashed"}><i className="fa-solid fa-table"></i> &nbsp; Excel</Button>
+                        <Button onClick={getExcel} type={"dashed"}><i
+                            className="fa-solid fa-table"></i> &nbsp; Excel</Button>
                     </div>
                 }
             </div>
@@ -143,8 +180,8 @@ function Table({isDark, columns, requestApi}) {
                     <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))} page={currentPage}
                                 count={data.totalPage}
                                 color={'primary'}
-                                style={{border:"1px solid"}}
-                                 shape="rounded"/>
+                                style={{border: "1px solid"}}
+                                shape="rounded"/>
                 </div>
             </div>
             <Modal isOpen={modal} toggle={() => dispatch(toggleModal())}>

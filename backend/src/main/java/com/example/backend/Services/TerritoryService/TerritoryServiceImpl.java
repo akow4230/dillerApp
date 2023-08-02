@@ -4,19 +4,22 @@ import com.example.backend.Entity.Territory;
 import com.example.backend.Payload.req.ReqEditTerritory;
 import com.example.backend.Payload.req.ReqTerritory;
 import com.example.backend.Repository.TerritoryRepo;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 //import org.apache.poi.ss.usermodel.Row;
 //import org.apache.poi.ss.usermodel.Sheet;
 //import org.apache.poi.ss.usermodel.Workbook;
 //import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,7 +33,7 @@ public class TerritoryServiceImpl implements TerritoryService {
     @Override
     public HttpEntity<?> addTerritory(ReqTerritory reqTerritory) {
         Territory newTerritory = Territory.builder()
-                .region(reqTerritory.getRegion()+"2")
+                .region(reqTerritory.getRegion() + "2")
                 .title(reqTerritory.getTitle())
                 .code(reqTerritory.getCode())
                 .active(reqTerritory.isActive())
@@ -44,14 +47,14 @@ public class TerritoryServiceImpl implements TerritoryService {
     @Override
     public HttpEntity<?> getTerritory(String active, String search, Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
-        Page<Territory> teretoryFilter = getTeretoryFilter(active, search, pageRequest);
-        return ResponseEntity.ok(teretoryFilter);
+        Page<Territory> territoryFilter = getTerritoryFilter(active, search, pageRequest);
+        return ResponseEntity.ok(territoryFilter);
     }
 
-    private Page<Territory> getTeretoryFilter(String active, String search, PageRequest pageRequest) {
-        Page<Territory>allTerritories=null;
+    private Page<Territory> getTerritoryFilter(String active, String search, PageRequest pageRequest) {
+        Page<Territory> allTerritories = null;
         if (Objects.equals(active, "")) {
-           allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(search, search, pageRequest);
+            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(search, search, pageRequest);
             return allTerritories;
         }
         allTerritories = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(Boolean.valueOf(active), search, pageRequest);
@@ -60,54 +63,39 @@ public class TerritoryServiceImpl implements TerritoryService {
     }
 
     @Override
-    public HttpEntity<?> getExcel(HttpServletResponse response, String active, String search, Integer page, Integer size) {
+    public void getExcel(HttpServletResponse response, String active, String search, Integer page, Integer size) throws IOException {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
-        Page<Territory> teretoryFilter = getTeretoryFilter(active, search, pageRequest);
+        Page<Territory> territoryFilter = getTerritoryFilter(active, search, pageRequest);
 
-//        Page<Territory> resultPage;
-//
-//        if (active == null) {
-//            resultPage = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(search, search, pageRequest);
-//        } else {
-//            resultPage = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(active, search, pageRequest);
-//        }
-//
-//        try (Workbook workbook = new XSSFWorkbook()) {
-//            Sheet sheet = workbook.createSheet("Territory Data");
-//
-//            // Create header row
-//            Row headerRow = sheet.createRow(0);
-//            headerRow.createCell(0).setCellValue("ID");
-//            headerRow.createCell(1).setCellValue("Region");
-//            headerRow.createCell(2).setCellValue("Title");
-//            headerRow.createCell(3).setCellValue("Code");
-//            headerRow.createCell(4).setCellValue("Active");
-//            headerRow.createCell(5).setCellValue("Longitude");
-//            headerRow.createCell(6).setCellValue("Latitude");
-//
-//            // Create data rows
-//            int rowNum = 1;
-//            for (Territory territory : resultPage) {
-//                Row row = sheet.createRow(rowNum);
-//                row.createCell(0).setCellValue(territory.getId().toString());
-//                row.createCell(1).setCellValue(territory.getRegion());
-//                row.createCell(2).setCellValue(territory.getTitle());
-//                row.createCell(3).setCellValue(territory.getCode());
-//                row.createCell(4).setCellValue(territory.isActive());
-//                row.createCell(5).setCellValue(territory.getLongitude());
-//                row.createCell(6).setCellValue(territory.getLatitude());
-//            }
-//
-//            try (FileOutputStream fileOut = new FileOutputStream("territory_data.xlsx")) {
-//                workbook.write(fileOut);
-//            }
-//            System.out.println("Territory data exported to territory_data.xlsx");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return ResponseEntity.ok(resultPage);
-        return ResponseEntity.ok("excel");
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("Company info");
+        HSSFRow row = sheet.createRow(0);
+        row.createCell(0).setCellValue("ID");
+        row.createCell(1).setCellValue("Region");
+        row.createCell(2).setCellValue("Title");
+        row.createCell(3).setCellValue("Code");
+        row.createCell(4).setCellValue("Active");
+        row.createCell(5).setCellValue("Longitude");
+        row.createCell(6).setCellValue("Latitude");
+
+        int counter = 1;
+        for (Territory territory : territoryFilter.getContent()) {
+            HSSFRow dataRow = sheet.createRow(counter);
+            dataRow.createCell(0).setCellValue(territory.getId().toString());
+            dataRow.createCell(1).setCellValue(territory.getRegion());
+            dataRow.createCell(2).setCellValue(territory.getTitle());
+            dataRow.createCell(3).setCellValue(territory.getCode());
+            dataRow.createCell(4).setCellValue(territory.isActive());
+            dataRow.createCell(5).setCellValue(territory.getLongitude());
+            dataRow.createCell(6).setCellValue(territory.getLatitude());
+            counter++;
+        }
+        ServletOutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+        outputStream.close();
     }
+
 
     @Override
     public void editTerritory(UUID id, ReqEditTerritory reqEditTerritory) {
