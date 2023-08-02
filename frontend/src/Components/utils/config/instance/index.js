@@ -10,7 +10,7 @@ export default function (url, method, data, param) {
         headers: {
             "Authorization": token
         },
-        params:param
+        params: param
     }).then((res) => {
         if (res.data) {
             console.log(res.data)

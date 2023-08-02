@@ -28,11 +28,27 @@ function Table({isDark, columns, requestApi}) {
     }
     useEffect(() => {
         getData(searchParams)
-    }, [columns, currentPage, dispatch, isDark, pageSize, requestApi,])
+        // getData()
+    }, [columns, currentPage, dispatch, isDark, pageSize, requestApi])
 
+
+    const param=[
+        {
+         id:1,
+         name:'active',
+         multi:false,
+         options:[
+             {value: '', label: 'All'},
+             {value: 'true', label: 'Active'},
+             {value: 'false', label: 'NoActive'}
+         ],
+         defaultValue:{value: '', label: 'All'},
+            placeholder:''
+        },
+     ]
     return (
         <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
-            <Filter obj={['active']} func={getData}/>
+            <Filter param={param}  func={getData}/>
             <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
                     className="fa-solid fa-sliders"></i></Button>

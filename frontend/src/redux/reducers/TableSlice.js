@@ -17,13 +17,7 @@ const initialState = {
         columns: []
     },
     searchParams: {
-        active: '',
-        city: [],
-        weekDays: [],
-        customerCategories: [],
-        tin: '',
-        week: '',
-        quickSearch: ''
+
     }
 
 };

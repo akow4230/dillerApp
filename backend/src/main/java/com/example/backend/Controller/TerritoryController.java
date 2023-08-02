@@ -36,9 +36,13 @@ public class TerritoryController {
                                       @RequestParam(defaultValue = "") String quickSearch,
                                       @RequestParam(defaultValue = "1") Integer page,
                                       @RequestParam(defaultValue = "5") Integer size
+
+
     ) {
+        System.out.print("active:"+active);
+        System.out.println(active);
+        System.out.println(quickSearch);
         HttpEntity<?> territory = territoryService.getTerritory(active, quickSearch, page, size);
-        System.out.println(territory.getBody());
         return territory;
     }
 
