@@ -2,9 +2,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideModal } from './modalSlice';
-
-function UModal() {
+import {hideModal} from "../../../redux/reducers/ModalSlice";
+import "./index.scss"
+function UModal(props) {
     const dispatch = useDispatch();
     const { handleSubmit, register, control, formState: { errors }, reset } = useForm();
     const { show, data } = useSelector((state) => state.modal);
@@ -23,11 +23,11 @@ function UModal() {
             <div className={'umodal'}>
                 <Modal show={show} onHide={handleClose} centered>
                     <Modal.Header closeButton>
-                        <Modal.Title>{data?.title}</Modal.Title>
+                        <Modal.Title>{props?.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <form id={'modal'} className="d-flex flex-column gap-3" onSubmit={handleSubmit(saveValues)}>
-                            {data?.elements?.map((item, index) => (
+                            {props?.elements?.map((item, index) => (
                                 <div key={index}>
                                     <label className="d-flex gap-2 fs-5">
                                         {item?.name + ':'}

@@ -14,8 +14,7 @@ import ErrorPage from "./Components/404/ErrorPage";
 function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const blockedPages = [
-        "/dashboard",
-        "/admin"
+        "/dashboard"
     ];
     const navigate = useNavigate();
     const location = useLocation();
@@ -27,8 +26,8 @@ function App() {
                 if (accessToken !== null) {
                     if (res?.data!==401&&res?.error){
                         console.log("Hello")
-                        if (res?.data[0].name!=="ROLE_SUPER_ADMIN" ){
-                            navigate("/404")
+                        if (res?.data[0].name!=="ROLE_SUPER_ADMIN"){
+                            // navigate("/404")
                         }
                     }
                 } else {

@@ -43,7 +43,11 @@ function Index(props) {
             name:"Age",
             key:"age",
             type:"number"
-        }
+        },{
+            name:"Number",
+            key:"number",
+            type:"number"
+        },
     ]
     const dispatch = useDispatch();
     const response = useSelector((state) => state.dashboard);
@@ -73,8 +77,8 @@ function Index(props) {
                     {/*    requestApi={"/api/v1/test?page={page}&size={limit}"}*/}
                     {/*    columns={columns}*/}
                     {/*/>*/}
-                    {/*<UModal elements={elements} title={"Modal"}/>*/}
-                    <Outlet />
+                    <UModal elements={elements} title={"Modal"}/>
+                    {/*<Outlet />*/}
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import instance from '../../Components/utils/config/instance';
-import { hideModal } from '../reducers/modalSlice';
+import { hideModal } from '../reducers/ModalSlice';
 
 function* saveValuesAsync(action) {
     try {
