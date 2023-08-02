@@ -13,6 +13,7 @@ export default function (url, method, data, param) {
         params:param
     }).then((res) => {
         if (res.data) {
+            console.log(res.data)
             return {
                 error: false,
                 data: res.data
@@ -23,7 +24,7 @@ export default function (url, method, data, param) {
             if (localStorage.getItem("refresh_token")===null){
                 return {
                     error: true,
-                    data: err.response.data
+                    data: err.response.status
                 };
             }
             return axios({

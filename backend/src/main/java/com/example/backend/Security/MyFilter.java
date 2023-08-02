@@ -33,9 +33,10 @@ public class MyFilter extends OncePerRequestFilter {
         String requestPath = request.getRequestURI();
 
         // Allow requests to "/api/v1/auth/login" without Authorization header
-        if (requestPath.equals("/api/v1/auth/login")) {
+        if (requestPath.equals("/api/v1/auth/login") || requestPath.equals("/api/v1/auth/access") || requestPath.equals("/api/v1/auth/refresh")) {
             filterChain.doFilter(request, response);
             return;
+
         }
 
         if (token != null) {

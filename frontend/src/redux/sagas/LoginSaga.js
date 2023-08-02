@@ -25,7 +25,6 @@ function* workLoginUser(action) {
       localStorage.setItem("access_token", response.data.access_token);
     }
     yield put(UserSuccess());
-    console.log(response.data.roles)
     if (response.data.roles[0].name === "ROLE_SUPER_ADMIN") {
       action.payload.navigate("/dashboard");
     }

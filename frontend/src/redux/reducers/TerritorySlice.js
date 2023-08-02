@@ -3,21 +3,17 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isLoading: false,
     error: false,
-    navigation:"",
-    modalVisible:false,
-    editModalVisible:false,
+    navigation: "",
+    modalVisible: false,
+    editModalVisible: false,
+    template: [],
+    defValueOfMap: [41.3775, 64.5853],
+    mapState: { center:[41.3775, 64.5853], zoom: 5 },
     placeName: "",
     latitude: "",
     longitude: "",
-    formData: {
-        title:"",
-        code:"",
-        active:false,
-        longitude:0,
-        latitude:0,
-        region:""
-    }
-}
+};
+
 export const territorySlice = createSlice({
     name: "territory",
     initialState,
@@ -45,14 +41,27 @@ export const territorySlice = createSlice({
         setRegion: (state, action) => {
             state.region = action.payload;
         },
+        setTemplate:(state, action) =>{
+            state.template = action.payload
+        },
+        setMapState:(state, action)=>{
+            state.mapState = action.payload
+        },
+        saveTerritoryAction: (state, action) => {},
+        editTerritoryAction: (state, action) => {}
     }
 });
 export const {
     setModalVisible,
     setLatitude,
     setLongitude,
+    setMapState,
+    setRegion,
+    setTemplate,
     setPlaceName,
     resetTerritory,
-    setEditModalVisible
+    setEditModalVisible,
+    saveTerritoryAction,
+    editTerritoryAction
 } = territorySlice.actions
 export default territorySlice.reducer;
