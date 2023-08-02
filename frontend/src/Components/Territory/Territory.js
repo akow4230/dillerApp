@@ -9,10 +9,45 @@ import {
     setMapState
 } from "../../redux/reducers/TerritorySlice";
 import TerritoryModal from "./TerritoryModal";
+import Table from "../UniversalUI/Table/Table";
 
 function Territory(props) {
     const dispatch = useDispatch();
     const { modalVisible, editModalVisible, defValueOfMap, mapState } = useSelector((state) => state.territory);
+    const columns = [
+        {
+            id: 1,
+            title: "Id",
+            key: "id",
+            type: "int",
+            show: true,
+            order: 1
+        },
+        {
+            id: 2,
+            title: "Region",
+            key: "region",
+            type: "str",
+            show: true,
+            order: 2
+        },
+        {
+            id: 3,
+            title: "Title",
+            key: "title",
+            type: "str",
+            show: true,
+            order: 3
+        },
+        {
+            id: 4,
+            title: "Code",
+            key: "code",
+            type: "str",
+            show: true,
+            order: 4
+        }
+    ]
     const closeModal = () => {
         dispatch({ type: 'territory/handleMapClear', payload: { mapState: mapState, defValueOfMap: defValueOfMap } });
         dispatch(setModalVisible(false));
@@ -31,6 +66,11 @@ function Territory(props) {
                 console.log(editModalVisible)
                 dispatch(setEditModalVisible(true))
             }}> Edit Territory</button>
+            <Table
+                isDark={false}
+                requestApi={"/api/v1/territory?page={page}&size={limit}"}
+                columns={columns}
+            />
             <TerritoryModal action={"Add territory"} visible={modalVisible} onClose={closeModal} />
             <TerritoryModal action={"Edit territory"} data={{
                 id:"a03c748d-551b-4bd9-9dc4-bc372143cc09",

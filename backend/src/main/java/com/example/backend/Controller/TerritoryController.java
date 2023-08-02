@@ -37,7 +37,9 @@ public class TerritoryController {
                                       @RequestParam(defaultValue = "1") Integer page,
                                       @RequestParam(defaultValue = "5") Integer size
     ) {
-        return territoryService.getTerritory(active, quickSearch, page, size);
+        HttpEntity<?> territory = territoryService.getTerritory(active, quickSearch, page, size);
+        System.out.println(territory.getBody());
+        return territory;
     }
 
     @GetMapping("/getExcel")

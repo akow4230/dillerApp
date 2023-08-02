@@ -72,13 +72,8 @@ function Index(props) {
                     <DashboardLeftMenu />
                 </div>
                 <div className={"right-menu w-100 p-4"} style={{background:"#c2c5d5"}}>
-                    {/*<Table*/}
-                    {/*    isDark={false}*/}
-                    {/*    requestApi={"/api/v1/test?page={page}&size={limit}"}*/}
-                    {/*    columns={columns}*/}
-                    {/*/>*/}
-                    <UModal elements={elements} title={"Modal"}/>
-                    {/*<Outlet />*/}
+                    {/*<UModal elements={elements} title={"Modal"}/>*/}
+                    <Outlet />
                 </div>
             </div>
         </div>

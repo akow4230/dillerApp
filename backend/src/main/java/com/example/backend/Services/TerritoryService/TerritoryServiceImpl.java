@@ -55,6 +55,7 @@ public class TerritoryServiceImpl implements TerritoryService {
             return allTerritories;
         }
         allTerritories = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(Boolean.valueOf(active), search, pageRequest);
+        System.out.println(allTerritories);
         return allTerritories;
     }
 

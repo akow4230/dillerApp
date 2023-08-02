@@ -92,9 +92,8 @@ function TerritoryModal(props) {
                                  {errors.code && <span className="error-message">{errors.code.message}</span>}
                                  <label className={"d-flex gap-2"}>
                                      Active
-                                     <input type="checkbox" className={"form-check"} {...register("active", { required: "Active is required" })} />
+                                     <input type="checkbox" className={"form-check"} {...register("active")} />
                                  </label>
-                                 {errors.active && <span className="error-message">{errors.active.message}</span>}
                                  <div style={{ marginTop: "auto", display: "flex", justifyContent: "center" }}>
                                      <button className="btn btn-primary" style={{ position: "absolute", bottom: "30px" }}>Add</button>
                                  </div>
