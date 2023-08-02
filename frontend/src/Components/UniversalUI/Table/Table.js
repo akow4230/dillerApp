@@ -139,6 +139,7 @@ function Table({isDark, columns, requestApi}) {
                             data?.data?.map(item => <tr key={item?.id}>
                                 {
                                     data?.columns?.map((col) => <td key={col?.id}>{
+                                        col.type==="jsx"?col.data:
                                         <p className={col?.show ? "" : "hidden"}>{item[col?.key]}</p>
                                     }</td>)
                                 }
