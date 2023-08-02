@@ -20,6 +20,7 @@ function* watchGetTableData(action) {
             totalPage: response.data.totalPages,
             totalElements: response.data.totalElements
         }))
+
         console.log(response.data)
     } catch (e) {
 
