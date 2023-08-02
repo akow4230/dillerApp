@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,19 +42,27 @@ public class TerritoryServiceImpl implements TerritoryService {
     }
 
     @Override
-    public HttpEntity<?> getTerritory(Boolean active, String search, Integer page, Integer size) {
+    public HttpEntity<?> getTerritory(String active, String search, Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
-        if (active == null) {
-            Page<Territory> allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(search, search, pageRequest);
-            return ResponseEntity.ok(allTerritories);
+        Page<Territory> teretoryFilter = getTeretoryFilter(active, search, pageRequest);
+        return ResponseEntity.ok(teretoryFilter);
+    }
+
+    private Page<Territory> getTeretoryFilter(String active, String search, PageRequest pageRequest) {
+        Page<Territory>allTerritories=null;
+        if (Objects.equals(active, "")) {
+           allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(search, search, pageRequest);
+            return allTerritories;
         }
-        Page<Territory> allByActive = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(active, search, pageRequest);
-        return ResponseEntity.ok(allByActive);
+        allTerritories = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(Boolean.valueOf(active), search, pageRequest);
+        return allTerritories;
     }
 
     @Override
-    public HttpEntity<?> getExcel(HttpServletResponse response, Boolean active, String search, Integer page, Integer size) {
-//        PageRequest pageRequest = PageRequest.of(page - 1, size);
+    public HttpEntity<?> getExcel(HttpServletResponse response, String active, String search, Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        Page<Territory> teretoryFilter = getTeretoryFilter(active, search, pageRequest);
+
 //        Page<Territory> resultPage;
 //
 //        if (active == null) {

@@ -93,7 +93,7 @@ const tableSlice = createSlice({
         },
         changeSearchParams(state, action) {
             state.searchParams = action.payload
-            console.log(action.payload)
+            // console.log(action.payload)
         }
     }
 })

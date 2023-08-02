@@ -32,19 +32,20 @@ public class TerritoryController {
 
     @GetMapping
     @PreAuthorize("hasRole(#UserRoles.ROLE_SUPER_ADMIN)")
-    public HttpEntity<?> getTerritory(@RequestParam(defaultValue = "") Boolean Active,
-                                      @RequestParam(defaultValue = "") String search,
+    public HttpEntity<?> getTerritory(@RequestParam(defaultValue = "") String active,
+                                      @RequestParam(defaultValue = "") String quickSearch,
                                       @RequestParam(defaultValue = "1") Integer page,
-                                      @RequestParam(defaultValue = "5") Integer size) {
-        return territoryService.getTerritory(Active, search, page, size);
+                                      @RequestParam(defaultValue = "5") Integer size
+    ) {
+        return territoryService.getTerritory(active, quickSearch, page, size);
     }
 
     @GetMapping("/getExcel")
     public HttpEntity<?> getExcel(HttpServletResponse response,
-                                  @RequestParam(defaultValue = "") Boolean Active,
-                                  @RequestParam(defaultValue = "") String search,
+                                  @RequestParam(defaultValue = "") String active,
+                                  @RequestParam(defaultValue = "") String quickSearch,
                                   @RequestParam(defaultValue = "1") Integer page,
                                   @RequestParam(defaultValue = "5") Integer size) {
-        return territoryService.getExcel(response, Active, search, page, size);
+        return territoryService.getExcel(response, active, quickSearch, page, size);
     }
 }

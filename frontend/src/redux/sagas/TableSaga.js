@@ -1,4 +1,4 @@
-import {call, put, takeLatest} from "redux-saga/effects";
+import {call, put, takeLatest,takeEvery} from "redux-saga/effects";
 import instance from "../../Components/utils/config/instance";
 import {
     changeSearchParams,
@@ -12,14 +12,15 @@ import {
 
 
 function* watchGetTableData(action) {
+    console.log(action.payload.search.quickSearch,action.payload.search.active)
     try {
-        const response = yield call(() => instance(action.payload.url, "GET"));
+        const response = yield call(() => instance(action.payload.url, "GET", null, {active:action.payload.search.active.value, quickSearch:action.payload.search.quickSearch}));
         yield put(getTableDataSuccess({
             data: response.data.content,
             totalPage: response.data.totalPages,
             totalElements: response.data.totalElements
         }))
-        console.log(response.data)
+        // console.log(response.data)
     } catch (e) {
 
     }
@@ -54,7 +55,7 @@ function* watchChangeSearchParams(action) {
 
 
 export default function* tableSaga() {
-    yield takeLatest(getTableData.type, watchGetTableData)
+    yield takeEvery(getTableData.type, watchGetTableData)
     yield takeLatest(changeTableDataSize.type, watchChangeTableDataSize)
     yield takeLatest(changeTableDataPage.type, watchChangeTableDataPage)
     yield takeLatest(changeTableColumns.type, watchChangeTableColumns)

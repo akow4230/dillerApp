@@ -10,9 +10,9 @@ import java.util.UUID;
 public interface TerritoryService {
     HttpEntity<?> addTerritory(ReqTerritory reqTerritory);
 
-    HttpEntity<?> getTerritory(Boolean active, String search,Integer page, Integer size);
+    HttpEntity<?> getTerritory(String active, String search,Integer page, Integer size);
 
-    HttpEntity<?> getExcel(HttpServletResponse response, Boolean active, String search, Integer page, Integer size);
+    HttpEntity<?> getExcel(HttpServletResponse response, String active, String search, Integer page, Integer size);
 
     void editTerritory(UUID id, ReqEditTerritory reqEditTerritory);
 }

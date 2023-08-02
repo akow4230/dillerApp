@@ -1,14 +1,16 @@
 import axios from "axios";
 
-export default function (url, method, data) {
+export default function (url, method, data, param) {
     let token = localStorage.getItem("access_token");
+    console.log(param)
     return axios({
         url: "http://localhost:8080" + url,
         method: method,
         data: data,
         headers: {
             "Authorization": token
-        }
+        },
+        params:param
     }).then((res) => {
         if (res.data) {
             return {

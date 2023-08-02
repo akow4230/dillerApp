@@ -22,16 +22,18 @@ import Filter from "../filter/Filter";
 function Table({isDark, columns, requestApi}) {
     const dispatch = useDispatch()
     const [settings, setSettings] = useState(false)
-    const {pageSize, darkTheme, currentPage, data, modalColumns, modal} = useSelector((state) => state.table);
-
+    const {pageSize, darkTheme, currentPage, data, modalColumns, modal, searchParams} = useSelector((state) => state.table);
+    function getData(search){
+        dispatch(getTableData({url: requestApi, page: currentPage, size: pageSize, columns: columns, isDark: isDark, search}))
+    }
     useEffect(() => {
-        dispatch(getTableData({url: requestApi, page: currentPage, size: pageSize, columns: columns, isDark: isDark}))
-    }, [columns, currentPage, dispatch, isDark, pageSize, requestApi])
+        getData(searchParams)
+    }, [columns, currentPage, dispatch, isDark, pageSize, requestApi,])
 
     return (
-        <div className={"tableUI"}>
-            <Filter obj={['active']}/>
-            <div className={'topUI'}>
+        <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
+            <Filter obj={['active']} func={getData}/>
+            <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
                     className="fa-solid fa-sliders"></i></Button>
                 {
@@ -43,10 +45,9 @@ function Table({isDark, columns, requestApi}) {
                         <Button type={"dashed"} onClick={() => dispatch(toggleModal())}><i
                             className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
                         <FormControlLabel
-                            checked={darkTheme}
                             control={<MaterialUISwitch sx={{m: 1}} defaultChecked/>}
                             label="Dark Mode"
-                            onChange={(e) => dispatch(changeTheme(e.target.checked))}
+                            onChange={(e) => console.log(e.target.checked)}
                         />
                         {
                             data.columns?.map((item, index) => {
@@ -105,8 +106,8 @@ function Table({isDark, columns, requestApi}) {
                     </div>
                 }
             </div>
-            <div className={'bottomUI'}>
-                <div className={'my-table'}>
+            <div className={darkTheme ? 'bottomUI-dark' : 'bottomUI'}>
+                <div className={darkTheme ? 'my-table-dark' : 'my-table'}>
                     <table className={darkTheme ? 'table table-dark table-striped' : 'table'}>
                         <thead>
                         <tr>
@@ -139,18 +140,18 @@ function Table({isDark, columns, requestApi}) {
                     width: "100%",
                     height: 40
                 }}>
-                    <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page, theme: darkTheme}))}
-                                page={currentPage}
+                    <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))} page={currentPage}
                                 count={data.totalPage}
-                                variant={'outlined'}
-                                shape="rounded"/>
+                                color={'primary'}
+                                style={{border:"1px solid"}}
+                                 shape="rounded"/>
                 </div>
             </div>
             <Modal isOpen={modal} toggle={() => dispatch(toggleModal())}>
                 <ModalHeader toggle={() => dispatch(toggleModal())}>Menu Control</ModalHeader>
                 <ModalBody>
                     {
-                        modalColumns?.map((item, index) => <div
+                        modalColumns.map((item, index) => <div
                             onDragStart={(e) => dispatch(setCurrentDragingColumn(index))}
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={(e) => dispatch(changeOrder(index))}

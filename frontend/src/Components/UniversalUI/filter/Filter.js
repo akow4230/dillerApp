@@ -4,6 +4,7 @@ import {connect, useDispatch} from 'react-redux';
 import {changeSearchParams} from "../../../redux/reducers/TableSlice";
 
 function Filter(props) {
+    const object=props.obj
     const {obj} = props;
     const dispatch = useDispatch();
     const [options] = useState([
@@ -22,7 +23,7 @@ function Filter(props) {
         control: (provided) => ({
             ...provided,
             borderRadius: 8,
-            minHeight: 34,
+            minHeight: 15,
             border: '1px solid #d1d1d1',
         }),
     };
@@ -33,11 +34,18 @@ function Filter(props) {
             ...searchParams,
             [name]: value,
         }))
+        if(name==='quickSearch' || name==='active'){
+            props.func({
+                ...searchParams,
+                [name]: value,
+            })
+
+        }
     };
 
 
     const active = (
-        <div className="my-2 mx-1" style={{width: 300}}>
+        <div className="my-1 mx-1" style={{width: 300}}>
             <Select
                 name="tin"
                 options={act}
@@ -51,7 +59,7 @@ function Filter(props) {
     );
 
     const tin = (
-        <div className="my-2 mx-1" style={{width: 300}}>
+        <div className="my-1 mx-1" style={{width: 300}}>
             <Select
                 name="tin"
                 options={options}
@@ -65,7 +73,7 @@ function Filter(props) {
     );
 
     const city = (
-        <div className="my-2 mx-1" style={{width: 450}}>
+        <div className="my-1 mx-1" style={{width: 450}}>
             <Select
                 name="city"
                 options={options}
@@ -81,7 +89,7 @@ function Filter(props) {
     );
 
     const weekDays = (
-        <div className="my-2 mx-1" style={{width: 400}}>
+        <div className="my-1 mx-1" style={{width: 400}}>
             <Select
                 name="weekDays"
                 options={options}
@@ -96,7 +104,7 @@ function Filter(props) {
     );
 
     const week = (
-        <div className="my-2 mx-1" style={{width: 300}}>
+        <div className="my-1 mx-1" style={{width: 300}}>
             <Select
                 name="week"
                 options={options}
@@ -110,7 +118,7 @@ function Filter(props) {
     );
 
     const customerCategories = (
-        <div className="my-2 mx-1" style={{width: 400}}>
+        <div className="my-1 mx-1" style={{width: 400}}>
             <Select
                 name="customerCategories"
                 options={options}
@@ -151,14 +159,13 @@ function Filter(props) {
         customerCategories,
     };
 
-
     return (
         <div className="">
             <div className="row">
                 {obj.map((item) => myFilters[item])}
                 {/*  button  */}
-                {obj.length !== 0 || obj.length === 1 && obj[0] !== 'active' ? (
-                    <button  style={{width: '90px'}} className="my-2 h-50 btn btn-primary">
+                {obj.length !== 0 && (obj.length === 1 && obj[0] !== 'active') ? (
+                    <button onClick={()=>props.func(searchParams)}  style={{width: '90px'}} className="my-1 h-20 btn btn-primary">
                         Filter
                     </button>
                 ) : (
