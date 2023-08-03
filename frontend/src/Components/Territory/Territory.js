@@ -1,4 +1,4 @@
-    import React from 'react';
+    import React, {useEffect} from 'react';
     import { ToastContainer } from "react-toastify";
     import { useDispatch, useSelector } from "react-redux";
     import {
@@ -11,10 +11,14 @@
     import TerritoryModal from "./TerritoryModal";
     import Table from "../UniversalUI/Table/Table";
     import TerritoryUpdateButton from "./TerritoryUpdateButton";
+    import {changeSearchParams} from "../../redux/reducers/TableSlice";
 
     function Territory(props) {
         const dispatch = useDispatch();
         const { modalVisible, editModalVisible, defValueOfMap, mapState, editData } = useSelector((state) => state.territory);
+        useEffect(()=>{
+            dispatch(changeSearchParams({active:""}))
+        },[])
         const columns = [
             {
                 id: 1,

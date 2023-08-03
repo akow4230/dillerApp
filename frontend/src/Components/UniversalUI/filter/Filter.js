@@ -16,8 +16,9 @@ function Filter(props) {
         }),
     };
 useEffect(()=>{
-   if(!searchParams.active ){
+   if(searchParams.active ===undefined){
        props.func({active:' ', quickSearch:searchParams.quickSearch})
+       console.log(searchParams.quickSearch)
    }
 },[])
 
@@ -32,10 +33,10 @@ useEffect(()=>{
                 ...searchParams,
                 [name]: value,
             })
-            // console.log({
-            //     ...searchParams,
-            //     [name]: value,
-            // })
+            console.log({
+                ...searchParams,
+                [name]: value,
+            })
         }
     };
    // const param=[
