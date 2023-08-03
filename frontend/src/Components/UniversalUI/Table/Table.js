@@ -19,44 +19,76 @@ import {styled} from '@mui/material/styles';
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import Filter from "../filter/Filter";
 import instance from "../../utils/config/instance";
+import axios from "axios";
 
 function Table({isDark, columns, requestApi}) {
     const dispatch = useDispatch()
     const [settings, setSettings] = useState(false)
-    const {pageSize, darkTheme, currentPage, data, modalColumns, modal, searchParams} = useSelector((state) => state.table);
-    function getData(search){
-        dispatch(getTableData({url: requestApi, page: currentPage, size: pageSize, columns: columns, isDark: isDark, search}))
+    const {
+        pageSize,
+        darkTheme,
+        currentPage,
+        data,
+        modalColumns,
+        modal,
+        searchParams
+    } = useSelector((state) => state.table);
+
+    function getData(search) {
+        dispatch(getTableData({
+            url: requestApi,
+            page: currentPage,
+            size: pageSize,
+            columns: columns,
+            isDark: isDark,
+            search
+        }))
     }
+
     useEffect(() => {
         getData(searchParams)
     }, [columns, currentPage, dispatch, isDark, pageSize, requestApi,])
 
-    function downloadExcel() {
-        instance("api/v1/territory/getExcel", "GET").then(res=>{
-            const blob = new Blob([res.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "user_data.xlsx";
-            a.click();
-            window.URL.revokeObjectURL(url);
-            console.log("Excel file downloaded successfully!");
-        })
-    }
-    const param=[
+    const param = [
         {
-         id:1,
-         name:'active',
-         multi:false,
-         options:[
-             {value: '', label: 'All'},
-             {value: 'true', label: 'Active'},
-             {value: 'false', label: 'NoActive'}
-         ],
-         defaultValue:{value: '', label: 'All'},
-            placeholder:''
+            id: 1,
+            name: 'active',
+            multi: false,
+            options: [
+                {value: '', label: 'All'},
+                {value: 'true', label: 'Active'},
+                {value: 'false', label: 'NoActive'}
+            ],
+            defaultValue: {value: '', label: 'All'},
+            placeholder: ''
         },
-        ]
+    ]
+
+    function getExcel() {
+        const active = "true";
+        const search = 'bux';
+        axios
+            .get(`http://localhost:8080/api/v1/territory/getExcel?active=${active}&search=${search}`, {
+                responseType: 'arraybuffer', headers: {
+                    Authorization: localStorage.getItem("access_token")
+                }
+            })
+            .then((res) => {
+                const blob = new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+                const url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'territory.xlsx';
+                a.click();
+
+                window.URL.revokeObjectURL(url);
+            })
+            .catch((error) => {
+                console.error('Error fetching Excel data:', error);
+            });
+    }
+
     return (
         <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
             <Filter param={param} func={getData}/>
@@ -129,7 +161,8 @@ function Table({isDark, columns, requestApi}) {
                                 },
                             ]}
                         />
-                        <Button type={"dashed"} onClick={downloadExcel}><i className="fa-solid fa-table"></i> &nbsp; Excel</Button>
+                        <Button type={"dashed"} onClick={getExcel}><i
+                            className="fa-solid fa-table"></i> &nbsp; Excel</Button>
                     </div>
                 }
             </div>
@@ -153,7 +186,8 @@ function Table({isDark, columns, requestApi}) {
                                 {
                                     data?.columns?.map((col) => <td key={col?.id}>{
                                         col?.show &&
-                                        col.type==="jsx"?React.cloneElement(col.data, { data: item }):col.show&& <p >{item[col?.key]}</p>
+                                        col.type === "jsx" ? React.cloneElement(col.data, {data: item}) : col.show &&
+                                            <p>{item[col?.key]}</p>
                                     }</td>)
                                 }
                             </tr>)
@@ -171,8 +205,8 @@ function Table({isDark, columns, requestApi}) {
                     <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))} page={currentPage}
                                 count={data.totalPage}
                                 color={'primary'}
-                                style={{border:"1px solid"}}
-                                 shape="rounded"/>
+                                style={{border: "1px solid"}}
+                                shape="rounded"/>
                 </div>
             </div>
             <Modal isOpen={modal} toggle={() => dispatch(toggleModal())}>

@@ -6,6 +6,7 @@ import com.example.backend.Payload.req.ReqTerritory;
 import com.example.backend.Services.TerritoryService.TerritoryService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,16 +47,12 @@ public class TerritoryController {
         return territory;
     }
 
+    @PreAuthorize("hasRole(#UserRoles.ROLE_SUPER_ADMIN)")
     @GetMapping("/getExcel")
-    public void getExcel(HttpServletResponse response,
-                         @RequestParam(defaultValue = "") String active,
-                         @RequestParam(defaultValue = "") String quickSearch,
-                         @RequestParam(defaultValue = "1") Integer page,
-                         @RequestParam(defaultValue = "5") Integer size) throws IOException {
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment;filename=company.xls";
-        response.setHeader(headerKey, headerValue);
-        territoryService.getExcel(response, active, quickSearch, page, size);
+    public ResponseEntity<Resource> getExcel(HttpServletResponse response,
+                                             @RequestParam(defaultValue = "") String active,
+                                             @RequestParam(defaultValue = "") String search
+    ) throws IOException {
+        return territoryService.getExcel(response, active, search);
     }
 }

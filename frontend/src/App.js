@@ -16,6 +16,7 @@ function App() {
         "/dashboard"
     ];
     const existingPage = [
+        "/",
         "/dashboard"
     ]
     const navigate = useNavigate();

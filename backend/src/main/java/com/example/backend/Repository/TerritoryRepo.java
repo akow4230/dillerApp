@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface TerritoryRepo extends JpaRepository<Territory, UUID> {
@@ -15,4 +16,9 @@ public interface TerritoryRepo extends JpaRepository<Territory, UUID> {
     Page<Territory> findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(Boolean active, String search, PageRequest pageRequest);
 
     Page<Territory> findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(String title, String region, PageRequest pageRequest);
+
+
+    List<Territory> findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(String title,String region);
+
+    List<Territory> findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(Boolean active, String title,String region);
 }

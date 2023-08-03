@@ -3,7 +3,6 @@ package com.example.backend.Services.TerritoryService;
 import com.example.backend.Entity.Territory;
 import com.example.backend.Payload.req.ReqEditTerritory;
 import com.example.backend.Payload.req.ReqTerritory;
-import com.example.backend.Repository.TerritoryRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
