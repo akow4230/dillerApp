@@ -5,9 +5,17 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import {useNavigate} from "react-router-dom";
 
 function Index({data}) {
-    const [userBox, setUserBox] = useState(false)
+    const navigate = useNavigate()
+    const [userBox, setUserBox] = useState(false);
+
+    function logOut() {
+        localStorage.clear()
+        navigate("/")
+    }
+
     return (
         <div className={"dashboardTopBar"}>
             <img src={logo} alt="Image Not Found" width={70} height={70} style={{borderRadius: "50%"}}/>
@@ -65,7 +73,16 @@ function Index({data}) {
                     justifyContent: "center",
                     background: "#219ebc"
                 }}>
-                    <b style={{fontSize: "16pt", gap:"10px", color: "white", display:"flex", justifyContent:"center", alignItems:"center"}}><i className="fa-solid fa-calendar-days"></i><p style={{marginTop:"20px"}}>{data?.currentDateAndTime?(data?.currentDateAndTime[2]+"-"+data?.currentDateAndTime[1]+"-"+data?.currentDateAndTime[0]):""}</p> </b>
+                    <b style={{
+                        fontSize: "16pt",
+                        gap: "10px",
+                        color: "white",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}><i className="fa-solid fa-calendar-days"></i><p
+                        style={{marginTop: "20px"}}>{data?.currentDateAndTime ? (data?.currentDateAndTime[2] + "-" + data?.currentDateAndTime[1] + "-" + data?.currentDateAndTime[0]) : ""}</p>
+                    </b>
 
                 </div>
                 <div style={{
@@ -138,7 +155,7 @@ function Index({data}) {
                             alignItems: "center",
                             justifyContent: "left",
                             paddingLeft: 10
-                        }}>
+                        }} onClick={logOut}>
                             <b style={{color: "white"}}><i className="fa-solid fa-power-off"></i> Exit</b>
                         </div>
                     </div> : ""}
