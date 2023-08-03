@@ -43,10 +43,23 @@ function Table({isDark, columns, requestApi}) {
             console.log("Excel file downloaded successfully!");
         })
     }
-
+    const param=[
+        {
+         id:1,
+         name:'active',
+         multi:false,
+         options:[
+             {value: '', label: 'All'},
+             {value: 'true', label: 'Active'},
+             {value: 'false', label: 'NoActive'}
+         ],
+         defaultValue:{value: '', label: 'All'},
+            placeholder:''
+        },
+        ]
     return (
-        <div className={darkTheme ? "tableUI-dark" : "tableUI"} style={{height:"100%"}}>
-            <Filter obj={['active']} func={getData}/>
+        <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
+            <Filter param={param} func={getData}/>
             <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
                     className="fa-solid fa-sliders"></i></Button>
