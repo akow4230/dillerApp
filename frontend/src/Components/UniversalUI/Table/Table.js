@@ -21,7 +21,7 @@ import Filter from "../filter/Filter";
 import instance from "../../utils/config/instance";
 import axios from "axios";
 
-function Table({isDark, columns, requestApi, param}) {
+function Table({isDark, columns, requestApi, filterParam}) {
     const dispatch = useDispatch()
     const [settings, setSettings] = useState(false)
     const {
@@ -50,7 +50,6 @@ function Table({isDark, columns, requestApi, param}) {
     }, [columns, currentPage, dispatch, isDark, pageSize, requestApi,])
 
 
-
     function getExcel() {
         axios
             .get(`http://localhost:8080/api/v1/territory/getExcel?active=${searchParams.active}&search=${searchParams.quickSearch}`, {
@@ -76,7 +75,7 @@ function Table({isDark, columns, requestApi, param}) {
 
     return (
         <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
-            <Filter param={param} func={getData}/>
+            <Filter param={filterParam} func={getData}/>
             <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
                     className="fa-solid fa-sliders"></i></Button>
@@ -169,11 +168,15 @@ function Table({isDark, columns, requestApi, param}) {
                         {
                             data?.data?.map(item => <tr key={item?.id}>
                                 {
-                                    data?.columns?.map((col) => <td key={col?.id}>{
-                                        col?.show &&
-                                        col.type === "jsx" ? React.cloneElement(col.data, {data: item}) : col.show &&
-                                            <p>{item[col?.key]}</p>
-                                    }</td>)
+                                    data?.columns?.map((col) => <td key={col?.id}>
+                                        {col.render ? col.render(item) :
+                                            col?.show &&
+                                            col.type === "jsx" ? React.cloneElement(col.data, {data: item}) : col.show &&
+                                                <p>{item[col?.key]}</p>
+
+                                        }
+                                        {
+                                        }</td>)
                                 }
                             </tr>)
                         }

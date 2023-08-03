@@ -12,8 +12,8 @@ import {
 
 
 function* watchGetTableData(action) {
-    console.log(action.payload.search)
-    console.log(action.payload.url)
+    // console.log(action.payload.search)
+    // console.log(action.payload.url)
     try {
         const response = yield call(() => instance(action.payload.url, "GET", null, {active:action.payload.search.active.value, quickSearch:action.payload.search.quickSearch}));
         yield put(getTableDataSuccess({
@@ -21,7 +21,7 @@ function* watchGetTableData(action) {
             totalPage: response.data.totalPages,
             totalElements: response.data.totalElements
         }))
-        // console.log(response.data)
+         console.log(response.data)
     } catch (e) {
 
     }

@@ -60,7 +60,7 @@
             order:5,
             data:<TerritoryUpdateButton />}
         ]
-        const param = [
+        const filterParam = [
             {
                 id: 1,
                 name: 'active',
@@ -92,7 +92,7 @@
                     isDark={false}
                     requestApi={"/api/v1/territory?page={page}&size={limit}"}
                     columns={columns}
-                    param={param}
+                    filterParam={filterParam}
                 />
                 {/*<button className="btn btn-success" onClick={() => {*/}
                 {/*    dispatch(setEditData({*/}

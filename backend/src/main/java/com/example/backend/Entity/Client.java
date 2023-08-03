@@ -30,7 +30,7 @@ public class Client {
     private String referencePoint;
     @OneToOne
     private CustomerCategory category;
-    private boolean activity;
+    private boolean active;
     private LocalDate dateOfRegistration;
     private String typeOfEquipment;
     private String equipment;
