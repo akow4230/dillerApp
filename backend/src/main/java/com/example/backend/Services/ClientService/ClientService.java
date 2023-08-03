@@ -1,0 +1,8 @@
+package com.example.backend.Services.ClientService;
+
+import org.springframework.http.HttpEntity;
+
+public interface ClientService {
+
+    HttpEntity<?> getClients(String active, String quickSearch, Integer page, Integer size);
+}

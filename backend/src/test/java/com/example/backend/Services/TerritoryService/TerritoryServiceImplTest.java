@@ -3,6 +3,7 @@ package com.example.backend.Services.TerritoryService;
 import com.example.backend.Entity.Territory;
 import com.example.backend.Payload.req.ReqEditTerritory;
 import com.example.backend.Payload.req.ReqTerritory;
+import com.example.backend.Repository.TerritoryRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -96,7 +97,7 @@ class TerritoryServiceImplTest {
     void itShouldEditTerritory() {
         //Given
         UUID id = UUID.randomUUID();
-        ReqEditTerritory reqEditTerritory = new ReqEditTerritory("tit", "code", true, 1, 2);
+        ReqEditTerritory reqEditTerritory = new ReqEditTerritory("tit", "code","region", true, 1, 2);
 
         Territory editingterritory = new Territory(
                 id, "reg",

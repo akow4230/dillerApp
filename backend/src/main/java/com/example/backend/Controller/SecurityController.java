@@ -18,9 +18,9 @@ public class SecurityController {
     private SecurityService securityService;
     @GetMapping
     public HttpEntity<?> checkSecurity(@RequestHeader("Authorization") String authorization){
-        System.out.println(authorization);
+//        System.out.println(authorization);
         HttpEntity<?> httpEntity = securityService.checkSecurity(authorization);
-        System.out.println(httpEntity.getBody());
+//        System.out.println(httpEntity.getBody());
         return httpEntity;
     }
 }

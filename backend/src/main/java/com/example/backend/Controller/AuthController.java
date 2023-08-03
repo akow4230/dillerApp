@@ -1,5 +1,7 @@
 package com.example.backend.Controller;
+import com.example.backend.DTO.CurrentUser;
 import com.example.backend.DTO.UserDTO;
+import com.example.backend.Entity.User;
 import com.example.backend.Payload.req.ReqLogin;
 import com.example.backend.Security.JwtService;
 import com.example.backend.Services.AuthService.AuthService;
@@ -32,8 +34,8 @@ public class AuthController {
     }
 
     @GetMapping("/decode")
-    public HttpEntity<?> decode(@RequestHeader("token") String token) {
-        return ResponseEntity.ok(service.decode(token));
+    public HttpEntity<?> decode(@CurrentUser User user) {
+        return ResponseEntity.ok(user);
     }
 
 }

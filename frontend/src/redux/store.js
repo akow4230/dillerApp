@@ -7,6 +7,7 @@ import tableSlice from "./reducers/TableSlice";
 import settings from "./reducers/SettingsSlice";
 import territory from "./reducers/TerritorySlice"
 import modal from "./reducers/ModalSlice"
+import categoryReducer from './reducers/CustomerCategorySlice'
 const sagaMiddleware = createSagaMiddleware();
 const rootReducer = combineReducers({
     login,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     table: tableSlice,
     territory,
     settings,
-    modal
+    modal,
+    category: categoryReducer
 });
 
 export const store = configureStore({

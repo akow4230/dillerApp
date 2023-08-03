@@ -9,6 +9,7 @@ import Settings from "./Components/Settings/Settings";
 import {useNavigate} from "react-router-dom";
 import instance from "./Components/utils/config/instance";
 import ErrorPage from "./Components/404/ErrorPage";
+import TestKeraksiz from "./Components/UniversalUI/filter/TestKeraksiz";
 
 function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,6 +50,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Login/>}/>
                 <Route path="/404" element={<ErrorPage/>}/>
+                <Route path="/keraksiz" element={<TestKeraksiz/>}/>
                 <Route path="/dashboard" element={<Dashboard/>}>
                     <Route path="/dashboard/settings" element={<Settings/>}>
                         <Route path={"/dashboard/settings/territory"} element={<Territory/>}/>
