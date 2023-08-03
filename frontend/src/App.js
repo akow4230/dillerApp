@@ -16,18 +16,21 @@ function App() {
         "/dashboard"
     ];
     const existingPage = [
+        "/dashboard",
         "/",
-        "/dashboard"
+        "/dashboard/settings",
+        "/dashboard/settings/territory",
+        "/404"
     ]
     const navigate = useNavigate();
     const location = useLocation();
     useEffect( () => {
         async function checkSecurity(){
-            if (existingPage.some((blockedPage) => location.pathname.startsWith(blockedPage))) {
+            // if (existingPage.includes(location.pathname)) {
                 if (blockedPages.some((blockedPage) => location.pathname.startsWith(blockedPage))) {
                     let accessToken = localStorage.getItem("access_token");
-                    const res = await instance("/api/v1/security", "GET")
                     if (accessToken !== null) {
+                        const res = await instance("/api/v1/security", "GET")
                         if (res?.data !== 401 && res?.error) {
                             console.log("Hello")
                             if (res?.data[0].name !== "ROLE_SUPER_ADMIN") {
@@ -38,9 +41,9 @@ function App() {
                         navigate("/");
                     }
                 }
-            }else {
-                navigate("/404")
-            }
+            // }else {
+            //     navigate("/404")
+            // }
         }
         checkSecurity()
     }, [blockedPages, location.pathname, navigate])
@@ -48,12 +51,12 @@ function App() {
         <div className="App">
             <Routes>
                 <Route path="/" element={<Login/>}/>
-                <Route path="/404" element={<ErrorPage/>}/>
-                <Route path="/dashboard" element={<Dashboard/>}>
-                    <Route path="/dashboard/settings" element={<Settings/>}>
+                <Route path="/dashboard/" element={<Dashboard/>}>
+                    <Route path="/dashboard/settings/" element={<Settings/>}>
                         <Route path={"/dashboard/settings/territory"} element={<Territory/>}/>
                     </Route>
                 </Route>
+                <Route path="*" element={<ErrorPage />} />
             </Routes>
         </div>
     );

@@ -69,11 +69,9 @@ public class TerritoryServiceImpl implements TerritoryService {
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
         List<Territory> territoryFilter = null;
         if (Objects.equals(active, "")) {
-            System.out.println(active);
             territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(search, search);
         } else {
             System.out.println(active);
-            System.out.println(search + " search");
             territoryFilter = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(Boolean.valueOf(active), search, search);
         }
         System.out.println(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(search, search));

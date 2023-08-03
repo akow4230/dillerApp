@@ -15,7 +15,7 @@ function* saveTerritoryAsync(action) {
             toast.error("You must select territory");
             return;
         }
-
+        console.log(territory.longitude)
         const response = yield call(
             instance,
             `/api/v1/territory${isEditing ? "/" + territory.id : ""}`,
@@ -31,7 +31,6 @@ function* saveTerritoryAsync(action) {
         );
         yield put(resetTerritory());
         toast.success(`Territory ${isEditing ? "edited" : "saved"} successfully`);
-
         yield put(setModalVisible(false));
         yield put(setEditModalVisible(false));
     } catch (error) {
@@ -65,6 +64,10 @@ function* handleMapClickAsync(action) {
         }
     } catch (error) {
     }
+
+
+
+
 }
 
 export function* territorySaga() {

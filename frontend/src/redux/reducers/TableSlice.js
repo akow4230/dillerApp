@@ -6,7 +6,7 @@ const initialState = {
     darkTheme: false,
     url: "",
     modal: false,
-    pageSize: 10,
+    pageSize: 5,
     currentPage: 1,
     modalColumns: [],
     currentDragingColumn: 0,

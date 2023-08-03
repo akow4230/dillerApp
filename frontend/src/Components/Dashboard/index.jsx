@@ -64,12 +64,6 @@ function Index(props) {
         dispatch({ type: 'dashboard/getDashboardData' });
     }, [dispatch]);
 
-    useEffect(() => {
-        if (response?.error) {
-            dispatch(navigateTo("/"));
-        }
-    }, [response, dispatch]);
-
     return (
         <div className={"dashboard"}>
             <div className="top-bar">
