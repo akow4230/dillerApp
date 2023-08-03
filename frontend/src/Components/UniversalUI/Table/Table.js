@@ -21,7 +21,7 @@ import Filter from "../filter/Filter";
 import instance from "../../utils/config/instance";
 import axios from "axios";
 
-function Table({isDark, columns, requestApi}) {
+function Table({isDark, columns, requestApi, param}) {
     const dispatch = useDispatch()
     const [settings, setSettings] = useState(false)
     const {
@@ -49,20 +49,7 @@ function Table({isDark, columns, requestApi}) {
         getData(searchParams)
     }, [columns, currentPage, dispatch, isDark, pageSize, requestApi,])
 
-    const param = [
-        {
-            id: 1,
-            name: 'active',
-            multi: false,
-            options: [
-                {value: '', label: 'All'},
-                {value: 'true', label: 'Active'},
-                {value: 'false', label: 'NoActive'}
-            ],
-            defaultValue: {value: '', label: 'All'},
-            placeholder: ''
-        },
-    ]
+
 
     function getExcel() {
         const active = "true";

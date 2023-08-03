@@ -56,6 +56,20 @@
             order:5,
             data:<TerritoryUpdateButton />}
         ]
+        const param = [
+            {
+                id: 1,
+                name: 'active',
+                multi: false,
+                options: [
+                    {value: '', label: 'All'},
+                    {value: 'true', label: 'Active'},
+                    {value: 'false', label: 'NoActive'}
+                ],
+                defaultValue: {value: '', label: 'All'},
+                placeholder: ''
+            },
+        ]
         const closeModal = () => {
             dispatch({ type: 'territory/handleMapClear', payload: { mapState: mapState, defValueOfMap: defValueOfMap } });
             dispatch(setModalVisible(false));
@@ -74,6 +88,7 @@
                     isDark={false}
                     requestApi={"/api/v1/territory?page={page}&size={limit}"}
                     columns={columns}
+                    param={param}
                 />
                 {/*<button className="btn btn-success" onClick={() => {*/}
                 {/*    dispatch(setEditData({*/}
