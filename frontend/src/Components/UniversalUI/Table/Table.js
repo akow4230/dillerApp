@@ -52,10 +52,8 @@ function Table({isDark, columns, requestApi, param}) {
 
 
     function getExcel() {
-        const active = "true";
-        const search = 'bux';
         axios
-            .get(`http://localhost:8080/api/v1/territory/getExcel?active=${active}&search=${search}`, {
+            .get(`http://localhost:8080/api/v1/territory/getExcel?active=${searchParams.active}&search=${searchParams.quickSearch}`, {
                 responseType: 'arraybuffer', headers: {
                     Authorization: localStorage.getItem("access_token")
                 }

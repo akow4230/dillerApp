@@ -53,6 +53,11 @@ public class TerritoryController {
                                              @RequestParam(defaultValue = "") String active,
                                              @RequestParam(defaultValue = "") String search
     ) throws IOException {
-        return territoryService.getExcel(response, active, search);
+        if (search.equals("undefined")){
+            return territoryService.getExcel(response, active, "");
+        }else {
+            return territoryService.getExcel(response, active, search);
+
+        }
     }
 }
