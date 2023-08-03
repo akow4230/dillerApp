@@ -108,6 +108,7 @@ public class TerritoryServiceImpl implements TerritoryService {
             EditingTerritory.setActive(reqEditTerritory.isActive());
             EditingTerritory.setLatitude(reqEditTerritory.getLatitude());
             EditingTerritory.setLongitude(reqEditTerritory.getLongitude());
+            EditingTerritory.setRegion(reqEditTerritory.getRegion());
             territoryRepo.save(EditingTerritory);
         } else {
             throw new IllegalArgumentException("Territory not found with ID: " + id);

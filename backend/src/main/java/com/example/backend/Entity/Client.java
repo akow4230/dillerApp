@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -16,17 +18,21 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    private String name;
+    @OneToMany
+    private List<Company> company;
+    @OneToOne
+    private User agent;
     @OneToOne
     private Territory territory;
-    private String name;
     private String address;
     private String phone;
-    private String tin;
-    private String companyName;
-    private double longitude;
-    private double latitude;
-
+    private String referencePoint;
     @OneToOne
     private CustomerCategory category;
+    private boolean activity;
+    private LocalDate dateOfRegistration;
+    private String typeOfEquipment;
+    private String equipment;
 
 }

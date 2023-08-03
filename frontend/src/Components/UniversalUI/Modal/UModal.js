@@ -21,7 +21,7 @@ function UModal(props) {
     return (
         <div>
             <div className={'umodal'}>
-                <Modal show={show} onHide={handleClose} centered>
+                <Modal show={props.visible} onHide={props.toggle} centered>
                     <Modal.Header closeButton>
                         <Modal.Title>{props?.title}</Modal.Title>
                     </Modal.Header>

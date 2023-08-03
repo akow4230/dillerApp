@@ -10,7 +10,7 @@ import modal from "./reducers/ModalSlice"
 const sagaMiddleware = createSagaMiddleware();
 const rootReducer = combineReducers({
     login,
-    dashboard: dashboardSlice.reducer,
+        dashboard: dashboardSlice.reducer,
     table: tableSlice,
     territory,
     settings,

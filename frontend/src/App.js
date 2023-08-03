@@ -15,23 +15,30 @@ function App() {
     const blockedPages = [
         "/dashboard"
     ];
+    const existingPage = [
+        "/dashboard"
+    ]
     const navigate = useNavigate();
     const location = useLocation();
     useEffect( () => {
         async function checkSecurity(){
-            if (blockedPages.some((blockedPage) => location.pathname.startsWith(blockedPage))) {
-                let accessToken = localStorage.getItem("access_token");
-                const res = await instance("/api/v1/security", "GET")
-                if (accessToken !== null) {
-                    if (res?.data!==401&&res?.error){
-                        console.log("Hello")
-                        if (res?.data[0].name!=="ROLE_SUPER_ADMIN"){
-                            navigate("/404")
+            if (existingPage.some((blockedPage) => location.pathname.startsWith(blockedPage))) {
+                if (blockedPages.some((blockedPage) => location.pathname.startsWith(blockedPage))) {
+                    let accessToken = localStorage.getItem("access_token");
+                    const res = await instance("/api/v1/security", "GET")
+                    if (accessToken !== null) {
+                        if (res?.data !== 401 && res?.error) {
+                            console.log("Hello")
+                            if (res?.data[0].name !== "ROLE_SUPER_ADMIN") {
+                                navigate("/404")
+                            }
                         }
+                    } else {
+                        navigate("/");
                     }
-                } else {
-                    navigate("/");
                 }
+            }else {
+                navigate("/404")
             }
         }
         checkSecurity()
@@ -39,11 +46,11 @@ function App() {
     return (
         <div className="App">
             <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/404" element={<ErrorPage />} />
-                <Route path="/dashboard" element={<Dashboard />} >
-                    <Route path="/dashboard/settings" element={<Settings />} >
-                        <Route path={"/dashboard/settings/territory"} element={<Territory />}/>
+                <Route path="/" element={<Login/>}/>
+                <Route path="/404" element={<ErrorPage/>}/>
+                <Route path="/dashboard" element={<Dashboard/>}>
+                    <Route path="/dashboard/settings" element={<Settings/>}>
+                        <Route path={"/dashboard/settings/territory"} element={<Territory/>}/>
                     </Route>
                 </Route>
             </Routes>

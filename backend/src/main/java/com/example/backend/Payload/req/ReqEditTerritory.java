@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ReqEditTerritory {
     private String title;
     private String code;
+    private String region;
     private boolean active;
     private double longitude;
     private double latitude;

@@ -12,6 +12,7 @@ const initialState = {
     placeName: "",
     latitude: "",
     longitude: "",
+    editData:{}
 };
 
 export const territorySlice = createSlice({
@@ -47,6 +48,9 @@ export const territorySlice = createSlice({
         setMapState:(state, action)=>{
             state.mapState = action.payload
         },
+        setEditData:(state,action)=>{
+          state.editData = action.payload
+        },
         saveTerritoryAction: (state, action) => {},
         editTerritoryAction: (state, action) => {}
     }
@@ -62,6 +66,7 @@ export const {
     resetTerritory,
     setEditModalVisible,
     saveTerritoryAction,
-    editTerritoryAction
+    editTerritoryAction,
+    setEditData
 } = territorySlice.actions
 export default territorySlice.reducer;

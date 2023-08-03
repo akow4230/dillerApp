@@ -2,18 +2,19 @@
     import { ToastContainer } from "react-toastify";
     import { useDispatch, useSelector } from "react-redux";
     import {
-        setModalVisible,
-        setEditModalVisible,
-        setLongitude,
-        setLatitude,
-        setMapState
-    } from "../../redux/reducers/TerritorySlice";
+    setModalVisible,
+    setEditModalVisible,
+    setLongitude,
+    setLatitude,
+    setMapState, setEditData
+} from "../../redux/reducers/TerritorySlice";
     import TerritoryModal from "./TerritoryModal";
     import Table from "../UniversalUI/Table/Table";
+    import TerritoryUpdateButton from "./TerritoryUpdateButton";
 
     function Territory(props) {
         const dispatch = useDispatch();
-        const { modalVisible, editModalVisible, defValueOfMap, mapState } = useSelector((state) => state.territory);
+        const { modalVisible, editModalVisible, defValueOfMap, mapState, editData } = useSelector((state) => state.territory);
         const columns = [
             {
                 id: 1,
@@ -46,7 +47,14 @@
                 type: "str",
                 show: true,
                 order: 4
-            }
+            },
+            {id:5,
+            title:"Update",
+            key:"update",
+            type:"jsx",
+            show:true,
+            order:5,
+            data:<TerritoryUpdateButton />}
         ]
         const closeModal = () => {
             dispatch({ type: 'territory/handleMapClear', payload: { mapState: mapState, defValueOfMap: defValueOfMap } });
@@ -62,25 +70,25 @@
                 <p style={{ fontSize: "25pt" }}>Territory</p>
                 <hr />
                 <button className="btn btn-success" onClick={() => dispatch(setModalVisible(true))}>+ Add Territory</button>
-                <button className="btn btn-success" onClick={() => {
-                    console.log(editModalVisible)
-                    dispatch(setEditModalVisible(true))
-                }}> Edit Territory</button>
                 <Table
                     isDark={false}
                     requestApi={"/api/v1/territory?page={page}&size={limit}"}
                     columns={columns}
                 />
+                {/*<button className="btn btn-success" onClick={() => {*/}
+                {/*    dispatch(setEditData({*/}
+                {/*        id:"a03c748d-551b-4bd9-9dc4-bc372143cc09",*/}
+                {/*        title:"Shift Academyyy",*/}
+                {/*        region:"Buxoro2",*/}
+                {/*        code:"1111111",*/}
+                {/*        active:true,*/}
+                {/*        longitude:64.45346406250006,*/}
+                {/*        latitude:39.7420392241709*/}
+                {/*    }))*/}
+                {/*    dispatch(setEditModalVisible(true))*/}
+                {/*}}> Edit Territory</button>*/}
                 <TerritoryModal action={"Add territory"} visible={modalVisible} onClose={closeModal} />
-                <TerritoryModal action={"Edit territory"} data={{
-                    id:"a03c748d-551b-4bd9-9dc4-bc372143cc09",
-                    title:"Shift Academy",
-                    region:"Buxoro2",
-                    code:"1111111",
-                    active:true,
-                    longitude:64.45346406250006,
-                    latitude:39.7420392241709
-                }} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
+                <TerritoryModal action={"Edit territory"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
             </div>
         );
     }

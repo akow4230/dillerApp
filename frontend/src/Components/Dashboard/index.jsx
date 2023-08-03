@@ -33,7 +33,15 @@ function Index(props) {
             key: "url",
             type: "string",
             show: true
-        }]
+        },
+        {
+            id: 4,
+            title: "Button",
+            key: "editButton",
+            type: "jsx",
+            show: true
+        }
+    ]
     const elements = [{
         name:"Name",
         key:"name",
