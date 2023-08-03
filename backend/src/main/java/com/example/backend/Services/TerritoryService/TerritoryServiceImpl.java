@@ -69,10 +69,14 @@ public class TerritoryServiceImpl implements TerritoryService {
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
         List<Territory> territoryFilter = null;
         if (Objects.equals(active, "")) {
+            System.out.println(active);
             territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(search, search);
         } else {
+            System.out.println(active);
+            System.out.println(search + " search");
             territoryFilter = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(Boolean.valueOf(active), search, search);
         }
+        System.out.println(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(search, search));
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Company info");
         Row row = sheet.createRow(0);
@@ -84,6 +88,7 @@ public class TerritoryServiceImpl implements TerritoryService {
         row.createCell(5).setCellValue("Longitude");
         row.createCell(6).setCellValue("Latitude");
         int counter = 1;
+        System.out.println(territoryFilter);
         for (Territory territory : territoryFilter) {
             Row dataRow = sheet.createRow(counter);
             counter++;
