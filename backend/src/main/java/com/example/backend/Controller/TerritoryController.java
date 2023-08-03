@@ -41,9 +41,7 @@ public class TerritoryController {
 
 
     ) {
-        System.out.print("active:"+active);
-        System.out.println(active);
-        System.out.println(quickSearch);
+
         HttpEntity<?> territory = territoryService.getTerritory(active, quickSearch, page, size);
         return territory;
     }

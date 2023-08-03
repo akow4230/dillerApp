@@ -18,6 +18,7 @@ import Pagination from '@mui/material/Pagination';
 import {styled} from '@mui/material/styles';
 import {Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import Filter from "../filter/Filter";
+import instance from "../../utils/config/instance";
 
 function Table({isDark, columns, requestApi}) {
     const dispatch = useDispatch()
@@ -42,10 +43,23 @@ function Table({isDark, columns, requestApi}) {
             console.log("Excel file downloaded successfully!");
         })
     }
-
+    const param=[
+        {
+         id:1,
+         name:'active',
+         multi:false,
+         options:[
+             {value: '', label: 'All'},
+             {value: 'true', label: 'Active'},
+             {value: 'false', label: 'NoActive'}
+         ],
+         defaultValue:{value: '', label: 'All'},
+            placeholder:''
+        },
+        ]
     return (
         <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
-            <Filter obj={['active']} func={getData}/>
+            <Filter param={param} func={getData}/>
             <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
                     className="fa-solid fa-sliders"></i></Button>

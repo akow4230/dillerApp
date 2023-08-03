@@ -16,8 +16,8 @@ function Filter(props) {
         }),
     };
 useEffect(()=>{
-   if(!searchParams.active){
-       props.func({active:''})
+   if(!searchParams.active ){
+       props.func({active:' ', quickSearch:searchParams.quickSearch})
    }
 },[])
 
@@ -32,7 +32,10 @@ useEffect(()=>{
                 ...searchParams,
                 [name]: value,
             })
-            console.log(searchParams)
+            // console.log({
+            //     ...searchParams,
+            //     [name]: value,
+            // })
         }
     };
    // const param=[
@@ -81,6 +84,7 @@ useEffect(()=>{
                     style={{width: 180, height: 30}}
                     className="my-1 mx-1 form-control"
                     placeholder=""
+                    defaultValue=''
                 />
             </label>
         </div>
