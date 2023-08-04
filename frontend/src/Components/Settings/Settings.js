@@ -18,7 +18,7 @@ function Settings() {
     useEffect(()=>{
         let has = false;
         // eslint-disable-next-line array-callback-return
-        settingsArray.length!==0&&settingsArray.map(item=>{
+        isLoading&&settingsArray.length!==0&&settingsArray.map(item=>{
             if (item.url===location.pathname){
                 dispatch(setSettingBoxColor(item.id))
                 has = true;
