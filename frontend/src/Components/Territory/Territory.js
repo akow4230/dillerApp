@@ -82,9 +82,11 @@
         return (
             <div style={{ background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY:"auto" }}>
                 <ToastContainer />
-                <p style={{ fontSize: "25pt" }}>Territory</p>
+                <div className={"d-flex gap-3 align-items-center"}>
+                    <p style={{ fontSize: "25pt" }}>Territory</p>
+                    <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add Territory</button>
+                </div>
                 <hr />
-                <button className="btn btn-success" onClick={() => dispatch(setModalVisible(true))}>+ Add Territory</button>
                 <Table
                     isDark={false}
                     requestApi={"/api/v1/territory?page={page}&size={limit}"}
