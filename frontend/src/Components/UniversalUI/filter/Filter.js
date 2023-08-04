@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Select from 'react-select';
 import {connect, useDispatch} from 'react-redux';
-import {changeSearchParams} from "../../../redux/reducers/TableSlice";
+import {changeCurrentPage, changeSearchParams} from "../../../redux/reducers/TableSlice";
 
 function Filter(props) {
-    let param=props.param
+    let param = props.param
     const dispatch = useDispatch();
     const searchParams = props.table.searchParams
     const customStyles = {
@@ -15,12 +15,15 @@ function Filter(props) {
             border: '1px solid #d1d1d1',
         }),
     };
-useEffect(()=>{
-   if(searchParams.active ===undefined){
-       props.func({active:' ', quickSearch:searchParams.quickSearch})
-       console.log(searchParams.quickSearch)
-   }
-},[])
+    useEffect(() => {
+        if (searchParams.active === undefined) {
+            props.func({active: ' ', quickSearch: searchParams.quickSearch})
+            console.log(searchParams.quickSearch)
+        }
+    }, [searchParams.active, searchParams.quickSearch, props])
+    useEffect(() => {
+        dispatch(changeCurrentPage());
+    }, [searchParams.quickSearch, searchParams.active, dispatch]);
 
     const handleCityChange = (obj) => {
         const {name, value} = obj;
@@ -28,7 +31,8 @@ useEffect(()=>{
             ...searchParams,
             [name]: value,
         }))
-        if(name==='quickSearch' || name==='active'){
+        if (name === 'quickSearch' || name === 'active') {
+            dispatch(changeCurrentPage())
             props.func({
                 ...searchParams,
                 [name]: value,
@@ -39,38 +43,37 @@ useEffect(()=>{
             })
         }
     };
-   // const param=[
-   //     {
-   //      id:1,
-   //      name:'active',
-   //      multi:false,
-   //      options:[
-   //          {value: '', label: 'All'},
-   //          {value: 'true', label: 'Active'},
-   //          {value: 'false', label: 'NoActive'}
-   //      ],
-   //      defaultValue:{value: '', label: 'All'},
-   //         placeholder:''
-   //     },
-   //     {
-   //         id:2,
-   //         name:'week',
-   //         multi:true,
-   //         options:[
-   //             {value: 'MONDAY', label: 'Monday'},
-   //             {value: 'TUESDAY', label: 'Tuesday'},
-   //             {value: 'WEDNESDAY', label: 'Wednesday'},
-   //             {value: 'THURSDAY', label: 'Thursday'},
-   //             {value: 'FRIDAY', label: 'Friday'},
-   //             {value: 'SATURDAY', label: 'Saturday'},
-   //         ],
-   //         defaultValue:[],
-   //         placeholder:'week days'
-   //
-   //     },
-   //
-   //  ]
-
+    // const param=[
+    //     {
+    //      id:1,
+    //      name:'active',
+    //      multi:false,
+    //      options:[
+    //          {value: '', label: 'All'},
+    //          {value: 'true', label: 'Active'},
+    //          {value: 'false', label: 'NoActive'}
+    //      ],
+    //      defaultValue:{value: '', label: 'All'},
+    //         placeholder:''
+    //     },
+    //     {
+    //         id:2,
+    //         name:'week',
+    //         multi:true,
+    //         options:[
+    //             {value: 'MONDAY', label: 'Monday'},
+    //             {value: 'TUESDAY', label: 'Tuesday'},
+    //             {value: 'WEDNESDAY', label: 'Wednesday'},
+    //             {value: 'THURSDAY', label: 'Thursday'},
+    //             {value: 'FRIDAY', label: 'Friday'},
+    //             {value: 'SATURDAY', label: 'Saturday'},
+    //         ],
+    //         defaultValue:[],
+    //         placeholder:'week days'
+    //
+    //     },
+    //
+    //  ]
 
 
     const quickSearch = (
@@ -96,20 +99,20 @@ useEffect(()=>{
         <div className="">
 
             <div className="row">
-                {param.map(item=>
-                    <div key={item.name} className="my-1 mx-1" style={item.multi?{width: 320}:{width: 180}}>
-                    <Select
-                        name={item.name}
-                        options={item.options}
-                        value={searchParams[item.name]}
-                        onChange={(e) => handleCityChange({name: item.name, value: e})}
-                        style={{width: 70}}
-                        styles={customStyles}
-                        placeholder={item.placeholder}
-                        isMulti={item.multi}
-                        defaultValue={item.defaultValue}
+                {param.map(item =>
+                    <div key={item.name} className="my-1 mx-1" style={item.multi ? {width: 320} : {width: 180}}>
+                        <Select
+                            name={item.name}
+                            options={item.options}
+                            value={searchParams[item.name]}
+                            onChange={(e) => handleCityChange({name: item.name, value: e})}
+                            style={{width: 70}}
+                            styles={customStyles}
+                            placeholder={item.placeholder}
+                            isMulti={item.multi}
+                            defaultValue={item.defaultValue}
 
-                    />
+                        />
                     </div>
                 )}
             </div>

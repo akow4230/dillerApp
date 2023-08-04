@@ -86,7 +86,11 @@ const tableSlice = createSlice({
         },
         changeSearchParams(state, action) {
             state.searchParams = action.payload
-            // console.log(action.payload)
+            state.currentPage = 1
+        },
+        changeCurrentPage(state) {
+            state.currentPage = 1;
+            console.log("hello")
         }
     }
 })
@@ -101,7 +105,8 @@ export const {
     toggleModal,
     changeTableColumns,
     changeSearchParams,
-    changeTheme
+    changeTheme,
+    changeCurrentPage
 } = tableSlice.actions
 
 export default tableSlice.reducer
