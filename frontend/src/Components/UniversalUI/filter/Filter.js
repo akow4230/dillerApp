@@ -99,7 +99,7 @@ function Filter(props) {
         <div className="">
 
             <div className="row">
-                {param.map(item =>
+                {param?.map(item =>
                     <div key={item.name} className="my-1 mx-1" style={item.multi ? {width: 320} : {width: 180}}>
                         <Select
                             name={item.name}
