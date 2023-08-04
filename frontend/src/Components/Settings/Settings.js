@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
+import {Link, Outlet, useLocation} from "react-router-dom";
 import {
     getSettings, setCurrentPathname,
     setSettingBoxColor
@@ -11,17 +11,23 @@ function Settings() {
     const { settingsArray, isLoading, settingBoxColor } = useSelector(
         state => state.settings
     );
-
+    const location = useLocation();
     useEffect(() => {
         dispatch(getSettings());
     }, [dispatch]);
     useEffect(()=>{
+        let has = false;
         settingsArray.length!==0&&settingsArray.map(item=>{
-            if (item.url===window.location.pathname){
+            if (item.url===location.pathname){
                 dispatch(setSettingBoxColor(item.id))
+                has = true;
             }
         })
-    },[settingsArray])
+        if (!has){
+            dispatch(setSettingBoxColor(""))
+        }
+
+    },[settingsArray, location.pathname])
 
     function handleClick(item) {
         dispatch(setSettingBoxColor(item.id));
