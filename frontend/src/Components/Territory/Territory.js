@@ -4,9 +4,6 @@
     import {
     setModalVisible,
     setEditModalVisible,
-    setLongitude,
-    setLatitude,
-    setMapState, setEditData
 } from "../../redux/reducers/TerritorySlice";
     import TerritoryModal from "./TerritoryModal";
     import Table from "../UniversalUI/Table/Table";
@@ -18,7 +15,7 @@
         const { modalVisible, editModalVisible, defValueOfMap, mapState, editData } = useSelector((state) => state.territory);
         useEffect(()=>{
             dispatch(changeSearchParams({active:""}))
-        },[])
+        },[dispatch])
         const columns = [
             {
                 id: 1,
