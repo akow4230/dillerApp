@@ -90,7 +90,6 @@ const tableSlice = createSlice({
         },
         changeCurrentPage(state) {
             state.currentPage = 1;
-            console.log("hello")
         }
     }
 })

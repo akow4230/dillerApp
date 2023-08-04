@@ -1,11 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Select from 'react-select';
 import {connect, useDispatch} from 'react-redux';
 import {changeCurrentPage, changeSearchParams} from "../../../redux/reducers/TableSlice";
 
 function Filter(props) {
     let param = props.param
-    console.log(param)
     const dispatch = useDispatch();
     const searchParams = props.table.searchParams
     const customStyles = {
@@ -19,7 +18,6 @@ function Filter(props) {
     useEffect(() => {
         if (searchParams.active === undefined) {
             props.func({active: ' ', quickSearch: searchParams.quickSearch})
-            console.log(searchParams.quickSearch)
         }
     }, [searchParams.active, searchParams.quickSearch, props])
     useEffect(() => {
@@ -43,37 +41,38 @@ function Filter(props) {
             })
         }
     };
-    // const param=[
-    //     {
-    //      id:1,
-    //      name:'active',
-    //      multi:false,
-    //      options:[
-    //          {value: '', label: 'All'},
-    //          {value: 'true', label: 'Active'},
-    //          {value: 'false', label: 'NoActive'}
-    //      ],
-    //      defaultValue:{value: '', label: 'All'},
-    //         placeholder:''
-    //     },
-    //     {
-    //         id:2,
-    //         name:'week',
-    //         multi:true,
-    //         options:[
-    //             {value: 'MONDAY', label: 'Monday'},
-    //             {value: 'TUESDAY', label: 'Tuesday'},
-    //             {value: 'WEDNESDAY', label: 'Wednesday'},
-    //             {value: 'THURSDAY', label: 'Thursday'},
-    //             {value: 'FRIDAY', label: 'Friday'},
-    //             {value: 'SATURDAY', label: 'Saturday'},
-    //         ],
-    //         defaultValue:[],
-    //         placeholder:'week days'
-    //
-    //     },
-    //
-    //  ]
+   // const param=[
+   //     {
+   //      id:1,
+   //      name:'active',
+   //      multi:false,
+   //      options:[
+   //          {value: '', label: 'All'},
+   //          {value: 'true', label: 'Active'},
+   //          {value: 'false', label: 'NoActive'}
+   //      ],
+   //      defaultValue:{value: '', label: 'All'},
+   //         placeholder:''
+   //     },
+   //     {
+   //         id:2,
+   //         name:'week',
+   //         multi:true,
+   //         options:[
+   //             {value: 'MONDAY', label: 'Monday'},
+   //             {value: 'TUESDAY', label: 'Tuesday'},
+   //             {value: 'WEDNESDAY', label: 'Wednesday'},
+   //             {value: 'THURSDAY', label: 'Thursday'},
+   //             {value: 'FRIDAY', label: 'Friday'},
+   //             {value: 'SATURDAY', label: 'Saturday'},
+   //         ],
+   //         defaultValue:[],
+   //         placeholder:'week days'
+   //
+   //     },
+   //
+   //  ]
+
 
 
     const quickSearch = (
@@ -99,7 +98,7 @@ function Filter(props) {
         <div className="">
 
             <div className="row">
-                {param.map(item =>
+                {param?.map(item =>
                     <div key={item.name} className="my-1 mx-1" style={item.multi ? {width: 320} : {width: 180}}>
                         <Select
                             name={item.name}

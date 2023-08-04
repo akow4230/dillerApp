@@ -12,7 +12,6 @@ export default function (url, method, data, param) {
         params: param
     }).then((res) => {
         if (res.data) {
-            // console.log(res.data)
             return {
                 error: false,
                 data: res.data
@@ -31,7 +30,6 @@ export default function (url, method, data, param) {
                 method: "POST"
             }).then((res) => {
                 localStorage.setItem("access_token", res.data);
-                // Returning the inner promise
                 return axios({
                     url: "http://localhost:8080" + url,
                     method: method,

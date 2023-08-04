@@ -1,38 +1,19 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {Link, Outlet, useLocation} from "react-router-dom";
 import {
-    getSettings,
-    setSettingBoxColor
+    getSettings
 } from "../../redux/reducers/SettingsSlice";
 
 function Settings() {
     const dispatch = useDispatch();
-    const { settingsArray, isLoading, settingBoxColor } = useSelector(
+    const {settingsArray, isLoading} = useSelector(
         state => state.settings
     );
     const location = useLocation();
     useEffect(() => {
         dispatch(getSettings());
     }, [dispatch]);
-    useEffect(()=>{
-        let has = false;
-        // eslint-disable-next-line array-callback-return
-        settingsArray.length!==0&&settingsArray.map(item=>{
-            if (item.url===location.pathname){
-                dispatch(setSettingBoxColor(item.id))
-                has = true;
-            }
-        })
-        if (!has){
-            dispatch(setSettingBoxColor(""))
-        }
-
-    },[dispatch,settingsArray, location.pathname])
-
-    function handleClick(item) {
-        dispatch(setSettingBoxColor(item.id));
-    }
 
     return (
         <div className={"d-flex bg-white gap-3 p-4 h-100"}>
@@ -74,9 +55,8 @@ function Settings() {
                                 <Link
                                     to={item.url}
                                     key={item.id}
-                                    onClick={() => handleClick(item)}
                                     style={{
-                                        background: settingBoxColor === item.id ? "#2b76bd" : "#7ec8f2",
+                                        background: location.pathname === item.url ? "#2b76bd" : "#7ec8f2",
                                         height: "50px",
                                         color: "white",
                                         width: "100%",
@@ -87,7 +67,7 @@ function Settings() {
                                         borderRadius: "7px",
                                         transition: " 0.3s ease",
                                         textDecoration: "none",
-                                        scale: settingBoxColor === item.id ? "1.1" : "1"
+                                        scale: location.pathname === item.url ? "1.1" : "1"
                                     }}
                                 >
                                     {index + 1}. {item.name}
@@ -99,7 +79,7 @@ function Settings() {
                     </div>
                 )}
             </div>
-            <Outlet />
+            <Outlet/>
         </div>
     );
 }

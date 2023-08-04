@@ -18,9 +18,6 @@ export const settingsSlice = createSlice({
       state.settingsArray = action.payload;
       state.isLoading = false;
     },
-    setSettingBoxColor(state, action) {
-      state.settingBoxColor = action.payload;
-    },
     getSettingsFailure(state, action) {
       state.isLoading = false;
       state.error = action.payload;
@@ -30,7 +27,6 @@ export const settingsSlice = createSlice({
 export const {
   getSettings,
   getSettingsSuccess,
-  setSettingBoxColor,
   getSettingsFailure
 } = settingsSlice.actions;
 export default settingsSlice.reducer;
