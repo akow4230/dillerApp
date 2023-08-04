@@ -37,7 +37,7 @@ public class TerritoryServiceImpl implements TerritoryService {
     @Override
     public HttpEntity<?> addTerritory(ReqTerritory reqTerritory) {
         Territory newTerritory = Territory.builder()
-                .region(reqTerritory.getRegion() + "2")
+                .region(reqTerritory.getRegion())
                 .title(reqTerritory.getTitle())
                 .code(reqTerritory.getCode())
                 .active(reqTerritory.isActive())
@@ -67,13 +67,11 @@ public class TerritoryServiceImpl implements TerritoryService {
 
     @Override
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
-        System.out.println(active + "FIRST");
         List<Territory> territoryFilter = null;
         if (Objects.equals(active, "undefined")) {
-            System.out.println("Hello");
             territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(search, search);
-            System.out.println(territoryFilter);
         } else {
+            System.out.println(active);
             territoryFilter = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(Boolean.valueOf(active), search, search);
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -118,6 +116,7 @@ public class TerritoryServiceImpl implements TerritoryService {
     @Override
     public void editTerritory(UUID id, ReqEditTerritory reqEditTerritory) {
         Optional<Territory> territoryById = territoryRepo.findById(id);
+
         if (territoryById.isPresent()) {
             Territory EditingTerritory = territoryById.get();
             EditingTerritory.setId(id);

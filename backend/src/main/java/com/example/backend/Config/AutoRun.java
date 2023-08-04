@@ -23,7 +23,6 @@ public class AutoRun implements CommandLineRunner {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final TerritoryRepo territoryRepo;
-    private final TestRepo testRepo;
     private final SettingsRepo settingsRepo;
 
     @Override
@@ -35,10 +34,6 @@ public class AutoRun implements CommandLineRunner {
 
         List<Settings> all = settingsRepo.findAll();
         saveSettings(all);
-
-        RestTemplate restTemplate = new RestTemplate();
-        Test[] forObject = restTemplate.getForObject("https://jsonplaceholder.typicode.com/photos", Test[].class);
-        testRepo.saveAll(Arrays.asList(forObject));
     }
 
     private void saveSettings(List<Settings> all) {

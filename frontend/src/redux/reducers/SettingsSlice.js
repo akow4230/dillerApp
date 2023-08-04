@@ -20,8 +20,17 @@ export const settingsSlice = createSlice({
     },
     setSettingBoxColor(state, action) {
       state.settingBoxColor = action.payload;
+    },
+    getSettingsFailure(state, action) {
+      state.isLoading = false;
+      state.error = action.payload;
     }
   }
 });
-export const { getSettings, getSettingsSuccess,setSettingBoxColor } = settingsSlice.actions;
+export const {
+  getSettings,
+  getSettingsSuccess,
+  setSettingBoxColor,
+  getSettingsFailure
+} = settingsSlice.actions;
 export default settingsSlice.reducer;

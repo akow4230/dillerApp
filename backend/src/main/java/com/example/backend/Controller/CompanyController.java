@@ -1,5 +1,7 @@
 package com.example.backend.Controller;
 
+import com.example.backend.DTO.CurrentUser;
+import com.example.backend.Entity.User;
 import com.example.backend.Enums.UserRoles;
 import com.example.backend.Services.CompanyService.CompanyService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,12 @@ public class CompanyController {
         return companyService.getInfo(authorization);
     }
 
-    @GetMapping("/profile/{id}")
-    public HttpEntity<?> getCompanyProfile(@PathVariable Integer id) {
-        return companyService.getCompanyProfile(id);
+    @GetMapping("/profile")
+    public HttpEntity<?> getCompanyProfile(@CurrentUser User user,
+                                           @RequestParam(defaultValue = "") String quickSearch,
+                                           @RequestParam(defaultValue = "5") Integer size,
+                                           @RequestParam(defaultValue = "1") Integer page) {
+        System.out.println(quickSearch);
+        return companyService.getCompanyProfile(size, page, user, quickSearch);
     }
 }
