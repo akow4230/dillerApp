@@ -5,21 +5,19 @@ import {useDispatch, useSelector} from "react-redux";
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import {
-    changeOrder,
     changeTableColumns,
     changeTableDataPage,
     changeTableDataSize, changeTheme,
     getTableData,
     saveColumnsOrders,
-    setCurrentDragingColumn,
     toggleModal
 } from "../../../redux/reducers/TableSlice";
 import Pagination from '@mui/material/Pagination';
 import {styled} from '@mui/material/styles';
-import {Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import Filter from "../filter/Filter";
-import instance from "../../utils/config/instance";
 import axios from "axios";
+import TableModal from "./TableModal";
+import UModal from "../Modal/UModal";
 
 function Table({isDark, columns, requestApi, filterParam}) {
     const dispatch = useDispatch()
@@ -29,7 +27,6 @@ function Table({isDark, columns, requestApi, filterParam}) {
         darkTheme,
         currentPage,
         data,
-        modalColumns,
         modal,
         searchParams
     } = useSelector((state) => state.table);
@@ -73,6 +70,11 @@ function Table({isDark, columns, requestApi, filterParam}) {
             });
     }
 
+    const elements = [
+        {
+            data: <TableModal/>
+        }
+    ]
     return (
         <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
             <Filter param={filterParam} func={getData}/>
@@ -197,23 +199,8 @@ function Table({isDark, columns, requestApi, filterParam}) {
                                 shape="rounded"/>
                 </div>
             </div>
-            <Modal isOpen={modal} toggle={() => dispatch(toggleModal())}>
-                <ModalHeader toggle={() => dispatch(toggleModal())}>Menu Control</ModalHeader>
-                <ModalBody>
-                    {
-                        modalColumns.map((item, index) => <div
-                            onDragStart={(e) => dispatch(setCurrentDragingColumn(index))}
-                            onDragOver={(e) => e.preventDefault()}
-                            onDrop={(e) => dispatch(changeOrder(index))}
-                            draggable={true} key={item?.id} className="card mb-3 p-3">
-                            {item?.title}
-                        </div>)
-                    }
-                </ModalBody>
-                <ModalFooter>
-                    <Button type={'dashed'} onClick={() => dispatch(saveColumnsOrders())}>Save</Button>
-                </ModalFooter>
-            </Modal>
+            <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} title={"Change order"}
+                    onSave={() => dispatch(saveColumnsOrders())} elements={elements}/>
         </div>
     );
 }

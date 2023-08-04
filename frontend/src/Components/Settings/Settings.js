@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet } from "react-router-dom";
 import {
-    getSettings,
+    getSettings, setCurrentPathname,
     setSettingBoxColor
 } from "../../redux/reducers/SettingsSlice";
 
@@ -15,6 +15,13 @@ function Settings() {
     useEffect(() => {
         dispatch(getSettings());
     }, [dispatch]);
+    useEffect(()=>{
+        settingsArray.length!==0&&settingsArray.map(item=>{
+            if (item.url===window.location.pathname){
+                dispatch(setSettingBoxColor(item.id))
+            }
+        })
+    },[settingsArray])
 
     function handleClick(item) {
         dispatch(setSettingBoxColor(item.id));
