@@ -78,7 +78,7 @@ function Table({isDark, columns, requestApi, filterParam}) {
     return (
         <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
             <Filter param={filterParam} func={getData}/>
-            <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
+            <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
                 <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
                     className="fa-solid fa-sliders"></i></Button>
                 {
@@ -89,11 +89,11 @@ function Table({isDark, columns, requestApi, filterParam}) {
                     }}>
                         <Button type={"dashed"} onClick={() => dispatch(toggleModal())}><i
                             className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
-                        <FormControlLabel
-                            control={<MaterialUISwitch sx={{m: 1}}/>}
-                            label="Dark Mode"
-                            onChange={(e) => dispatch(changeTheme(e.target.checked))}
-                        />
+                        {/*<FormControlLabel*/}
+                        {/*    control={<MaterialUISwitch sx={{m: 1}}/>}*/}
+                        {/*    label="Dark Mode"*/}
+                        {/*    onChange={(e) => dispatch(changeTheme(e.target.checked))}*/}
+                        {/*/>*/}
                         {
                             data.columns?.map((item, index) => {
                                 return <FormControlLabel
