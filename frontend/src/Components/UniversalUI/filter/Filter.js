@@ -5,6 +5,7 @@ import {changeCurrentPage, changeSearchParams} from "../../../redux/reducers/Tab
 
 function Filter(props) {
     let param = props.param
+    console.log(param)
     const dispatch = useDispatch();
     const searchParams = props.table.searchParams
     const customStyles = {
@@ -32,7 +33,6 @@ function Filter(props) {
             [name]: value,
         }))
         if (name === 'quickSearch' || name === 'active') {
-            dispatch(changeCurrentPage())
             props.func({
                 ...searchParams,
                 [name]: value,
@@ -110,8 +110,7 @@ function Filter(props) {
                             styles={customStyles}
                             placeholder={item.placeholder}
                             isMulti={item.multi}
-                            defaultValue={item.defaultValue}
-
+                            defaultValue={param[0]}
                         />
                     </div>
                 )}

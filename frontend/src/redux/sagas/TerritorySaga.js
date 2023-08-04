@@ -11,12 +11,10 @@ import {navigateTo} from "../reducers/DashboardSlice";
 function* saveTerritoryAsync(action) {
     try {
         const { territory, isEditing } = action.payload;
-        console.log(territory)
         if (!territory.longitude || !territory.latitude) {
             toast.error("You must select territory");
             return;
         }
-        console.log(territory.longitude)
         const response = yield instance(
             `/api/v1/territory${isEditing ? "/" + territory.id : ""}`,
             isEditing ? "PUT" : "POST",
@@ -30,7 +28,7 @@ function* saveTerritoryAsync(action) {
             }
         );
         console.log(response)
-        if (response.data===401){
+        if (response!==undefined&&response.data===401){
             toast.error("Authorization problem")
             yield put(navigateTo("/404"))
         }

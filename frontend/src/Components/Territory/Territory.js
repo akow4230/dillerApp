@@ -68,7 +68,7 @@
                     {value: 'false', label: 'NoActive'}
                 ],
                 defaultValue: {value: '', label: 'All'},
-                placeholder: ''
+                placeholder: 'All'
             },
         ]
         const closeModal = () => {
@@ -91,18 +91,6 @@
                     columns={columns}
                     filterParam={filterParam}
                 />
-                {/*<button className="btn btn-success" onClick={() => {*/}
-                {/*    dispatch(setEditData({*/}
-                {/*        id:"a03c748d-551b-4bd9-9dc4-bc372143cc09",*/}
-                {/*        title:"Shift Academyyy",*/}
-                {/*        region:"Buxoro2",*/}
-                {/*        code:"1111111",*/}
-                {/*        active:true,*/}
-                {/*        longitude:64.45346406250006,*/}
-                {/*        latitude:39.7420392241709*/}
-                {/*    }))*/}
-                {/*    dispatch(setEditModalVisible(true))*/}
-                {/*}}> Edit Territory</button>*/}
                 <TerritoryModal action={"Add territory"} visible={modalVisible} onClose={closeModal} />
                 <TerritoryModal action={"Edit territory"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
             </div>

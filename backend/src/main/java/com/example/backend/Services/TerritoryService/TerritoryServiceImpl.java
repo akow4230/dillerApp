@@ -67,14 +67,15 @@ public class TerritoryServiceImpl implements TerritoryService {
 
     @Override
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
+        System.out.println(active + "FIRST");
         List<Territory> territoryFilter = null;
-        if (Objects.equals(active, "")) {
+        if (Objects.equals(active, "undefined")) {
+            System.out.println("Hello");
             territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(search, search);
+            System.out.println(territoryFilter);
         } else {
-            System.out.println(active);
             territoryFilter = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(Boolean.valueOf(active), search, search);
         }
-        System.out.println(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(search, search));
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Company info");
         Row row = sheet.createRow(0);
@@ -86,7 +87,6 @@ public class TerritoryServiceImpl implements TerritoryService {
         row.createCell(5).setCellValue("Longitude");
         row.createCell(6).setCellValue("Latitude");
         int counter = 1;
-        System.out.println(territoryFilter);
         for (Territory territory : territoryFilter) {
             Row dataRow = sheet.createRow(counter);
             counter++;
@@ -118,7 +118,6 @@ public class TerritoryServiceImpl implements TerritoryService {
     @Override
     public void editTerritory(UUID id, ReqEditTerritory reqEditTerritory) {
         Optional<Territory> territoryById = territoryRepo.findById(id);
-
         if (territoryById.isPresent()) {
             Territory EditingTerritory = territoryById.get();
             EditingTerritory.setId(id);
