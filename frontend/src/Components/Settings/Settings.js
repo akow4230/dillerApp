@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {Link, Outlet, useLocation} from "react-router-dom";
 import {
-    getSettings, setCurrentPathname,
+    getSettings,
     setSettingBoxColor
 } from "../../redux/reducers/SettingsSlice";
 
@@ -17,6 +17,7 @@ function Settings() {
     }, [dispatch]);
     useEffect(()=>{
         let has = false;
+        // eslint-disable-next-line array-callback-return
         settingsArray.length!==0&&settingsArray.map(item=>{
             if (item.url===location.pathname){
                 dispatch(setSettingBoxColor(item.id))
@@ -27,7 +28,7 @@ function Settings() {
             dispatch(setSettingBoxColor(""))
         }
 
-    },[settingsArray, location.pathname])
+    },[dispatch,settingsArray, location.pathname])
 
     function handleClick(item) {
         dispatch(setSettingBoxColor(item.id));
