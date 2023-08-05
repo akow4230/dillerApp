@@ -11,9 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.UUID;
 
 public interface CompanyRepo extends JpaRepository<Company, Integer> {
-    @Query(value = "SELECT support_phone as support_phone, now() as current_date_and_time FROM company WHERE company.owner_id = :id", nativeQuery = true)
+    @Query(value = "SELECT support_phone as support_phone, TO_CHAR(cast('2023-08-05' as timestamp), 'FMMonth FMDD') as date_now FROM company WHERE company.owner_id = :id", nativeQuery = true)
     DashboardProjection getDashboardInfo(UUID id);
-
     @Query(value = """
             SELECT 
             c.id, c.email,

@@ -17,13 +17,13 @@ function Index({data}) {
     }
 
     return (
-        <div className={"dashboardTopBar"}>
+        <div className={"dashboardTopBar d-flex align-items-center"}>
             <img src={logo} alt="Image Not Found" width={70} height={70} style={{borderRadius: "50%"}}/>
             <div className={"top"}>
-                <div className="box">
+                <div className="box mt-3">
                     <p>Supervisor</p>
                 </div>
-                <div className="box">
+                <div className="box mt-3">
                     <p>Sales</p>
                 </div>
                 <div className="box">
@@ -59,31 +59,15 @@ function Index({data}) {
                         </Select>
                     </FormControl>
                 </div>
-                <div style={{background: "#8ac926"}} className="box">
-                    <p><i className="fa-solid fa-circle-question"></i> Online Help</p>
+                <div className="d-flex gap-5">
+                    <div style={{background: "#8ac926", width:'150px'}} className="box d-flex align-items-center justify-content-center gap-2">
+                        <i className="fa-solid fa-circle-question"></i><p className={"my-3"}>Online Help</p>
+                    </div>
                 </div>
             </div>
             <div style={{padding: 10}} className={"top"}>
-                <div style={{
-                    cursor: "pointer",
-                    width: 150,
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: "#219ebc"
-                }}>
-                    <b style={{
-                        fontSize: "16pt",
-                        gap: "10px",
-                        color: "white",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}><i className="fa-solid fa-calendar-days"></i><p
-                        style={{marginTop: "20px"}}>{data?.currentDateAndTime ? (data?.currentDateAndTime[2] + "-" + data?.currentDateAndTime[1] + "-" + data?.currentDateAndTime[0]) : ""}</p>
-                    </b>
-
+                <div style={{background: "#219ebc", width:"150px"}} className="box d-flex align-items-center justify-content-center gap-2">
+                    <i className="fa-solid fa-calendar-days"></i><p className={"my-3"}>{data?.currentDateAndTime ? data.currentDateAndTime : ""}</p>
                 </div>
                 <div style={{
                     marginLeft: 15,

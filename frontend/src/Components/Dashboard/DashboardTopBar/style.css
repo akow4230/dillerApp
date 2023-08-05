@@ -3,9 +3,9 @@
 
 .dashboardTopBar {
     width: 100%;
-    height: 100%;
     background: #415a77;
-    padding: 10px;
+    padding-left: 10px;
+    padding-top: 1px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,7 +21,7 @@
 .dashboardTopBar .top .box {
     cursor: pointer;
     width: 20%;
-    height: 100%;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;

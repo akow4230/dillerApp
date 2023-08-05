@@ -22,6 +22,7 @@ public class CompanyServiceImpl implements CompanyService {
     public HttpEntity<?> getInfo(String accessToken) {
         User decode = authService.decode(accessToken);
         DashboardProjection dashboardInfo = companyRepo.getDashboardInfo(decode.getId());
+        System.out.println(dashboardInfo);
         return ResponseEntity.ok(dashboardInfo);
     }
 
