@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,20 +20,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserRepo userRepo;
+    private final UserRepo usersRepository;
     private final MyFilter myFilter;
 
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors() // Enable CORS configuration
-                .and()
-                .csrf().disable()
+                .cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        auth -> auth
+                        auth->auth
                                 .requestMatchers("/api/v1/auth/register").permitAll()
                                 .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/v1/auth/refresh").permitAll()
@@ -39,26 +42,27 @@ public class SecurityConfig {
 //                                .requestMatchers("/api/v1/territory/getExcel").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .addFilterBefore(myFilter, UsernamePasswordAuthenticationFilter.class); // Add your custom filter before the default Spring Security filter
-
+                .addFilterBefore(myFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+
     @Bean
-    public UserDetailsService users() {
+    public UserDetailsService userDetailsService() {
         return username -> {
-            User user = userRepo.findByPhone(username).orElseThrow();
-            return user;
+
+            return usersRepository.findByPhone(username).orElseThrow();
         };
     }
 
     @Bean
-    public static PasswordEncoder passwordEncoder(){
+    public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
 }

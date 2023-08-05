@@ -11,16 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ClientRepo extends JpaRepository<Client, UUID> {
-    //    @Query("SELECT c from Client c where lower(c.name || '' || c.address || '' || c.phone) LIKE lower(concat('%',:search,'%'))" +
-//            " and c.active=:active"
-//
-//    )
-//    Page<Client> findAllByActiveAndNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(Boolean active, String search, PageRequest pageRequest, Integer categoryIds);
-//    @Query(value = """
-//            SELECT * from client join customer_category cc on cc.id = client.category_id
-//            where cc.id in (1) and client.name like lower('%' || :search || '%') and client.active = :active
-//            """, nativeQuery = true)
-//    Page<Client> findAllByActiveAndNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(Boolean active, String search, PageRequest pageRequest);
+
     @Query(value = """
     SELECT c.id AS id,
            c.name AS name,

@@ -34,5 +34,7 @@ public class Client {
     private LocalDate dateOfRegistration;
     private String typeOfEquipment;
     private String equipment;
+    @ManyToMany
+    private List<WeekDay> weekDay;
 
 }

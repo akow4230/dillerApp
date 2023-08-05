@@ -2,6 +2,7 @@ package com.example.backend.Config;
 
 import com.example.backend.Entity.*;
 import com.example.backend.Enums.UserRoles;
+import com.example.backend.Enums.WeekDays;
 import com.example.backend.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @Configuration
 @RequiredArgsConstructor
 public class AutoRun implements CommandLineRunner {
-
+    private final WeekDayRepo weekDayRepo;
     private final CompanyRepo companyRepo;
     private final RoleRepo roleRepo;
     private final UserRepo userRepo;
@@ -34,6 +35,12 @@ public class AutoRun implements CommandLineRunner {
 
         List<Settings> all = settingsRepo.findAll();
         saveSettings(all);
+        List<WeekDay> allWeekDays = new ArrayList<>();
+        if (weekDayRepo.count() == 0) {
+            List<WeekDays> weekDaysList = Arrays.asList(WeekDays.values());
+            weekDaysList.forEach(weekDay -> allWeekDays.add(new WeekDay(weekDay)));
+        }
+        weekDayRepo.saveAll(allWeekDays);
     }
 
     private void saveSettings(List<Settings> all) {

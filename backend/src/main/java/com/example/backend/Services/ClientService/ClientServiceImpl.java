@@ -21,15 +21,14 @@ public class ClientServiceImpl implements ClientService {
 
     private Page<Client> getClientFilter(String active, String search, PageRequest pageRequest, List<Integer> categoryIds) {
         Page<Client> allClient = null;
-        System.out.println(categoryIds);
+//        System.out.println(categoryIds);
         if (Objects.equals(active, "")) {
-            System.out.println("first if");
             allClient = clientRepo.findAllByNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(search, categoryIds, pageRequest);
             return allClient;
         }
         boolean aBoolean = Boolean.parseBoolean(active);
         allClient = clientRepo.findAllByActiveAndNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(aBoolean, search, categoryIds, pageRequest );
-        System.out.println(allClient);
+//        System.out.println(allClient);
         return allClient;
     }
 

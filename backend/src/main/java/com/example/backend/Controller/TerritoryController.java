@@ -21,20 +21,20 @@ import java.util.UUID;
 public class TerritoryController {
     private final TerritoryService territoryService;
 
-    @PreAuthorize("hasRole(#UserRoles.ROLE_SUPER_ADMIN)")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PostMapping
     public HttpEntity<?> addTerritory(@RequestBody ReqTerritory reqTerritory) {
         return territoryService.addTerritory(reqTerritory);
     }
 
-    @PreAuthorize("hasRole(#UserRoles.ROLE_SUPER_ADMIN)")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/{id}")
     public void editTerritory(@PathVariable UUID id, @RequestBody ReqEditTerritory reqEditTerritory) {
         territoryService.editTerritory(id, reqEditTerritory);
     }
 
     @GetMapping
-    @PreAuthorize("hasRole(#UserRoles.ROLE_SUPER_ADMIN)")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public HttpEntity<?> getTerritory(@RequestParam(defaultValue = "") String active,
                                       @RequestParam(defaultValue = "") String quickSearch,
                                       @RequestParam(defaultValue = "1") Integer page,
@@ -47,7 +47,7 @@ public class TerritoryController {
         return territory;
     }
 
-    @PreAuthorize("hasRole(#UserRoles.ROLE_SUPER_ADMIN)")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/getExcel")
     public ResponseEntity<Resource> getExcel(HttpServletResponse response,
                                              @RequestParam(defaultValue = "") String active,

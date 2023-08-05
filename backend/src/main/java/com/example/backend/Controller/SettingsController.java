@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/settings")
 public class SettingsController {
     private final SettingsService settingsService;
-    @PreAuthorize("hasRole(#UserRoles.ROLE_SUPER_ADMIN)")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
 
     @GetMapping
     public HttpEntity<?> getSettings(){

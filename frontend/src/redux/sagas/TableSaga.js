@@ -12,14 +12,22 @@ import {
 
 
 function* watchGetTableData(action) {
+    // console.log(action.payload.search)
+    let obj =action.payload.search.category
+    let arr=[]
+    obj?.map(item=>{
+        arr.push(item.value)
+    })
+    console.log(arr)
+
     try {
-        const response = yield call(() => instance(action.payload.url, "GET", null, {active:action.payload.search.active.value, quickSearch:action.payload.search.quickSearch}));
+        const response = yield call(() => instance(action.payload.url, "GET", null, {active:action.payload.search.active.value, quickSearch:action.payload.search.quickSearch ,category:arr.join(',')}));
         yield put(getTableDataSuccess({
             data: response.data.content,
             totalPage: response.data.totalPages,
             totalElements: response.data.totalElements
         }))
-         console.log(response.data)
+        console.log(response.data)
     } catch (e) {
 
     }

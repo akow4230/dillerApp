@@ -17,7 +17,7 @@ public class ClientController {
     private final ClientService clientService;
 
     @GetMapping
-    @PreAuthorize("hasRole(#UserRoles.ROLE_SUPER_ADMIN)")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public HttpEntity<?> getClient(@RequestParam(defaultValue = "") String active,
                                    @RequestParam(defaultValue = "") String quickSearch,
                                    @RequestParam(defaultValue = "1") Integer page,
