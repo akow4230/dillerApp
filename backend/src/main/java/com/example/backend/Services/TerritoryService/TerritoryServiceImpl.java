@@ -96,7 +96,7 @@ public class TerritoryServiceImpl implements TerritoryService {
             dataRow.createCell(1).setCellValue(territory.getRegion());
             dataRow.createCell(2).setCellValue(territory.getTitle());
             dataRow.createCell(3).setCellValue(territory.getCode());
-            dataRow.createCell(4).setCellValue(territory.isActive());
+            dataRow.createCell(4).setCellValue(territory.isActive()?"active":"No active");
             dataRow.createCell(5).setCellValue(territory.getLongitude());
             dataRow.createCell(6).setCellValue(territory.getLatitude());
         }

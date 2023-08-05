@@ -71,7 +71,7 @@
                     {value: 'false', label: 'NoActive'}
                 ],
                 defaultValue: {value: '', label: 'All'},
-                placeholder: ''
+                placeholder: 'All'
             },
         ]
         const closeModal = () => {

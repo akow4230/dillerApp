@@ -101,8 +101,8 @@ function TestKeraksiz(props) {
     const columns = [
         {
             id: 1,
-            title: "Id",
-            key: "id",
+            title: "Name",
+            key: "name",
             type: "uuid",
             show: true,
             order: 1,
@@ -115,6 +115,10 @@ function TestKeraksiz(props) {
             type: "str",
             show: true,
             order: 2,
+            render:(item)=>{
+                // console.log(item.territory)
+                return <p>{item.company.name}</p>
+            }
 
         },
         {
@@ -169,12 +173,12 @@ function TestKeraksiz(props) {
             show: true,
             order: 9
         },
-        {id:5,
+        {id:10,
             title:"Update",
             key:"update",
             type:"jsx",
             show:true,
-            order:5,
+            order:10,
             data:<TerritoryUpdateButton />}
     ]
     const filterParam = [

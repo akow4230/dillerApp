@@ -18,7 +18,8 @@ function App() {
     ];
     const existingPage = [
         "/",
-        "/dashboard"
+        "/dashboard",
+        "/error"
     ]
     const navigate = useNavigate();
     const location = useLocation();
@@ -27,16 +28,20 @@ function App() {
             if (existingPage.some((blockedPage) => location.pathname.startsWith(blockedPage))) {
                 if (blockedPages.some((blockedPage) => location.pathname.startsWith(blockedPage))) {
                     let accessToken = localStorage.getItem("access_token");
-                    const res = await instance("/api/v1/security", "GET")
-                    if (accessToken !== null) {
-                        if (res?.data !== 401 && res?.error) {
-                            console.log("Hello")
-                            if (res?.data[0].name !== "ROLE_SUPER_ADMIN") {
-                                navigate("/404")
+                    try {
+                        const res = await instance("/api/v1/security", "GET")
+                        if (accessToken !== null) {
+                            if (res?.data !== 401 && res?.error) {
+                                console.log("Hello")
+                                if (res?.data[0].name !== "ROLE_SUPER_ADMIN") {
+                                    navigate("/404")
+                                }
                             }
+                        } else {
+                            navigate("/");
                         }
-                    } else {
-                        navigate("/");
+                    }catch (e){
+                        navigate("/404")
                     }
                 }
             }else {

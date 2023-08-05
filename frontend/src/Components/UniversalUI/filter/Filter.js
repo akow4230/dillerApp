@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Select from 'react-select';
 import {connect, useDispatch} from 'react-redux';
-import {changeSearchParams} from "../../../redux/reducers/TableSlice";
+import {changeCurrentPage, changeSearchParams} from "../../../redux/reducers/TableSlice";
 
 function Filter(props) {
     let param=props.param
@@ -18,7 +18,7 @@ function Filter(props) {
 useEffect(()=>{
    if(searchParams.active ===undefined){
        props.func({active:' ', quickSearch:searchParams.quickSearch})
-       console.log(searchParams.quickSearch)
+       // console.log(searchParams.quickSearch)
    }
 },[])
 
@@ -29,11 +29,8 @@ useEffect(()=>{
             [name]: value,
         }))
         if(name==='quickSearch' || name==='active'){
+            dispatch(changeCurrentPage());
             props.func({
-                ...searchParams,
-                [name]: value,
-            })
-            console.log({
                 ...searchParams,
                 [name]: value,
             })
@@ -112,6 +109,13 @@ useEffect(()=>{
                     />
                     </div>
                 )}
+                <div>
+                    {param.length>1?
+                    <button className='btn btn-primary' onClick={()=>props.func(searchParams)}>Filter</button>
+                        :
+                        ''
+                    }
+                </div>
             </div>
             <div className="d-flex justify-content-end">
 
