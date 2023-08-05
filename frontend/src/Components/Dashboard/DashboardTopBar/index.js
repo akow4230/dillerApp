@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './style.css'
 import logo from '../../images/img.png'
 import InputLabel from '@mui/material/InputLabel';
@@ -15,7 +15,21 @@ function Index({data}) {
         localStorage.clear()
         navigate("/")
     }
+    const dropdownRef = useRef(null);
 
+    useEffect(() => {
+        function handleOutsideClick(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setUserBox(false);
+            }
+        }
+
+        document.addEventListener('click', handleOutsideClick);
+
+        return () => {
+            document.removeEventListener('click', handleOutsideClick);
+        };
+    }, []);
     return (
         <div className={"dashboardTopBar d-flex align-items-center"}>
             <img src={logo} alt="Image Not Found" width={70} height={70} style={{borderRadius: "50%"}}/>
@@ -101,7 +115,7 @@ function Index({data}) {
                     background: "#1b263b",
                     borderRadius: 10,
                     position: "relative"
-                }}>
+                }} ref={dropdownRef}>
                     <b style={{fontSize: 20, color: "white"}}><i className="fa-solid fa-user-large"></i> </b>
                     {userBox ? <div className={"scale-up-ver-top"} style={{
                         position: "absolute",
