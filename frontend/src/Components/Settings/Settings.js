@@ -1,22 +1,20 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
+import React, {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Link, Outlet, useLocation} from "react-router-dom";
 import {
-    getSettings,
-    setSettingBoxColor
+    getSettings
 } from "../../redux/reducers/SettingsSlice";
 
 function Settings() {
     const dispatch = useDispatch();
-    const { settingsArray, isLoading, settingBoxColor } = useSelector(
+    const {settingsArray, isLoading} = useSelector(
         state => state.settings
     );
+    const location = useLocation();
     useEffect(() => {
         dispatch(getSettings());
-    }, []);
-    function handleClick(item) {
-        dispatch(setSettingBoxColor(item.id));
-    }
+    }, [dispatch]);
+
     return (
         <div className={"d-flex bg-white gap-3 p-4 h-100"}>
             <div
@@ -42,36 +40,46 @@ function Settings() {
                 >
                     Settings Panel
                 </div>
-                {
-                    isLoading?"Loading...":(<div style={{display: "flex", flexDirection: "column", gap: "5px"}}>
-                        {settingsArray?.map((item, index) =>
-                            <Link
-                                to={item.url}
-                                key={item.id}
-                                onClick={() => handleClick(item)}
-                                style={{
-                                    background: settingBoxColor === item.id ? "#2b76bd" : "#7ec8f2",
-                                    height: "50px",
-                                    color: "white",
-                                    width: "100%",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "start",
-                                    padding: "5px",
-                                    borderRadius: "7px",
-                                    transition: " 0.3s ease",
-                                    textDecoration: "none",
-                                    scale: settingBoxColor === item.id ? "1.1" : "1"
-                                }}
-                            >
-                                {index + 1}. {item.name}
-                            </Link>
+                {isLoading ? (
+                    <div>Loading...</div>
+                ) : (
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "5px"
+                        }}
+                    >
+                        {Array.isArray(settingsArray) ? (
+                            settingsArray.map((item, index) => (
+                                <Link
+                                    to={item.url}
+                                    key={item.id}
+                                    style={{
+                                        background: location.pathname === item.url ? "#2b76bd" : "#7ec8f2",
+                                        height: "50px",
+                                        color: "white",
+                                        width: "100%",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "start",
+                                        padding: "5px",
+                                        borderRadius: "7px",
+                                        transition: " 0.3s ease",
+                                        textDecoration: "none",
+                                        scale: location.pathname === item.url ? "1.1" : "1"
+                                    }}
+                                >
+                                    {index + 1}. {item.name}
+                                </Link>
+                            ))
+                        ) : (
+                            <div>No settings available.</div>
                         )}
-                    </div>)
-                }
-
+                    </div>
+                )}
             </div>
-            <Outlet />
+            <Outlet/>
         </div>
     );
 }

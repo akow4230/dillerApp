@@ -4,7 +4,7 @@ import {connect, useDispatch} from 'react-redux';
 import {changeCurrentPage, changeSearchParams} from "../../../redux/reducers/TableSlice";
 
 function Filter(props) {
-    let param=props.param
+    let param = props.param
     const dispatch = useDispatch();
     const searchParams = props.table.searchParams
     const customStyles = {
@@ -15,12 +15,14 @@ function Filter(props) {
             border: '1px solid #d1d1d1',
         }),
     };
-useEffect(()=>{
-   if(searchParams.active ===undefined){
-       props.func({active:' ', quickSearch:searchParams.quickSearch})
-       // console.log(searchParams.quickSearch)
-   }
-},[])
+    useEffect(() => {
+        if (searchParams.active === undefined) {
+            props.func({active: ' ', quickSearch: searchParams.quickSearch})
+        }
+    }, [searchParams.active, searchParams.quickSearch, props])
+    useEffect(() => {
+        dispatch(changeCurrentPage());
+    }, [searchParams.quickSearch, searchParams.active, dispatch]);
 
     const handleCityChange = (obj) => {
         const {name, value} = obj;
@@ -28,9 +30,12 @@ useEffect(()=>{
             ...searchParams,
             [name]: value,
         }))
-        if(name==='quickSearch' || name==='active'){
-            dispatch(changeCurrentPage());
+        if (name === 'quickSearch' || name === 'active') {
             props.func({
+                ...searchParams,
+                [name]: value,
+            })
+            console.log({
                 ...searchParams,
                 [name]: value,
             })
@@ -92,30 +97,22 @@ useEffect(()=>{
     return (
         <div className="">
 
-            <div className="row">
-                {param.map(item=>
-                    <div key={item.name} className="my-1 mx-1" style={item.multi?{width: 320}:{width: 180}}>
-                    <Select
-                        name={item.name}
-                        options={item.options}
-                        value={searchParams[item.name]}
-                        onChange={(e) => handleCityChange({name: item.name, value: e})}
-                        style={{width: 70}}
-                        styles={customStyles}
-                        placeholder={item.placeholder}
-                        isMulti={item.multi}
-                        defaultValue={item.defaultValue}
-
-                    />
+            <div className="row" >
+                {param?.map(item =>
+                    <div key={item.name} className="my-1 mx-1" style={item.multi ? {width: 320} : {width: 180, zIndex:11}}>
+                        <Select
+                            name={item.name}
+                            options={item.options}
+                            value={searchParams[item.name]}
+                            onChange={(e) => handleCityChange({name: item.name, value: e})}
+                            style={{width: 70}}
+                            styles={customStyles}
+                            placeholder={item.placeholder}
+                            isMulti={item.multi}
+                            defaultValue={param[0]}
+                        />
                     </div>
                 )}
-                <div>
-                    {param.length>1?
-                    <button className='btn btn-primary' onClick={()=>props.func(searchParams)}>Filter</button>
-                        :
-                        ''
-                    }
-                </div>
             </div>
             <div className="d-flex justify-content-end">
 

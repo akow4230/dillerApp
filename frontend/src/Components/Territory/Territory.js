@@ -4,9 +4,6 @@
     import {
     setModalVisible,
     setEditModalVisible,
-    setLongitude,
-    setLatitude,
-    setMapState, setEditData
 } from "../../redux/reducers/TerritorySlice";
     import TerritoryModal from "./TerritoryModal";
     import Table from "../UniversalUI/Table/Table";
@@ -18,7 +15,7 @@
         const { modalVisible, editModalVisible, defValueOfMap, mapState, editData } = useSelector((state) => state.territory);
         useEffect(()=>{
             dispatch(changeSearchParams({active:""}))
-        },[])
+        },[dispatch])
         const columns = [
             {
                 id: 1,
@@ -85,27 +82,17 @@
         return (
             <div style={{ background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY:"auto" }}>
                 <ToastContainer />
-                <p style={{ fontSize: "25pt" }}>Territory</p>
+                <div className={"d-flex gap-3 align-items-center"}>
+                    <p style={{ fontSize: "25pt" }}>Territory</p>
+                    <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add Territory</button>
+                </div>
                 <hr />
-                <button className="btn btn-success" onClick={() => dispatch(setModalVisible(true))}>+ Add Territory</button>
                 <Table
                     isDark={false}
                     requestApi={"/api/v1/territory?page={page}&size={limit}"}
                     columns={columns}
                     filterParam={filterParam}
                 />
-                {/*<button className="btn btn-success" onClick={() => {*/}
-                {/*    dispatch(setEditData({*/}
-                {/*        id:"a03c748d-551b-4bd9-9dc4-bc372143cc09",*/}
-                {/*        title:"Shift Academyyy",*/}
-                {/*        region:"Buxoro2",*/}
-                {/*        code:"1111111",*/}
-                {/*        active:true,*/}
-                {/*        longitude:64.45346406250006,*/}
-                {/*        latitude:39.7420392241709*/}
-                {/*    }))*/}
-                {/*    dispatch(setEditModalVisible(true))*/}
-                {/*}}> Edit Territory</button>*/}
                 <TerritoryModal action={"Add territory"} visible={modalVisible} onClose={closeModal} />
                 <TerritoryModal action={"Edit territory"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
             </div>

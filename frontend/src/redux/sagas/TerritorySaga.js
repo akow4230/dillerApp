@@ -1,4 +1,4 @@
-import { call, put, takeLatest, select } from "redux-saga/effects";
+import { put, takeLatest, select } from "redux-saga/effects";
 import instance from "../../Components/utils/config/instance";
 import {
     saveTerritoryAction,
@@ -7,17 +7,15 @@ import {
     setModalVisible, setMapState, setLongitude, setLatitude, setTemplate, setEditModalVisible,
 } from "../reducers/TerritorySlice";
 import { toast } from "react-toastify";
+import {navigateTo} from "../reducers/DashboardSlice";
 function* saveTerritoryAsync(action) {
     try {
         const { territory, isEditing } = action.payload;
-        console.log(territory)
         if (!territory.longitude || !territory.latitude) {
             toast.error("You must select territory");
             return;
         }
-
-        const response = yield call(
-            instance,
+        const response = yield instance(
             `/api/v1/territory${isEditing ? "/" + territory.id : ""}`,
             isEditing ? "PUT" : "POST",
             {
@@ -29,9 +27,13 @@ function* saveTerritoryAsync(action) {
                 region: territory.region,
             }
         );
+        console.log(response)
+        if (response!==undefined&&response.data===401){
+            toast.error("Authorization problem")
+            yield put(navigateTo("/404"))
+        }
         yield put(resetTerritory());
         toast.success(`Territory ${isEditing ? "edited" : "saved"} successfully`);
-
         yield put(setModalVisible(false));
         yield put(setEditModalVisible(false));
     } catch (error) {
@@ -65,6 +67,10 @@ function* handleMapClickAsync(action) {
         }
     } catch (error) {
     }
+
+
+
+
 }
 
 export function* territorySaga() {

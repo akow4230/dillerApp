@@ -1,35 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import './style.css'
-import {Button, Select} from 'antd';
-import {useDispatch, useSelector} from "react-redux";
+import React, { useEffect, useState } from 'react';
+import './style.css';
+import { Button, Select } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import {
-    changeOrder,
-    changeTableColumns,
-    changeTableDataPage,
-    changeTableDataSize, changeTheme,
-    getTableData,
-    saveColumnsOrders,
-    setCurrentDragingColumn,
-    toggleModal
-} from "../../../redux/reducers/TableSlice";
+import { changeTableColumns, changeTableDataPage, changeTableDataSize, changeTheme, getTableData, saveColumnsOrders, toggleModal } from '../../../redux/reducers/TableSlice';
 import Pagination from '@mui/material/Pagination';
-import {styled} from '@mui/material/styles';
-import {Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
-import Filter from "../filter/Filter";
-import instance from "../../utils/config/instance";
-import axios from "axios";
+import { styled } from '@mui/material/styles';
+import Filter from '../filter/Filter';
+import axios from 'axios';
+import TableModal from './TableModal';
+import UModal from '../Modal/UModal';
 
-function Table({isDark, columns, requestApi, filterParam}) {
-    const dispatch = useDispatch()
-    const [settings, setSettings] = useState(false)
+function Table({ isDark, columns, requestApi, filterParam }) {
+    const dispatch = useDispatch();
+    const [settings, setSettings] = useState(false);
     const {
         pageSize,
         darkTheme,
         currentPage,
         data,
-        modalColumns,
         modal,
         searchParams
     } = useSelector((state) => state.table);
@@ -42,23 +32,22 @@ function Table({isDark, columns, requestApi, filterParam}) {
             columns: columns,
             isDark: isDark,
             search
-        }))
+        }));
     }
 
     useEffect(() => {
-        getData(searchParams)
-    }, [columns, currentPage, dispatch, isDark, pageSize, requestApi,])
-
+        getData(searchParams);
+    }, [columns, currentPage, dispatch, isDark, pageSize, requestApi]);
 
     function getExcel() {
         axios
-            .get(`http://localhost:8080/api/v1/territory/getExcel?active=${searchParams.active}&search=${searchParams.quickSearch}`, {
+            .get(`http://localhost:8080/api/v1/territory/getExcel?active=${searchParams.active.value}&search=${searchParams.quickSearch}`, {
                 responseType: 'arraybuffer', headers: {
-                    Authorization: localStorage.getItem("access_token")
+                    Authorization: localStorage.getItem('access_token')
                 }
             })
             .then((res) => {
-                const blob = new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+                const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                 const url = window.URL.createObjectURL(blob);
 
                 const a = document.createElement('a');
@@ -73,31 +62,33 @@ function Table({isDark, columns, requestApi, filterParam}) {
             });
     }
 
+    const elements = [
+        {
+            data: <TableModal />
+        }
+    ];
     return (
-        <div className={darkTheme ? "tableUI-dark" : "tableUI"}>
-            <Filter param={filterParam} func={getData}/>
-            <div className={darkTheme ? 'topUI-dark' : 'topUI'}>
-                <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
-                    className="fa-solid fa-sliders"></i></Button>
+        <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
+            <Filter param={filterParam} func={getData} />
+            <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
+                <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i className="fa-solid fa-sliders"></i></Button>
                 {
                     settings ? <div style={{
-                        display: "flex",
-                        alignItems: "center",
+                        display: 'flex',
+                        alignItems: 'center',
                         gap: 10
                     }}>
-                        <Button type={"dashed"} onClick={() => dispatch(toggleModal())}><i
-                            className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
-                        <FormControlLabel
-                            control={<MaterialUISwitch sx={{m: 1}}/>}
-                            label="Dark Mode"
-                            onChange={(e) => dispatch(changeTheme(e.target.checked))}
-                        />
+                        <Button type={'dashed'} onClick={() => dispatch(toggleModal())}><i className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
+                        {/*<MaterialUISwitch*/}
+                        {/*    checked={darkTheme}*/}
+                        {/*    onChange={(e) => dispatch(changeTheme(e.target.checked))}*/}
+                        {/*/>*/}
                         {
                             data.columns?.map((item, index) => {
                                 return <FormControlLabel
                                     key={item?.id}
                                     value={item.id}
-                                    control={<Switch color="primary"/>}
+                                    control={<Switch color="primary" />}
                                     label={item.title}
                                     checked={item.show}
                                     labelPlacement={item.title}
@@ -111,8 +102,8 @@ function Table({isDark, columns, requestApi, filterParam}) {
                         }
 
                     </div> : <div style={{
-                        display: "flex",
-                        alignItems: "center",
+                        display: 'flex',
+                        alignItems: 'center',
                         gap: 10
                     }}>
 
@@ -124,41 +115,40 @@ function Table({isDark, columns, requestApi, filterParam}) {
                             onChange={(e) => dispatch(changeTableDataSize(e))}
                             options={[
                                 {
+                                    value: '5',
+                                    label: '5',
+                                },
+                                {
                                     value: '10',
                                     label: '10',
                                 },
                                 {
+                                    value: '15',
+                                    label: '15',
+                                },
+                                {
                                     value: '20',
-                                    label: '20',
+                                    label: '20'
                                 },
                                 {
                                     value: '30',
-                                    label: '30',
-                                },
-                                {
-                                    value: '40',
-                                    label: '40'
-                                },
-                                {
-                                    value: '50',
-                                    label: '50'
+                                    label: '30'
                                 },
                             ]}
                         />
-                        <Button type={"dashed"} onClick={getExcel}><i
-                            className="fa-solid fa-table"></i> &nbsp; Excel</Button>
+                        <Button type={'dashed'} onClick={getExcel}><i className="fa-solid fa-table"></i> &nbsp; Excel</Button>
                     </div>
                 }
             </div>
-            <div className={darkTheme ? 'bottomUI-dark' : 'bottomUI'}>
+            <div className={darkTheme ? 'bottomUI-dark' : 'bottomUI'} style={{ overflowY: 'auto' }}>
                 <div className={darkTheme ? 'my-table-dark' : 'my-table'}>
-                    <table className={darkTheme ? 'table table-dark table-striped' : 'table'}>
-                        <thead>
+                    <table className={darkTheme ? 'table table-dark table-striped' : 'table table-bordered'}>
+                        <thead style={{position:"sticky", top:-1, zIndex:"10"}}>
                         <tr>
                             {
                                 data?.columns?.map((item) => {
                                     return <th key={item?.id}>
-                                        <p className={item?.show ? "" : "hidden"}>{item?.title}</p>
+                                        <p className={item?.show ? '' : 'hidden'}>{item?.title}</p>
                                     </th>
                                 })
                             }
@@ -171,7 +161,7 @@ function Table({isDark, columns, requestApi, filterParam}) {
                                     data?.columns?.map((col) => <td key={col?.id}>
                                         {col.render ? col.render(item) :
                                             col?.show &&
-                                            col.type === "jsx" ? React.cloneElement(col.data, {data: item}) : col.show &&
+                                            col.type === 'jsx' ? React.cloneElement(col.data, { data: item }) : col.show &&
                                                 <p>{item[col?.key]}</p>
 
                                         }
@@ -182,45 +172,32 @@ function Table({isDark, columns, requestApi, filterParam}) {
                         }
                         </tbody>
                     </table>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                        height: 40
+                    }}>
+                        {data.totalPage>1 && <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))} page={currentPage}
+                                                         count={data.totalPage}
+                                                         color={'primary'}
+                                                         variant={"outlined"}
+                                                         shape="rounded"/>}
+
+                    </div>
                 </div>
-                <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "100%",
-                    height: 40
-                }}>
-                    <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))} page={currentPage}
-                                count={data.totalPage}
-                                color={'primary'}
-                                style={{border: "1px solid"}}
-                                shape="rounded"/>
-                </div>
+
             </div>
-            <Modal isOpen={modal} toggle={() => dispatch(toggleModal())}>
-                <ModalHeader toggle={() => dispatch(toggleModal())}>Menu Control</ModalHeader>
-                <ModalBody>
-                    {
-                        modalColumns.map((item, index) => <div
-                            onDragStart={(e) => dispatch(setCurrentDragingColumn(index))}
-                            onDragOver={(e) => e.preventDefault()}
-                            onDrop={(e) => dispatch(changeOrder(index))}
-                            draggable={true} key={item?.id} className="card mb-3 p-3">
-                            {item?.title}
-                        </div>)
-                    }
-                </ModalBody>
-                <ModalFooter>
-                    <Button type={'dashed'} onClick={() => dispatch(saveColumnsOrders())}>Save</Button>
-                </ModalFooter>
-            </Modal>
+            <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} title={'Change order'}
+                    onSave={() => dispatch(saveColumnsOrders())} elements={elements} />
         </div>
     );
 }
 
 export default Table;
 
-const MaterialUISwitch = styled(Switch)(({theme}) => ({
+const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,
     padding: 7,

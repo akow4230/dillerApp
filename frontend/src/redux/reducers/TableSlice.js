@@ -6,7 +6,7 @@ const initialState = {
     darkTheme: false,
     url: "",
     modal: false,
-    pageSize: 10,
+    pageSize: 5,
     currentPage: 1,
     modalColumns: [],
     currentDragingColumn: 0,
@@ -86,10 +86,11 @@ const tableSlice = createSlice({
         },
         changeSearchParams(state, action) {
             state.searchParams = action.payload
-        },
-       changeCurrentPage(state) {
             state.currentPage = 1
-       }
+        },
+        changeCurrentPage(state) {
+            state.currentPage = 1;
+        }
     }
 })
 export const {
