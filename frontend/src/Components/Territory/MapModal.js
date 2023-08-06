@@ -23,7 +23,7 @@ import {
 import "./styles.css"
 import {ToastContainer, toast} from "react-toastify";
 
-function TerritoryModal(props) {
+function MapModal(props) {
     const dispatch = useDispatch();
     const territory = useSelector((state) => state.territory);
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
@@ -193,4 +193,4 @@ function TerritoryModal(props) {
     );
 }
 
-export default TerritoryModal;
+export default MapModal;
