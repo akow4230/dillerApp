@@ -5,7 +5,6 @@
             import org.springframework.data.domain.PageRequest;
             import org.springframework.data.jpa.repository.JpaRepository;
             import org.springframework.data.jpa.repository.Query;
-            import org.springframework.data.repository.query.Param;
 
             import java.util.List;
             import java.util.UUID;
@@ -43,7 +42,7 @@
             )
             AND c.active = :active
 """, nativeQuery = true)
-        Page<Client> findAllByActiveAndNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(Boolean active, String search, List<Integer> categoryIds, List<Integer> weekDayIds, PageRequest pageRequest);
+        Page<Client> getClientsByActive(Boolean active, String search, List<Integer> categoryIds, List<Integer> weekDayIds, PageRequest pageRequest);
 
 
 
@@ -73,12 +72,12 @@
             WHERE
                 cc.id IN :categoryIds or 0 IN :categoryIds
                 AND cwd.week_day_id IN :weekDayIds or 0 IN :weekDayIds
-                AND (
+                AND (.address) LIKE LOWER(concat('%', :search, '%'))
+                    OR LOWER(c
                     LOWER(c.name) LIKE LOWER(concat('%', :search, '%'))
-                    OR LOWER(c.address) LIKE LOWER(concat('%', :search, '%'))
                     OR LOWER(c.phone) LIKE LOWER(concat('%', :search, '%'))
                 )
         """, nativeQuery = true)
-        Page<Client> findAllByNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(String search, List<Integer> categoryIds, List<Integer> weekDayIds, PageRequest pageRequest);
+        Page<Client> getClientsWithSearch(String search, List<Integer> categoryIds, List<Integer> weekDayIds, PageRequest pageRequest);
 
     }

@@ -1,44 +1,29 @@
-package com.example.backend.Entity;
+package com.example.backend.DTO;
 
-import jakarta.persistence.*;
+import com.example.backend.Entity.WeekDay;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Entity
-@Builder
-public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
+public class ClientDTO {
     private String name;
-
     private String company;
-    @OneToOne
-    private User agent;
-    @OneToOne
-    private Territory territory;
-
+    private UUID agent;
+    private UUID territory;
     private String address;
     private String phone;
     private String referencePoint;
     private String tin;
-    @OneToOne
-    private CustomerCategory category;
+    private Integer category;
     private boolean active;
-    private LocalDate dateOfRegistration;
     private String typeOfEquipment;
     private String equipment;
-    @ManyToMany
     private List<WeekDay> weekDay;
     private double longitude;
     private double latitude;

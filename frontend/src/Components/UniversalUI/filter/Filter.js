@@ -4,7 +4,7 @@ import {connect, useDispatch} from 'react-redux';
 import {changeCurrentPage, changeSearchParams} from "../../../redux/reducers/TableSlice";
 
 function Filter(props) {
-    let param=props.param
+    let param = props.param
     const dispatch = useDispatch();
     const searchParams = props.table.searchParams
     const customStyles = {
@@ -16,12 +16,12 @@ function Filter(props) {
             zIndex:100
         }),
     };
-    useEffect(()=>{
-        if(searchParams.active ===undefined){
-            props.func({active:' ', quickSearch:searchParams.quickSearch})
+    useEffect(() => {
+        if (searchParams.active === undefined) {
+            props.func({active: ' ', quickSearch: searchParams.quickSearch})
             // console.log(searchParams.quickSearch)
         }
-    },[])
+    }, [])
 
     const handleCityChange = (obj) => {
         const {name, value} = obj;
@@ -29,7 +29,7 @@ function Filter(props) {
             ...searchParams,
             [name]: value,
         }))
-        if(name==='quickSearch' || name==='active'){
+        if (name === 'quickSearch' || name === 'active') {
             dispatch(changeCurrentPage());
             props.func({
                 ...searchParams,
@@ -70,7 +70,6 @@ function Filter(props) {
     //  ]
 
 
-
     const quickSearch = (
         <div className="">
             <label className="d-flex">
@@ -94,7 +93,7 @@ function Filter(props) {
         <div className="">
 
             <div className="row">
-                {param.map(item=>
+                {param?.map(item=>
                     <div key={item.name} className="my-1 mx-1" style={item.multi?{width: 320, zIndex:11}:{width: 180, zIndex:11}}>
                         <Select
                             name={item.name}
@@ -108,12 +107,11 @@ function Filter(props) {
                             defaultValue={item.defaultValue}
 
                         />
-
                     </div>
                 )}
                 <div>
-                    {param.length>1?
-                        <button className='btn btn-primary' onClick={()=>props.func(searchParams)}>Filter</button>
+                    {param?.length > 1 ?
+                        <button className='btn btn-primary' onClick={() => props.func(searchParams)}>Filter</button>
                         :
                         ''
                     }
