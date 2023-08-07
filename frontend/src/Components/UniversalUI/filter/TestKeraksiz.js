@@ -3,13 +3,17 @@ import Table from "../Table/Table";
 import TerritoryUpdateButton from "../../Territory/TerritoryUpdateButton";
 import {changeSearchParams} from "../../../redux/reducers/TableSlice";
 import {fetchCategoriesStart} from '../../../redux/reducers/CustomerCategorySlice'
+import {fetchWeekdaysStart} from '../../../redux/reducers/WeekDaySlice'
 import {useDispatch, useSelector} from "react-redux";
 function TestKeraksiz(props) {
     const dispatch = useDispatch();
     const {  categories} = useSelector((state) => state.category);
+    const {  weekdays } = useSelector((state) => state.weekday);
+
     useEffect(()=>{
         dispatch(changeSearchParams({active:""}))
         dispatch(fetchCategoriesStart())
+        dispatch(fetchWeekdaysStart())
     },[])
 
 
@@ -32,7 +36,7 @@ function TestKeraksiz(props) {
             order: 2,
             render:(item)=>{
                 // console.log(item.territory)
-                return <p>{item.company.name}</p>
+                return <p>{item?.company.name}</p>
             }
 
         },
@@ -45,7 +49,7 @@ function TestKeraksiz(props) {
             order: 3,
             render:(item)=>{
                 // console.log(item.territory)
-                return <p>{item.territory.region}</p>
+                return <p>{item?.territory.region}</p>
             }
         },
         {
@@ -78,7 +82,7 @@ function TestKeraksiz(props) {
             order: 8,
             render:(item)=>{
                 // console.log(item.territory)
-                return <p>{item.category.name}</p>
+                return <p>{item?.category.name}</p>
             }
         },{
             id: 9,
@@ -109,21 +113,32 @@ function TestKeraksiz(props) {
             defaultValue: {value: '', label: 'All'},
             placeholder: 'All'
         },{
-            id: 1,
+            id: 2,
             name: 'category',
             multi: true,
-            options:  categories.map(item => ({
+            options:  categories?.map(item => ({
                 value: item.id,
                 label: item.region,
             })),
             // defaultValue: {value: '', label: ''},
             placeholder: 'Customer Category'
+        },{
+            id: 3,
+            name: 'weekDay',
+            multi: true,
+            options:  weekdays?.map(item => ({
+                value: item.id,
+                label: item.name,
+            })),
+            // defaultValue: {value: '', label: ''},
+            placeholder: 'Week day'
         },
     ]
     return (
         <div className='container'>
             <h1>Filter </h1>
             <div className=''>
+
                 {/*<Filter obj={['active', 'city', 'weekDays','customerCategories', 'tin','week', 'quickSearch']}/>*/}
                 <Table
                     isDark={false}

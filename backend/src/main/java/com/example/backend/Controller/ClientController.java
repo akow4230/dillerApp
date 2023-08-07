@@ -22,9 +22,10 @@ public class ClientController {
                                    @RequestParam(defaultValue = "") String quickSearch,
                                    @RequestParam(defaultValue = "1") Integer page,
                                    @RequestParam(defaultValue = "5") Integer size,
-                                   @RequestParam(defaultValue = "") String  category
+                                   @RequestParam(defaultValue = "") String  category,
+                                   @RequestParam(defaultValue = "") String  weekDay
     )  {
-        HttpEntity<?> clients = clientService.getClients(active, quickSearch, page, size, category);
+        HttpEntity<?> clients = clientService.getClients(active, quickSearch, page, size, category, weekDay);
         return clients;
     }
 }

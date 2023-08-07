@@ -1,7 +1,6 @@
 // categorySaga.js
 
 import { call, put, takeLatest } from 'redux-saga/effects';
-import axios from 'axios';
 import { fetchCategoriesStart, fetchCategoriesSuccess, fetchCategoriesFailure } from '../reducers/CustomerCategorySlice';
 import instance from "../../Components/utils/config/instance";
 
@@ -9,7 +8,7 @@ function* fetchCategoriesSaga() {
     try {
         const response = yield call(() => instance("/api/v1/customercategory", "GET"))
         yield put(fetchCategoriesSuccess(response.data));
-        console.log(response)
+        // console.log(response)
     } catch (error) {
         yield put(fetchCategoriesFailure(error.message));
     }

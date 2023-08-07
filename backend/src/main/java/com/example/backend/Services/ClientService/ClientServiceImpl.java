@@ -19,34 +19,39 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepo clientRepo;
 
 
-    private Page<Client> getClientFilter(String active, String search, PageRequest pageRequest, List<Integer> categoryIds) {
+    private Page<Client> getClientFilter(String active, String search, PageRequest pageRequest, List<Integer> categoryIds, List<Integer> weekDayIds) {
         Page<Client> allClient = null;
-//        System.out.println(categoryIds);
+
         if (Objects.equals(active, "")) {
-            allClient = clientRepo.findAllByNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(search, categoryIds, pageRequest);
+            allClient = clientRepo.findAllByNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(search, categoryIds,weekDayIds, pageRequest);
             return allClient;
         }
         boolean aBoolean = Boolean.parseBoolean(active);
-        allClient = clientRepo.findAllByActiveAndNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(aBoolean, search, categoryIds, pageRequest );
-//        System.out.println(allClient);
+        allClient = clientRepo.findAllByActiveAndNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(aBoolean, search, categoryIds, weekDayIds, pageRequest );
         return allClient;
     }
 
 
     @Override
-    public HttpEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category) {
+    public HttpEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay) {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
-        System.out.println(category);
-
-        List<Integer> categoryIds=new LinkedList<>();
-        if(!category.equals("")) {
-            String[] strArr = category.split(",");
-            for (String s : strArr) {
-                categoryIds.add(Integer.valueOf(s));
-            }
-        }else{
-            categoryIds.add(0);
-        }
-        return ResponseEntity.ok(getClientFilter(active, quickSearch, pageRequest, categoryIds));
+        List<Integer> categoryIds = getIdes(category);
+        List<Integer> weekDayIds= getIdes(weekDay);
+        return ResponseEntity.ok(getClientFilter(active, quickSearch, pageRequest, categoryIds, weekDayIds));
     }
+
+    private static List<Integer> getIdes(String word) {
+        List<Integer> getIdes=new LinkedList<>();
+        if(!word.equals("")) {
+            String[] strArr = word.split(",");
+            for (String s : strArr) {
+                getIdes.add(Integer.valueOf(s));
+            }
+       } else{
+            getIdes.add(0);
+        }
+        return getIdes;
+    }
+
 }
+

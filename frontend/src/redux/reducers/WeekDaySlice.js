@@ -1,11 +1,10 @@
-// src/redux/weekdaysSlice.js
 
 import { createSlice } from "@reduxjs/toolkit";
 
-const weekdaysSlice = createSlice({
-    name: "weekdays",
+const weekdaySlice = createSlice({
+    name: "weekday",
     initialState: {
-        data: [],
+        weekdays: [],
         loading: false,
         error: null,
     },
@@ -16,7 +15,8 @@ const weekdaysSlice = createSlice({
         },
         fetchWeekdaysSuccess(state, action) {
             state.loading = false;
-            state.data = action.payload;
+            state.weekdays = action.payload;
+
         },
         fetchWeekdaysFailure(state, action) {
             state.loading = false;
@@ -29,6 +29,6 @@ export const {
     fetchWeekdaysStart,
     fetchWeekdaysSuccess,
     fetchWeekdaysFailure,
-} = weekdaysSlice.actions;
+} = weekdaySlice.actions;
 
-export default weekdaysSlice.reducer;
+export default weekdaySlice.reducer;

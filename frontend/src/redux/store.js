@@ -8,6 +8,7 @@ import settings from "./reducers/SettingsSlice";
 import territory from "./reducers/TerritorySlice"
 import modal from "./reducers/ModalSlice"
 import categoryReducer from './reducers/CustomerCategorySlice'
+import weekDayReducer from "./reducers/WeekDaySlice";
 const sagaMiddleware = createSagaMiddleware();
 const rootReducer = combineReducers({
     login,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     territory,
     settings,
     modal,
-    category: categoryReducer
+    category: categoryReducer,
+    weekday: weekDayReducer,
 });
 
 export const store = configureStore({

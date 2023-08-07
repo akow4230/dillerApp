@@ -13,21 +13,24 @@ import {
 
 function* watchGetTableData(action) {
     // console.log(action.payload.search)
-    let obj =action.payload.search.category
-    let arr=[]
-    obj?.map(item=>{
-        arr.push(item.value)
+
+    let category=[]
+    action.payload.search.category?.map(item=>{
+        category.push(item.value)
     })
-    console.log(arr)
+    let weekDay=[]
+    action.payload.search.weekDay?.map(item=>{
+        weekDay.push(item.value)
+    })
 
     try {
-        const response = yield call(() => instance(action.payload.url, "GET", null, {active:action.payload.search.active.value, quickSearch:action.payload.search.quickSearch ,category:arr.join(',')}));
+        const response = yield call(() => instance(action.payload.url, "GET", null, {active:action.payload.search.active.value, quickSearch:action.payload.search.quickSearch ,category:category.join(','), weekDay:weekDay.join(',')}));
         yield put(getTableDataSuccess({
             data: response.data.content,
             totalPage: response.data.totalPages,
             totalElements: response.data.totalElements
         }))
-        console.log(response.data)
+        // console.log(response.data)
     } catch (e) {
 
     }

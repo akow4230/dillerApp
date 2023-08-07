@@ -132,4 +132,10 @@ public class TerritoryServiceImpl implements TerritoryService {
         }
     }
 
+    @Override
+    public HttpEntity<?> getAll() {
+        List<Territory> all = territoryRepo.findAll();
+        return ResponseEntity.ok(all);
+    }
+
 }

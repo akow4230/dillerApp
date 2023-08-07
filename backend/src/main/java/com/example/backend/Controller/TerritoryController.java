@@ -60,4 +60,11 @@ public class TerritoryController {
 
         }
     }
+
+
+    @GetMapping("/all")
+    public HttpEntity<?> getAllTerritory(){
+        return territoryService.getAll();
+    }
+
 }

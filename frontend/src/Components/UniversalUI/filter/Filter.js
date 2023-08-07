@@ -13,6 +13,7 @@ function Filter(props) {
             borderRadius: 8,
             minHeight: 15,
             border: '1px solid #d1d1d1',
+            zIndex:100
         }),
     };
     useEffect(()=>{
@@ -94,7 +95,7 @@ function Filter(props) {
 
             <div className="row">
                 {param.map(item=>
-                    <div key={item.name} className="my-1 mx-1" style={item.multi?{width: 320}:{width: 180}}>
+                    <div key={item.name} className="my-1 mx-1" style={item.multi?{width: 320, zIndex:11}:{width: 180, zIndex:11}}>
                         <Select
                             name={item.name}
                             options={item.options}
@@ -107,6 +108,7 @@ function Filter(props) {
                             defaultValue={item.defaultValue}
 
                         />
+
                     </div>
                 )}
                 <div>

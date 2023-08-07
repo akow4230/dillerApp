@@ -19,8 +19,8 @@ public class Client {
     private UUID id;
 
     private String name;
-    @OneToMany
-    private List<Company> company;
+
+    private String company;
     @OneToOne
     private User agent;
     @OneToOne
@@ -28,6 +28,7 @@ public class Client {
     private String address;
     private String phone;
     private String referencePoint;
+    private String tin;
     @OneToOne
     private CustomerCategory category;
     private boolean active;
@@ -36,5 +37,6 @@ public class Client {
     private String equipment;
     @ManyToMany
     private List<WeekDay> weekDay;
-
+    private double longitude;
+    private double latitude;
 }

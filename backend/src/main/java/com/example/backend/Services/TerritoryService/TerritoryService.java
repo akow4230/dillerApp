@@ -18,4 +18,8 @@ public interface TerritoryService {
     ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException;
 
     void editTerritory(UUID id, ReqEditTerritory reqEditTerritory);
+
+
+
+    HttpEntity<?> getAll();
 }

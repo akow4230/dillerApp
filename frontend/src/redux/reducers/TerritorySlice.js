@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    territory:[],
     isLoading: false,
     error: false,
     navigation: "",
@@ -52,7 +53,20 @@ export const territorySlice = createSlice({
           state.editData = action.payload
         },
         saveTerritoryAction: (state, action) => {},
-        editTerritoryAction: (state, action) => {}
+        editTerritoryAction: (state, action) => {},
+        fetchTerritoryStart: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        fetchTerritorySuccess: (state, action) => {
+            state.territory = action.payload;
+            state.loading = false;
+            state.error = null;
+        },
+        fetchTerritoryFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
     }
 });
 export const {
@@ -67,6 +81,9 @@ export const {
     setEditModalVisible,
     saveTerritoryAction,
     editTerritoryAction,
-    setEditData
+    setEditData,
+    fetchTerritoryStart,
+    fetchTerritoryFailure,
+    fetchTerritorySuccess
 } = territorySlice.actions
 export default territorySlice.reducer;

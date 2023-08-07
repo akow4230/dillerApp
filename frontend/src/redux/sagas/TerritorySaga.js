@@ -4,10 +4,18 @@ import {
     saveTerritoryAction,
     editTerritoryAction,
     resetTerritory,
-    setModalVisible, setMapState, setLongitude, setLatitude, setTemplate, setEditModalVisible,
+    setModalVisible,
+    setMapState,
+    setLongitude,
+    setLatitude,
+    setTemplate,
+    setEditModalVisible,
+    fetchTerritorySuccess,
+    fetchTerritoryFailure, fetchTerritoryStart,
 } from "../reducers/TerritorySlice";
 import { toast } from "react-toastify";
 import {navigateTo} from "../reducers/DashboardSlice";
+import {fetchCategoriesFailure, fetchCategoriesStart, fetchCategoriesSuccess} from "../reducers/CustomerCategorySlice";
 function* saveTerritoryAsync(action) {
     try {
         const { territory, isEditing } = action.payload;
@@ -73,9 +81,20 @@ function* handleMapClickAsync(action) {
 
 }
 
+function* fetchTerritorySaga() {
+    try {
+        const response = yield call(() => instance("/api/v1/territory/all", "GET"))
+        yield put(fetchTerritorySuccess(response.data));
+        // console.log(response)
+    } catch (error) {
+        yield put(fetchTerritoryFailure(error.message));
+    }
+}
 export function* territorySaga() {
     yield takeLatest(saveTerritoryAction.type, saveTerritoryAsync);
     yield takeLatest(editTerritoryAction.type, saveTerritoryAsync);
     yield takeLatest("territory/handleMapClear", handleMapClearAsync);
     yield takeLatest("territory/handleMapClick", handleMapClickAsync);
+    yield takeLatest(fetchTerritoryStart.type, fetchTerritorySaga);
+
 }
