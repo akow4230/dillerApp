@@ -13,7 +13,6 @@ import {useForm} from 'react-hook-form';
 import {
     setLatitude,
     setLongitude,
-    resetTerritory,
     setModadlVisible,
     setTemplate,
     setMapState,
@@ -21,8 +20,7 @@ import {
     editClientsAction
 } from '../../redux/reducers/ClientsSlice';
 import "../Territory/styles.css"
-import {ToastContainer, toast} from "react-toastify";
-import {saveTerritoryAction} from "../../redux/reducers/TerritorySlice";
+import {ToastContainer} from "react-toastify";
 
 function ClientsModal(props) {
     const dispatch = useDispatch();

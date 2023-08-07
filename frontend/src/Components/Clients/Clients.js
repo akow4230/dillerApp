@@ -1,7 +1,8 @@
 import React from 'react';
 import ClientsModal from "./ClientsModal";
 import {useDispatch, useSelector} from "react-redux";
-import {setEditModalVisible, setModalVisible} from "../../redux/reducers/TerritorySlice";
+import {setEditModalVisible, setModalVisible} from "../../redux/reducers/ClientsSlice";
+import {ToastContainer} from "react-toastify";
 
 function Clients(props) {
     const { modalVisible, editModalVisible, defValueOfMap, mapState, editData } = useSelector((state) => state.clients);
@@ -15,10 +16,22 @@ function Clients(props) {
         dispatch(setEditModalVisible(false))
     }
     return (
-        <div>
-            <button className="btn btn-success">Add client</button>
+        <div style={{ background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY:"auto" }}>
+            <ToastContainer />
+            <div className={"d-flex gap-3 align-items-center"}>
+                <p style={{ fontSize: "25pt" }}>Clients</p>
+                <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add Territory</button>
+            </div>
+            <hr />
+            {/*<Table*/}
+            {/*    isDark={false}*/}
+            {/*    requestApi={"/api/v1/territory?page={page}&size={limit}"}*/}
+            {/*    columns={columns}*/}
+            {/*    filterParam={filterParam}*/}
+            {/*    path={"territory"}*/}
+            {/*/>*/}
             <ClientsModal action={"Add territory"} visible={modalVisible} onClose={closeModal} />
-            <ClientsModal action={"Edit territory"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal}  />
+            <ClientsModal action={"Edit territory"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
         </div>
     );
 }
