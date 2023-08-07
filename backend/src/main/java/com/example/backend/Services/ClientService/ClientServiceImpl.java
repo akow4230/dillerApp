@@ -1,7 +1,11 @@
 package com.example.backend.Services.ClientService;
 
+import com.example.backend.DTO.ClientDTO;
 import com.example.backend.Entity.Client;
 import com.example.backend.Repository.ClientRepo;
+import com.example.backend.Repository.CustomerCategoryRepo;
+import com.example.backend.Repository.TerritoryRepo;
+import com.example.backend.Repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,21 +17,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
     private final ClientRepo clientRepo;
-
+    private final UserRepo userRepo;
+    private final TerritoryRepo territoryRepo;
+    private final CustomerCategoryRepo categoryRepo;
 
     private Page<Client> getClientFilter(String active, String search, PageRequest pageRequest, List<Integer> categoryIds, List<Integer> weekDayIds) {
         Page<Client> allClient = null;
         if (Objects.equals(active, "")) {
-            allClient = clientRepo.findAllByNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(search, categoryIds,weekDayIds, pageRequest);
+            allClient = clientRepo.getClientsWithSearch(search, categoryIds, weekDayIds, pageRequest);
             return allClient;
         }
         boolean aBoolean = Boolean.parseBoolean(active);
-        allClient = clientRepo.findAllByActiveAndNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(aBoolean, search, categoryIds, weekDayIds, pageRequest );
+        allClient = clientRepo.getClientsByActive(aBoolean, search, categoryIds, weekDayIds, pageRequest);
         return allClient;
     }
 
@@ -36,24 +43,61 @@ public class ClientServiceImpl implements ClientService {
     public HttpEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay, String territory, String tin) {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         List<Integer> categoryIds = getIdes(category);
-        List<Integer> weekDayIds= getIdes(weekDay);
-//        List<UUID> territoryIds=getIdes(territory);
+        List<Integer> weekDayIds = getIdes(weekDay);
         return ResponseEntity.ok(getClientFilter(active, quickSearch, pageRequest, categoryIds, weekDayIds));
     }
 
     private static List<Integer> getIdes(String word) {
-        List<Integer> getIdes=new LinkedList<>();
-        if(!word.equals("")) {
+        List<Integer> getIdes = new LinkedList<>();
+        if (!word.equals("")) {
             String[] strArr = word.split(",");
             for (String s : strArr) {
                 getIdes.add(Integer.valueOf(s));
             }
-       } else{
+        } else {
             getIdes.add(0);
         }
         return getIdes;
     }
 
+    @Override
+    public HttpEntity<?> addClient(ClientDTO clientDTO) {
+        Client client = Client.builder()
+                .name(clientDTO.getName())
+                .company(clientDTO.getCompany())
+                .territory(territoryRepo.findById(clientDTO.getTerritory()).get())
+                .address(clientDTO.getAddress())
+                .phone(clientDTO.getPhone())
+                .referencePoint(clientDTO.getReferencePoint())
+                .tin(clientDTO.getTin())
+                .category(categoryRepo.findById(clientDTO.getCategory()).get())
+                .active(clientDTO.isActive())
+                .weekDay(clientDTO.getWeekDay())
+                .longitude(clientDTO.getLongitude())
+                .latitude(clientDTO.getLatitude())
+                .build();
+        clientRepo.save(client);
+        return ResponseEntity.ok("Client Saved successfully");
+    }
 
+    @Override
+    public void editClient(ClientDTO clientDTO, UUID id) {
+        Client currentClient = clientRepo.findById(id).orElseThrow();
+        currentClient.setId(id);
+        currentClient.setName(currentClient.getName());
+        currentClient.setCompany(clientDTO.getCompany());
+        currentClient.setAgent(userRepo.findById(clientDTO.getAgent()).orElseThrow());
+        currentClient.setTerritory(territoryRepo.findById(clientDTO.getTerritory()).orElseThrow());
+        currentClient.setAddress(clientDTO.getAddress());
+        currentClient.setPhone(clientDTO.getPhone());
+        currentClient.setReferencePoint(clientDTO.getReferencePoint());
+        currentClient.setTin(clientDTO.getTin());
+        currentClient.setCategory(categoryRepo.findById(clientDTO.getCategory()).orElseThrow());
+        currentClient.setActive(clientDTO.isActive());
+        currentClient.setWeekDay(currentClient.getWeekDay());
+        currentClient.setLongitude(clientDTO.getLongitude());
+        currentClient.setLatitude(clientDTO.getLatitude());
+        clientRepo.save(currentClient);
+    }
 }
 

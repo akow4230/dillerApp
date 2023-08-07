@@ -4,7 +4,7 @@ import {connect, useDispatch} from 'react-redux';
 import {changeCurrentPage, changeSearchParams} from "../../../redux/reducers/TableSlice";
 
 function Filter(props) {
-    let param=props.param
+    let param = props.param
     const dispatch = useDispatch();
     const searchParams = props.table.searchParams
     const customStyles = {
@@ -16,12 +16,12 @@ function Filter(props) {
             zIndex:100
         }),
     };
-    useEffect(()=>{
-        if(searchParams.active ===undefined){
-            props.func({active:' ', quickSearch:searchParams.quickSearch})
+    useEffect(() => {
+        if (searchParams.active === undefined) {
+            props.func({active: ' ', quickSearch: searchParams.quickSearch})
             // console.log(searchParams.quickSearch)
         }
-    },[])
+    }, [])
 
     const handleCityChange = (obj) => {
         const {name, value} = obj;
@@ -29,7 +29,7 @@ function Filter(props) {
             ...searchParams,
             [name]: value,
         }))
-        if(name==='quickSearch' || name==='active'){
+        if (name === 'quickSearch' || name === 'active') {
             dispatch(changeCurrentPage());
             props.func({
                 ...searchParams,

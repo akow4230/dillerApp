@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
-    clients:[],
+    clients: [],
     isLoading: false,
     error: false,
     navigation: "",
@@ -9,11 +9,12 @@ const initialState = {
     editModalVisible: false,
     template: [],
     defValueOfMap: [41.3775, 64.5853],
-    mapState: { center:[41.3775, 64.5853], zoom: 5 },
+    mapState: {center: [41.3775, 64.5853], zoom: 5},
     placeName: "",
     latitude: "",
     longitude: "",
-    editData:{}
+    editData: {},
+    selectedWeekdays: []
 };
 
 export const territorySlice = createSlice({
@@ -43,17 +44,19 @@ export const territorySlice = createSlice({
         setRegion: (state, action) => {
             state.region = action.payload;
         },
-        setTemplate:(state, action) =>{
+        setTemplate: (state, action) => {
             state.template = action.payload
         },
-        setMapState:(state, action)=>{
+        setMapState: (state, action) => {
             state.mapState = action.payload
         },
-        setEditData:(state,action)=>{
+        setEditData: (state, action) => {
             state.editData = action.payload
         },
-        saveClientsAction: (state, action) => {},
-        editClientsAction: (state, action) => {},
+        saveClientsAction: (state, action) => {
+        },
+        editClientsAction: (state, action) => {
+        },
         fetchClientsStart: (state) => {
             state.loading = true;
             state.error = null;
@@ -67,6 +70,15 @@ export const territorySlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+        setSelectedWeekdays: (state, action) => {
+            state.selectedWeekdays = action.payload;
+        },
+        pushWeekday: (state, action) => {
+            state.selectedWeekdays.push(action.payload)
+        },
+        deleteWeekday: (state, action) => {
+            state.selectedWeekdays = state.selectedWeekdays.filter(day => day.id !== action.payload.id);
+        }
     }
 });
 export const {
@@ -84,6 +96,9 @@ export const {
     setEditData,
     fetchClientsStart,
     fetchClientsFailure,
-    fetchClientsSuccess
+    fetchClientsSuccess,
+    setSelectedWeekdays,
+    pushWeekday,
+    deleteWeekday
 } = territorySlice.actions
 export default territorySlice.reducer;

@@ -2,6 +2,7 @@ package com.example.backend.Controller;
 
 import com.example.backend.Entity.Role;
 import com.example.backend.Services.Security.SecurityService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/security")
+@RequiredArgsConstructor
 public class SecurityController {
-    @Autowired
-    private SecurityService securityService;
+    private final SecurityService securityService;
+
     @GetMapping
-    public HttpEntity<?> checkSecurity(@RequestHeader("Authorization") String authorization){
-//        System.out.println(authorization);
-        HttpEntity<?> httpEntity = securityService.checkSecurity(authorization);
-//        System.out.println(httpEntity.getBody());
-        return httpEntity;
+    public HttpEntity<?> checkSecurity(@RequestHeader("Authorization") String authorization) {
+        return securityService.checkSecurity(authorization);
     }
 }

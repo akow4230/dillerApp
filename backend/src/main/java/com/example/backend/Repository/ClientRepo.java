@@ -75,25 +75,17 @@
             c.tin AS tin,
             c.latitude AS latitude,
             c.longitude AS longitude
-        FROM client c
-                 JOIN customer_category cc ON cc.id = c.category_id
-                 JOIN client_week_day cwd on c.id = cwd.client_id
-        WHERE
-            (cc.id IN :categoryIds or 0 IN :categoryIds)
-           AND (cwd.week_day_id IN :weekDayIds or 0 IN :weekDayIds)
-            AND(
-                CASE
-                    WHEN :tin = 'true' THEN c.tin IS NOT NULL AND c.tin != ''
-                    WHEN :tin = 'false' THEN c.tin IS NULL OR c.tin = ''
-                    ELSE true
-                    END
-            )
-          AND (
+            FROM client c
+            JOIN customer_category cc ON cc.id = c.category_id
+            JOIN client_week_day cwd on c.id = cwd.client_id
+            WHERE
+                cc.id IN :categoryIds or 0 IN :categoryIds
+                AND cwd.week_day_id IN :weekDayIds or 0 IN :weekDayIds
+                AND (
                     LOWER(c.name) LIKE LOWER(concat('%', :search, '%'))
-                OR LOWER(c.address) LIKE LOWER(concat('%', :search, '%'))
-                OR LOWER(c.phone) LIKE LOWER(concat('%', :search, '%'))
-            )
-        
+                    OR LOWER(c.address) LIKE LOWER(concat('%', :search, '%'))
+                    OR LOWER(c.phone) LIKE LOWER(concat('%', :search, '%'))
+                )
         """, nativeQuery = true)
         Page<Client> findAllByNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(String search, List<Integer> categoryIds, List<Integer> weekDayIds, PageRequest pageRequest);
 

@@ -7,6 +7,7 @@ import {territorySaga} from "./TerritorySaga";
 import settingsSaga from "./SettingsSaga";
 import {modalSaga} from "./ModalSaga";
 import {weekDaySaga} from './WeekDaySaga'
+import {clientsSaga} from "./ClientsSaga";
 export default function* rootSaga() {
     yield all([
         dashboardSaga(),
@@ -16,6 +17,7 @@ export default function* rootSaga() {
         settingsSaga(),
         modalSaga(),
         categorySaga(),
-        weekDaySaga()
+        weekDaySaga(),
+        clientsSaga()
     ])
 }
