@@ -17,11 +17,12 @@ import {
     setModadlVisible,
     setTemplate,
     setMapState,
-    saveTerritoryAction,
-    editTerritoryAction
-} from '../../redux/reducers/TerritorySlice';
+    saveClientsAction,
+    editClientsAction
+} from '../../redux/reducers/ClientsSlice';
 import "../Territory/styles.css"
 import {ToastContainer, toast} from "react-toastify";
+import {saveTerritoryAction} from "../../redux/reducers/TerritorySlice";
 
 function ClientsModal(props) {
     const dispatch = useDispatch();
@@ -80,7 +81,7 @@ function ClientsModal(props) {
     function saveTerritory(data) {
         dispatch(
             props.isEditing
-                ? editTerritoryAction({
+                ? editClientsAction({
                     territory: {
                         ...data,
                         longitude: territory?.longitude,
