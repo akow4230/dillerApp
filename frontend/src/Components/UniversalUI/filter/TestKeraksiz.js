@@ -5,15 +5,17 @@ import {changeSearchParams} from "../../../redux/reducers/TableSlice";
 import {fetchCategoriesStart} from '../../../redux/reducers/CustomerCategorySlice'
 import {fetchWeekdaysStart} from '../../../redux/reducers/WeekDaySlice'
 import {useDispatch, useSelector} from "react-redux";
+import territory, {fetchTerritoryStart} from "../../../redux/reducers/TerritorySlice";
 function TestKeraksiz(props) {
     const dispatch = useDispatch();
     const {  categories} = useSelector((state) => state.category);
     const {  weekdays } = useSelector((state) => state.weekday);
-
+    const {territory } = useSelector((state)=>state.territory)
     useEffect(()=>{
         dispatch(changeSearchParams({active:""}))
         dispatch(fetchCategoriesStart())
         dispatch(fetchWeekdaysStart())
+        dispatch(fetchTerritoryStart())
     },[])
 
 
@@ -132,6 +134,16 @@ function TestKeraksiz(props) {
             })),
             // defaultValue: {value: '', label: ''},
             placeholder: 'Week day'
+        },{
+            id: 4,
+            name: 'territory',
+            multi: true,
+            options:  territory?.map(item => ({
+                value: item.id,
+                label: item.region,
+            })),
+            // defaultValue: {value: '', label: ''},
+            placeholder: 'City'
         },
     ]
     return (

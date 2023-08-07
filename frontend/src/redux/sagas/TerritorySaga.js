@@ -1,4 +1,4 @@
-import { put, takeLatest, select } from "redux-saga/effects";
+import {call, put, takeLatest, select } from "redux-saga/effects";
 import instance from "../../Components/utils/config/instance";
 import {
     saveTerritoryAction,
@@ -15,7 +15,6 @@ import {
 } from "../reducers/TerritorySlice";
 import { toast } from "react-toastify";
 import {navigateTo} from "../reducers/DashboardSlice";
-import {fetchCategoriesFailure, fetchCategoriesStart, fetchCategoriesSuccess} from "../reducers/CustomerCategorySlice";
 function* saveTerritoryAsync(action) {
     try {
         const { territory, isEditing } = action.payload;
