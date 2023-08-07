@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ClientsModal from "./ClientsModal";
 import {useDispatch, useSelector} from "react-redux";
 import {setEditModalVisible, setModalVisible} from "../../redux/reducers/ClientsSlice";
 import {ToastContainer} from "react-toastify";
+import {fetchWeekdaysStart} from "../../redux/reducers/WeekDaySlice";
 
 function Clients(props) {
-    const { modalVisible, editModalVisible, defValueOfMap, mapState, editData } = useSelector((state) => state.clients);
     const dispatch = useDispatch();
+    const { modalVisible, editModalVisible, defValueOfMap, mapState, editData } = useSelector((state) => state.clients);
     const closeModal = () => {
         dispatch({ type: 'clients/handleMapClear', payload: { mapState: mapState, defValueOfMap: defValueOfMap } });
         dispatch(setModalVisible(false));
@@ -20,7 +21,7 @@ function Clients(props) {
             <ToastContainer />
             <div className={"d-flex gap-3 align-items-center"}>
                 <p style={{ fontSize: "25pt" }}>Clients</p>
-                <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add Territory</button>
+                <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add Client</button>
             </div>
             <hr />
             {/*<Table*/}
@@ -30,8 +31,8 @@ function Clients(props) {
             {/*    filterParam={filterParam}*/}
             {/*    path={"territory"}*/}
             {/*/>*/}
-            <ClientsModal action={"Add territory"} visible={modalVisible} onClose={closeModal} />
-            <ClientsModal action={"Edit territory"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
+            <ClientsModal action={"Add client"} visible={modalVisible} onClose={closeModal} />
+            <ClientsModal action={"Edit client"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
         </div>
     );
 }

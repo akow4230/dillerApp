@@ -13,19 +13,23 @@ import {useForm} from 'react-hook-form';
 import {
     setLatitude,
     setLongitude,
-    setModadlVisible,
     setTemplate,
     setMapState,
     saveClientsAction,
-    editClientsAction
+    editClientsAction, pushWeekday, deleteWeekday
 } from '../../redux/reducers/ClientsSlice';
 import "../Territory/styles.css"
 import {ToastContainer} from "react-toastify";
-
+import {fetchWeekdaysStart} from "../../redux/reducers/WeekDaySlice";
 function ClientsModal(props) {
     const dispatch = useDispatch();
-    const territory = useSelector((state) => state.territory);
+    const clients = useSelector((state) => state.clients);
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
+    const {weekdays} = useSelector((state)=>state.weekday);
+    
+    useEffect(()=>{
+        dispatch(fetchWeekdaysStart())
+    },[])
     useEffect(() => {
         if (props.isEditing && props.visible) {
             reset({
@@ -65,30 +69,30 @@ function ClientsModal(props) {
 
     function handleMapClick(event) {
         const coords = event.get('coords');
-        dispatch({type: "territory/handleMapClick", payload: coords});
+        dispatch({type: "clients/handleMapClick", payload: coords});
     }
 
 
     function handleMapClear() {
         dispatch({
-            type: 'territory/handleMapClear',
-            payload: {mapState: territory.mapState, defValueOfMap: territory.defValueOfMap}
+            type: 'clients/handleMapClear',
+            payload: {mapState: clients.mapState, defValueOfMap: clients.defValueOfMap}
         });
     }
 
-    function saveTerritory(data) {
+    function saveclients(data) {
         dispatch(
             props.isEditing
                 ? editClientsAction({
-                    territory: {
-                        ...data,
-                        longitude: territory?.longitude,
-                        latitude: territory?.latitude,
+                    clients: {
+                        data: {...data, weekdays:clients.selectedWeekdays},
+                        longitude: clients?.longitude,
+                        latitude: clients?.latitude,
                         id: props.data.id
                     }, isEditing: true
                 })
                 : saveClientsAction({
-                    territory: {...data, longitude: territory?.longitude, latitude: territory?.latitude},
+                    clients: {data:{...data, weekdays:clients.selectedWeekdays}, longitude: clients?.longitude, latitude: clients?.latitude},
                     isEditing: false,
                     reset:reset({
                         title: "",
@@ -99,6 +103,14 @@ function ClientsModal(props) {
                 })
         );
 
+    }
+
+    function selectWeekday(item, selected) {
+        if (!clients.selectedWeekdays.includes(item)){
+            dispatch(pushWeekday(item))
+        }else if (!selected){
+            dispatch(deleteWeekday(item))
+        }
     }
 
     return (
@@ -117,34 +129,83 @@ function ClientsModal(props) {
                         <p>{props.action}</p>
                     </header>
                     <div style={{display: "flex"}}>
-                        <div className="left-side w-50 p-5">
-                            <form onSubmit={handleSubmit(saveTerritory)}>
-                                <label className={"d-flex gap-4"}>
-                                    Title*
-                                    <input type="text"
-                                           className={"form-control my-2"} {...register("title", {required: "Title is required"})} />
-                                </label>
-                                {errors.title && <span className="error-message">{errors.title.message}</span>}
-                                <label className={"d-flex gap-4"}>
-                                    Region
-                                    <input type="text"
-                                           className={"form-control my-2"} {...register("region", {required: "Region is required"})} />
-                                </label>
-                                {errors.region && <span className="error-message">{errors.region.message}</span>}
-                                <label className={"d-flex gap-4"}>
-                                    Code
-                                    <input type="text"
-                                           className={"form-control my-2"} {...register("code", {required: "Code is required"})} />
-                                </label>
-                                {errors.code && <span className="error-message">{errors.code.message}</span>}
-                                <label className={"d-flex gap-2"}>
-                                    Active
-                                    <input type="checkbox" className={"form-check"} {...register("active")} />
-                                </label>
-                                <div style={{marginTop: "auto", display: "flex", justifyContent: "center"}}>
+                        <div className="left-side w-75 py-4" style={{paddingLeft:"50px"}}>
+                            <form onSubmit={handleSubmit(saveclients)} className={"d-flex gap-5"}>
+                                <div>
+                                    <label style={{width:"300px"}}>
+                                        Territory*
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("clients", {required: "clients is required"})} />
+                                    </label>
+                                    {errors.clients && <span className="error-message">{errors.clients.message}</span>}
+                                    <br/>
+                                    <label style={{width:"300px"}}>
+                                        Name*
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("name", {required: "Name is required"})} />
+                                    </label>
+                                    {errors.name && <span className="error-message">{errors.name.message}</span>}
+                                    <br/>
+                                    <label style={{width:"300px"}}>
+                                        Address
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("address", {required: "Address is required"})} />
+                                    </label>
+                                    {errors.address && <span className="error-message">{errors.address.message}</span>}
+                                    <br/>
+                                    <label style={{width:"300px"}}>
+                                        Telephone
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("telephone", {required: "Telephone is required"})} />
+                                    </label>
+                                    {errors.telephone && <span className="error-message">{errors.telephone.message}</span>}
+                                    <br/>
+                                    <label style={{width:"300px"}}>
+                                        TIN
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("TIN")} />
+                                    </label>
+                                    <br/>
+                                </div>
+                                <div>
+                                    <label style={{width:"300px"}}>
+                                        Company name
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("companyName", {required: "Company name is required"})} />
+                                    </label>
+                                    {errors.companyName && <span className="error-message">{errors.companyName.message}</span>}
+                                    <br/>
+                                    <label style={{width:"300px"}}>
+                                        Reference point
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("referencePoint", {required: "Reference point is required"})} />
+                                    </label>
+                                    {errors.referencePoint && <span className="error-message">{errors.referencePoint.message}</span>}
+                                    <br/>
+                                    <label style={{width:"300px"}}>
+                                        Category*
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("category", {required: "Category is required"})} />
+                                    </label>
+                                    {errors.category && <span className="error-message">{errors.category.message}</span>}
+                                    <br/>
+                                    <label style={{width:"300px"}}>
+                                        Visiting days
+                                        <br/>
+                                        <br/>
+                                        <span className="d-flex justify-content-center gap-3 flex-wrap">
+                                              {weekdays.map(item=>
+                                                  <label className={"d-flex gap-2 align-items-center"} style={{fontSize:"10pt"}}>
+                                                      <p style={item.name==="SATURDAY" || item.name === "SUNDAY" ? {color:"red"}:{color:"black"}} className={"my-1"}>{item.name.substring(0, 3)}</p>
+                                                      <input type="checkbox" className={"form-check"} onChange={(e)=>selectWeekday(item, e.target.checked)}/>
+                                                  </label>
+                                              )}
+                                        </span>
+                                    </label>
+                                </div>
+                                <div style={{display: "flex", alignItems:"center", justifyContent:"center", width:"100%"}}>
                                     <button className="btn btn-primary"
-                                            style={{position: "absolute", bottom: "30px"}}>Add
-                                    </button>
+                                            style={{position: "absolute", bottom: "30px", left:"50px"}}>Save</button>
                                 </div>
                             </form>
                         </div>
@@ -153,10 +214,10 @@ function ClientsModal(props) {
                                 onLoad={(e) => {
                                     console.log(e);
                                 }}
-                                width={500}
+                                width={400}
                                 height={400}
                                 onClick={handleMapClick}
-                                state={territory.mapState}
+                                state={clients.mapState}
                                 modules={['templateLayoutFactory']}
                             >
                                 <FullscreenControl options={{float: "left"}}/>
@@ -165,23 +226,25 @@ function ClientsModal(props) {
                                 <ZoomControl options={{float: "left"}}/>
                                 <TypeSelector options={{float: "right"}}/>
                                 <SearchControl options={{float: "left"}}/>
-                                {territory.template && territory.longitude !== "" && territory.latitude !== "" && (
+                                {clients.template && clients.longitude !== "" && clients.latitude !== "" && (
                                     <Placemark
-                                        geometry={territory.mapState.center}
+                                        geometry={clients.mapState.center}
                                         modules={['geoObject.addon.balloon']}
                                     />
 
                                 )}
                             </Map>
                             <div>
-                                <label>
-                                    Long <br/>
-                                    <input type="text" disabled={true} value={territory.longitude}/>
-                                </label>
-                                <label className={"mx-4 my-2"}>
-                                    Lat <br/>
-                                    <input type="text" disabled={true} value={territory.latitude}/>
-                                </label> <br/>
+                                <div className="inputs d-flex align-items-center">
+                                    <label>
+                                        Long <br/>
+                                        <input type="text" className={"w-75"} disabled={true} value={clients.longitude}/>
+                                    </label>
+                                    <label className={"mx-4 my-2"}>
+                                        Lat <br/>
+                                        <input type="text" className={"w-75"} disabled={true} value={clients.latitude}/>
+                                    </label> <br/>
+                                </div>
                                 <button className="btn btn-danger" onClick={handleMapClear}>clear</button>
                             </div>
                         </div>

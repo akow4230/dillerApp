@@ -1,8 +1,8 @@
 import {call, put, takeLatest, select } from "redux-saga/effects";
 import instance from "../../Components/utils/config/instance";
 import {
-    saveTerritoryAction,
-    editTerritoryAction,
+    saveClientsAction,
+    editClientsAction,
     resetTerritory,
     setModalVisible,
     setMapState,
@@ -10,28 +10,32 @@ import {
     setLatitude,
     setTemplate,
     setEditModalVisible,
-    fetchTerritorySuccess,
-    fetchTerritoryFailure, fetchTerritoryStart,
-} from "../reducers/TerritorySlice";
+    fetchClientsFailure,
+    fetchClientsStart, fetchClientsSuccess,
+} from "../reducers/ClientsSlice";
 import { toast } from "react-toastify";
 import {navigateTo} from "../reducers/DashboardSlice";
 function* saveClientsAsync(action) {
     try {
-        const { territory, isEditing } = action.payload;
-        if (!territory.longitude || !territory.latitude) {
+        console.log(action.payload)
+        const { clients, isEditing } = action.payload;
+        if (!clients.longitude || !clients.latitude) {
             toast.error("You must select territory");
             return;
         }
         const response = yield instance(
-            `/api/v1/client${isEditing ? "/" + territory.id : ""}`,
+            `/api/v1/client${isEditing ? "/" + clients.id : ""}`,
             isEditing ? "PUT" : "POST",
             {
-                title: territory.title,
-                code: territory.code,
-                active: territory.active,
-                longitude: territory.longitude,
-                latitude: territory.latitude,
-                region: territory.region,
+                territory: clients.territory,
+                name: clients.name,
+                address:clients.address,
+                telephone:clients.telephone,
+                tin:clients.tin,
+                category:clients.category,
+                companyName:clients.companyName,
+                referencePoint:clients.referencePoint,
+                weekDays:clients.weekDays
             }
         );
         console.log(response)
@@ -40,7 +44,7 @@ function* saveClientsAsync(action) {
             yield put(navigateTo("/404"))
         }
         yield put(resetTerritory());
-        toast.success(`Territory ${isEditing ? "edited" : "saved"} successfully`);
+        toast.success(`Client ${isEditing ? "edited" : "saved"} successfully`);
         yield put(setModalVisible(false));
         yield put(setEditModalVisible(false));
     } catch (error) {
@@ -50,9 +54,7 @@ function* saveClientsAsync(action) {
 function* handleMapClearAsync(action) {
     try {
         const { mapState, defValueOfMap } = action.payload;
-
         yield put(setMapState({ ...mapState, center: defValueOfMap }));
-
         yield put(setLongitude(""));
         yield put(setLatitude(""));
     } catch (error) {
@@ -62,7 +64,7 @@ function* handleMapClearAsync(action) {
 function* handleMapClickAsync(action) {
     try {
         const coords = action.payload;
-        const territory = yield select((state) => state.territory);
+        const territory = yield select((state) => state.clients);
 
         if (coords !== territory.template) {
             const latitude = coords[0];
@@ -79,17 +81,17 @@ function* handleMapClickAsync(action) {
 function* fetchClientsSaga() {
     try {
         const response = yield call(() => instance("/api/v1/client/all", "GET"))
-        yield put(fetchTerritorySuccess(response.data));
+        yield put(fetchClientsSuccess(response.data));
         // console.log(response)
     } catch (error) {
-        yield put(fetchTerritoryFailure(error.message));
+        yield put(fetchClientsFailure(error.message));
     }
 }
 export function* clientsSaga() {
-    yield takeLatest(saveTerritoryAction.type, saveClientsAsync);
-    yield takeLatest(editTerritoryAction.type, saveClientsAsync);
-    yield takeLatest("territory/handleMapClear", handleMapClearAsync);
-    yield takeLatest("territory/handleMapClick", handleMapClickAsync);
-    yield takeLatest(fetchTerritoryStart.type, fetchClientsSaga);
+    yield takeLatest(saveClientsAction.type, saveClientsAsync);
+    yield takeLatest(editClientsAction.type, saveClientsAsync);
+    yield takeLatest("clients/handleMapClear", handleMapClearAsync);
+    yield takeLatest("clients/handleMapClick", handleMapClickAsync);
+    yield takeLatest(fetchClientsStart.type, fetchClientsSaga);
 
 }
