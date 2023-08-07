@@ -89,7 +89,7 @@ function ClientsModal(props) {
                         id: props.data.id
                     }, isEditing: true
                 })
-                : saveTerritoryAction({
+                : saveClientsAction({
                     territory: {...data, longitude: territory?.longitude, latitude: territory?.latitude},
                     isEditing: false,
                     reset:reset({
