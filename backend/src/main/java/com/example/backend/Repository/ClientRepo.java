@@ -51,7 +51,7 @@
      
             AND c.active = :active
 """, nativeQuery = true)
-        Page<Client> findAllByActiveAndNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(Boolean active, String search, List<Integer> categoryIds, List<Integer> weekDayIds, PageRequest pageRequest);
+        Page<Client> getClientsByActive(Boolean active, String search, List<Integer> categoryIds, List<Integer> weekDayIds, PageRequest pageRequest);
 
 
 
@@ -87,6 +87,6 @@
                     OR LOWER(c.phone) LIKE LOWER(concat('%', :search, '%'))
                 )
         """, nativeQuery = true)
-        Page<Client> findAllByNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(String search, List<Integer> categoryIds, List<Integer> weekDayIds, PageRequest pageRequest);
+        Page<Client> getClientsWithSearch(String search, List<Integer> categoryIds, List<Integer> weekDayIds, PageRequest pageRequest);
 
     }

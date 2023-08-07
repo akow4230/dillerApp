@@ -3,14 +3,12 @@ import ClientsModal from "./ClientsModal";
 import {useDispatch, useSelector} from "react-redux";
 import {setEditModalVisible, setModalVisible} from "../../redux/reducers/ClientsSlice";
 import {ToastContainer} from "react-toastify";
-import {fetchWeekdaysStart} from "../../redux/reducers/WeekDaySlice";
-
 import TerritoryUpdateButton from "../Territory/TerritoryUpdateButton";
 import Table from "../UniversalUI/Table/Table";
-
 import {changeSearchParams} from "../../redux/reducers/TableSlice";
 import {fetchCategoriesStart} from '../../redux/reducers/CustomerCategorySlice'
 import {fetchWeekdaysStart} from '../../redux/reducers/WeekDaySlice'
+import {fetchTerritoryStart} from "../../redux/reducers/TerritorySlice";
 function Clients(props) {
     const dispatch = useDispatch();
     const { modalVisible, editModalVisible, defValueOfMap, mapState, editData } = useSelector((state) => state.clients);
@@ -173,40 +171,29 @@ function Clients(props) {
     ]
     return (
         <div>
-            <div>
-                <button className="btn btn-success">Add client</button>
-                <ClientsModal action={"Add territory"} visible={modalVisible} onClose={closeModal} />
-                <ClientsModal action={"Edit territory"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal}  />
+            <div style={{ background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY:"auto" }}>
+                <ToastContainer />
+                <div className={"d-flex gap-3 align-items-center"}>
+                    <p style={{ fontSize: "25pt" }}>Clients</p>
+                    <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add Client</button>
+                </div>
+                <hr />
 
-            </div>
-           <div className='container'>
-                <div className=''>
+                <ClientsModal action={"Add client"} visible={modalVisible} onClose={closeModal} />
+                <ClientsModal action={"Edit client"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
+                <div className='container'>
+                    <div className=''>
 
-                    {/*<Filter obj={['active', 'city', 'weekDays','customerCategories', 'tin','week', 'quickSearch']}/>*/}
-                    <Table
-                        isDark={false}
-                        requestApi={"/api/v1/client?page={page}&size={limit}"}
-                        columns={columns}
-                        filterParam={filterParam}
-                    />
+                        <Table
+                            isDark={false}
+                            requestApi={"/api/v1/client?page={page}&size={limit}"}
+                            columns={columns}
+                            filterParam={filterParam}
+                        />
+                    </div>
                 </div>
             </div>
-        <div style={{ background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY:"auto" }}>
-            <ToastContainer />
-            <div className={"d-flex gap-3 align-items-center"}>
-                <p style={{ fontSize: "25pt" }}>Clients</p>
-                <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add Client</button>
-            </div>
-            <hr />
-            {/*<Table*/}
-            {/*    isDark={false}*/}
-            {/*    requestApi={"/api/v1/territory?page={page}&size={limit}"}*/}
-            {/*    columns={columns}*/}
-            {/*    filterParam={filterParam}*/}
-            {/*    path={"territory"}*/}
-            {/*/>*/}
-            <ClientsModal action={"Add client"} visible={modalVisible} onClose={closeModal} />
-            <ClientsModal action={"Edit client"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
+
         </div>
     );
 }

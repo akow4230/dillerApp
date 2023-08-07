@@ -8,7 +8,6 @@ import java.util.UUID;
 public interface ClientService {
 
 
-    HttpEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay);
 
     HttpEntity<?> addClient(ClientDTO clientDTO);
 

@@ -21,12 +21,15 @@ import {
 import "../Territory/styles.css"
 import {ToastContainer} from "react-toastify";
 import {fetchWeekdaysStart} from "../../redux/reducers/WeekDaySlice";
+import Select from "react-select";
 function ClientsModal(props) {
     const dispatch = useDispatch();
     const clients = useSelector((state) => state.clients);
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
     const {weekdays} = useSelector((state)=>state.weekday);
-    
+    const {territory}= useSelector(state=>state.territory)
+    const {  categories} = useSelector((state) => state.category);
+
     useEffect(()=>{
         dispatch(fetchWeekdaysStart())
     },[])
@@ -81,6 +84,7 @@ function ClientsModal(props) {
     }
 
     function saveclients(data) {
+        console.log(data)
         dispatch(
             props.isEditing
                 ? editClientsAction({
@@ -92,7 +96,7 @@ function ClientsModal(props) {
                     }, isEditing: true
                 })
                 : saveClientsAction({
-                    clients: {data:{...data, weekdays:clients.selectedWeekdays}, longitude: clients?.longitude, latitude: clients?.latitude},
+                    clients: {data:{...data,territory:clients.territory.value,weekdays:clients.selectedWeekdays}, longitude: clients?.longitude, latitude: clients?.latitude},
                     isEditing: false,
                     reset:reset({
                         title: "",
@@ -112,7 +116,6 @@ function ClientsModal(props) {
             dispatch(deleteWeekday(item))
         }
     }
-
     return (
         <div>
             <ToastContainer style={{zIndex: "10000"}}/>
@@ -134,9 +137,17 @@ function ClientsModal(props) {
                                 <div>
                                     <label style={{width:"300px"}}>
                                         Territory*
-                                        <input type="text"
-                                               className={"form-control my-2"} {...register("clients", {required: "clients is required"})} />
-                                    </label>
+                                        <Select
+                                            options={territory?.map(item => ({
+                                                value: item.id,
+                                                label: item.region,
+                                            }))}
+                                            {...register("territory", {required: "Territory is required"})}
+
+                                            // onChange={(e) => console.log(e)}
+                                            style={{width: 70}}
+                                            placeholder={'territory'} />
+                                          </label>
                                     {errors.clients && <span className="error-message">{errors.clients.message}</span>}
                                     <br/>
                                     <label style={{width:"300px"}}>
@@ -184,8 +195,16 @@ function ClientsModal(props) {
                                     <br/>
                                     <label style={{width:"300px"}}>
                                         Category*
-                                        <input type="text"
-                                               className={"form-control my-2"} {...register("category", {required: "Category is required"})} />
+                                        <Select
+                                            options={categories?.map(item => ({
+                                                value: item.id,
+                                                label: item.region,
+                                            }))}
+                                            {...register("category", {required: "category is required"})}
+
+                                            // onChange={(e) => console.log(e)}
+                                            style={{width: 70}}
+                                            placeholder={'category'} />
                                     </label>
                                     {errors.category && <span className="error-message">{errors.category.message}</span>}
                                     <br/>

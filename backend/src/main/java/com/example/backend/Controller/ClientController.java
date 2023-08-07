@@ -23,29 +23,23 @@ public class ClientController {
                                    @RequestParam(defaultValue = "1") Integer page,
                                    @RequestParam(defaultValue = "5") Integer size,
                                    @RequestParam(defaultValue = "") String category,
-                                   @RequestParam(defaultValue = "") String weekDay
+                                   @RequestParam(defaultValue = "") String weekDay,
+                                    @RequestParam(defaultValue = "") String  territory,
+                                   @RequestParam(defaultValue = "") String  tin
     ) {
-        return clientService.getClients(active, quickSearch, page, size, category, weekDay);
+        return clientService.getClients(active, quickSearch, page, size, category, weekDay,territory, tin);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public HttpEntity<?> addClient(@RequestBody ClientDTO clientDTO) {
         return clientService.addClient(clientDTO);
-                                   @RequestParam(defaultValue = "") String  category,
-                                   @RequestParam(defaultValue = "") String  weekDay,
-                                   @RequestParam(defaultValue = "") String  territory,
-                                   @RequestParam(defaultValue = "") String  tin
-    )  {
-        System.out.println(tin);
-        System.out.println(territory);
-        HttpEntity<?> clients = clientService.getClients(active, quickSearch, page, size, category, weekDay, territory, tin);
-        return clients;
     }
 
     @PutMapping("/{id}")
     public void editClient(@RequestBody ClientDTO clientDTO, @PathVariable UUID id) {
         clientService.editClient(clientDTO, id);
     }
+
 
 }
