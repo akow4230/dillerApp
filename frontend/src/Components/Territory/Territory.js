@@ -5,7 +5,7 @@
     setModalVisible,
     setEditModalVisible,
 } from "../../redux/reducers/TerritorySlice";
-    import MapModal from "./MapModal";
+    import TerritoryModal from "./TerritoryModal";
     import Table from "../UniversalUI/Table/Table";
     import TerritoryUpdateButton from "./TerritoryUpdateButton";
     import {changeSearchParams} from "../../redux/reducers/TableSlice";
@@ -92,9 +92,10 @@
                     requestApi={"/api/v1/territory?page={page}&size={limit}"}
                     columns={columns}
                     filterParam={filterParam}
+                    path={"territory"}
                 />
-                <MapModal action={"Add territory"} visible={modalVisible} onClose={closeModal} />
-                <MapModal action={"Edit territory"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
+                <TerritoryModal action={"Add territory"} visible={modalVisible} onClose={closeModal} />
+                <TerritoryModal action={"Edit territory"} data={editData} isEditing={true} visible={editModalVisible} onClose={closeEditModal} />
             </div>
         );
     }

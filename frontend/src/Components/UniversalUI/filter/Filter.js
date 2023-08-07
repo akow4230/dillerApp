@@ -94,7 +94,7 @@ function Filter(props) {
         <div className="">
 
             <div className="row">
-                {param.map(item=>
+                {param?.map(item=>
                     <div key={item.name} className="my-1 mx-1" style={item.multi?{width: 320, zIndex:11}:{width: 180, zIndex:11}}>
                         <Select
                             name={item.name}
@@ -112,7 +112,7 @@ function Filter(props) {
                     </div>
                 )}
                 <div>
-                    {param.length>1?
+                    {param?.length>1?
                         <button className='btn btn-primary' onClick={()=>props.func(searchParams)}>Filter</button>
                         :
                         ''

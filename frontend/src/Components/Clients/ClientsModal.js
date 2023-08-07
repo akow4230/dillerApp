@@ -14,16 +14,16 @@ import {
     setLatitude,
     setLongitude,
     resetTerritory,
-    setModalVisible,
+    setModadlVisible,
     setTemplate,
     setMapState,
     saveTerritoryAction,
     editTerritoryAction
 } from '../../redux/reducers/TerritorySlice';
-import "./styles.css"
+import "../Territory/styles.css"
 import {ToastContainer, toast} from "react-toastify";
 
-function MapModal(props) {
+function ClientsModal(props) {
     const dispatch = useDispatch();
     const territory = useSelector((state) => state.territory);
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
@@ -193,4 +193,4 @@ function MapModal(props) {
     );
 }
 
-export default MapModal;
+export default ClientsModal;
