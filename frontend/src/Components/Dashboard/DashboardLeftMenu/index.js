@@ -21,7 +21,7 @@ function Index(props) {
             }} className="fa-solid fa-server"></i>
                 <p style={{color: "white"}}>Stock</p>
             </div>
-            <div onClick={()=>navigate("/clients")} className="box"><i style={{
+            <div onClick={()=>navigate("/dashboard/clients")} className="box"><i style={{
                 color: "white", fontSize: 35,
             }} className="fa-solid fa-users"></i>
                 <p style={{color: "white"}}>Clients</p>

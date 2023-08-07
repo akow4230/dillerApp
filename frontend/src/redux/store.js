@@ -6,6 +6,7 @@ import {dashboardSlice} from "./reducers/DashboardSlice";
 import tableSlice from "./reducers/TableSlice";
 import settings from "./reducers/SettingsSlice";
 import territory from "./reducers/TerritorySlice"
+import clients from "./reducers/ClientsSlice"
 import modal from "./reducers/ModalSlice"
 import categoryReducer from './reducers/CustomerCategorySlice'
 import weekDayReducer from "./reducers/WeekDaySlice";
@@ -19,6 +20,8 @@ const rootReducer = combineReducers({
     modal,
     category: categoryReducer,
     weekday: weekDayReducer,
+    clients
+
 });
 
 export const store = configureStore({

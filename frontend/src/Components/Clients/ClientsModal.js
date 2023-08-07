@@ -13,17 +13,16 @@ import {useForm} from 'react-hook-form';
 import {
     setLatitude,
     setLongitude,
-    resetTerritory,
-    setModalVisible,
+    setModadlVisible,
     setTemplate,
     setMapState,
-    saveTerritoryAction,
-    editTerritoryAction
-} from '../../redux/reducers/TerritorySlice';
-import "./styles.css"
-import {ToastContainer, toast} from "react-toastify";
+    saveClientsAction,
+    editClientsAction
+} from '../../redux/reducers/ClientsSlice';
+import "../Territory/styles.css"
+import {ToastContainer} from "react-toastify";
 
-function MapModal(props) {
+function ClientsModal(props) {
     const dispatch = useDispatch();
     const territory = useSelector((state) => state.territory);
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
@@ -80,7 +79,7 @@ function MapModal(props) {
     function saveTerritory(data) {
         dispatch(
             props.isEditing
-                ? editTerritoryAction({
+                ? editClientsAction({
                     territory: {
                         ...data,
                         longitude: territory?.longitude,
@@ -88,7 +87,7 @@ function MapModal(props) {
                         id: props.data.id
                     }, isEditing: true
                 })
-                : saveTerritoryAction({
+                : saveClientsAction({
                     territory: {...data, longitude: territory?.longitude, latitude: territory?.latitude},
                     isEditing: false,
                     reset:reset({
@@ -193,4 +192,4 @@ function MapModal(props) {
     );
 }
 
-export default MapModal;
+export default ClientsModal;

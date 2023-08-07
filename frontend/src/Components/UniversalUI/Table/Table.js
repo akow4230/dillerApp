@@ -12,7 +12,7 @@ import axios from 'axios';
 import TableModal from './TableModal';
 import UModal from '../Modal/UModal';
 
-function Table({ isDark, columns, requestApi, filterParam }) {
+function Table({ isDark, columns, requestApi, filterParam, path }) {
     const dispatch = useDispatch();
     const [settings, setSettings] = useState(false);
     const {
@@ -41,7 +41,7 @@ function Table({ isDark, columns, requestApi, filterParam }) {
 
     function getExcel() {
         axios
-            .get(`http://localhost:8080/api/v1/territory/getExcel?active=${searchParams.active.value}&search=${searchParams.quickSearch}`, {
+            .get(`http://localhost:8080/api/v1/${path}/getExcel?active=${searchParams.active.value}&search=${searchParams.quickSearch}`, {
                 responseType: 'arraybuffer', headers: {
                     Authorization: localStorage.getItem('access_token')
                 }

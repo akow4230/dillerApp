@@ -70,6 +70,7 @@ function Filter(props) {
     //  ]
 
 
+
     const quickSearch = (
         <div className="">
             <label className="d-flex">
@@ -107,11 +108,12 @@ function Filter(props) {
                             defaultValue={item.defaultValue}
 
                         />
+
                     </div>
                 )}
                 <div>
-                    {param?.length > 1 ?
-                        <button className='btn btn-primary' onClick={() => props.func(searchParams)}>Filter</button>
+                    {param?.length>1?
+                        <button className='btn btn-primary' onClick={()=>props.func(searchParams)}>Filter</button>
                         :
                         ''
                     }
