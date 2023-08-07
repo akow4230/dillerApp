@@ -95,7 +95,7 @@ function Filter(props) {
 
             <div className="row">
                 {param?.map(item=>
-                    <div key={item.name} className="my-1 mx-1" style={item.multi?{width: 320, zIndex:11}:{width: 180, zIndex:11}}>
+                    <div key={item.name} className={"my-1 mx-1 "+ item.multi?"col-3":"col-2"} style={item.multi?{width: 320, zIndex:11}:{width: 180, zIndex:11}}>
                         <Select
                             name={item.name}
                             options={item.options}
@@ -111,18 +111,22 @@ function Filter(props) {
 
                     </div>
                 )}
+               <div className='col-2 mx-1 my-1 text-end'>
+                   {param?.length>1?
+                       <button className='btn btn-primary w-75' onClick={()=>props.func(searchParams)}>Filter</button>
+                       :
+                       ''
+                   }
+               </div>
+                <div className="d-flex justify-content-end text-end" >
+
+                    {quickSearch}
+                </div>
                 <div>
-                    {param?.length>1?
-                        <button className='btn btn-primary' onClick={()=>props.func(searchParams)}>Filter</button>
-                        :
-                        ''
-                    }
+
                 </div>
             </div>
-            <div className="d-flex justify-content-end">
 
-                {quickSearch}
-            </div>
         </div>
     );
 }

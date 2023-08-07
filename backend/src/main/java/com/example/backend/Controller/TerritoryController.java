@@ -42,7 +42,6 @@ public class TerritoryController {
 
 
     ) {
-        System.out.println(quickSearch);
         HttpEntity<?> territory = territoryService.getTerritory(active, quickSearch, page, size);
         return territory;
     }

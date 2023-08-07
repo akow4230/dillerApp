@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,6 @@ public class ClientServiceImpl implements ClientService {
 
     private Page<Client> getClientFilter(String active, String search, PageRequest pageRequest, List<Integer> categoryIds, List<Integer> weekDayIds) {
         Page<Client> allClient = null;
-
         if (Objects.equals(active, "")) {
             allClient = clientRepo.findAllByNameContainingIgnoreCaseOrAddressContainingIgnoreCaseOrPhoneContainingIgnoreCase(search, categoryIds,weekDayIds, pageRequest);
             return allClient;
@@ -33,10 +33,11 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Override
-    public HttpEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay) {
+    public HttpEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay, String territory, String tin) {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         List<Integer> categoryIds = getIdes(category);
         List<Integer> weekDayIds= getIdes(weekDay);
+//        List<UUID> territoryIds=getIdes(territory);
         return ResponseEntity.ok(getClientFilter(active, quickSearch, pageRequest, categoryIds, weekDayIds));
     }
 
@@ -52,6 +53,7 @@ public class ClientServiceImpl implements ClientService {
         }
         return getIdes;
     }
+
 
 }
 

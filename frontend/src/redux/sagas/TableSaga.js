@@ -22,9 +22,15 @@ function* watchGetTableData(action) {
     action.payload.search.weekDay?.map(item=>{
         weekDay.push(item.value)
     })
+     let territory=[]
+    action.payload.search.territory?.map(item=>{
+        territory.push(item.value)
+    })
+    console.log(territory)
+    console.log(action.payload.search.tin)
 
     try {
-        const response = yield call(() => instance(action.payload.url, "GET", null, {active:action.payload.search.active.value, quickSearch:action.payload.search.quickSearch ,category:category.join(','), weekDay:weekDay.join(',')}));
+        const response = yield call(() => instance(action.payload.url, "GET", null, {active:action.payload.search.active.value, quickSearch:action.payload.search.quickSearch, tin:action.payload.search.tin.value ,category:category.join(','), weekDay:weekDay.join(','), territory:territory.join(',') }));
         yield put(getTableDataSuccess({
             data: response.data.content,
             totalPage: response.data.totalPages,

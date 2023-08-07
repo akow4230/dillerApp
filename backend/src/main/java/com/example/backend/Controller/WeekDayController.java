@@ -16,7 +16,6 @@ public class WeekDayController {
     private final WeekDayService weekDayService;
     @GetMapping
     public HttpEntity<?> getWeekDays(){
-        System.out.println("get");
         return weekDayService.getWeekDays();
     }
 

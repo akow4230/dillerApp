@@ -23,9 +23,13 @@ public class ClientController {
                                    @RequestParam(defaultValue = "1") Integer page,
                                    @RequestParam(defaultValue = "5") Integer size,
                                    @RequestParam(defaultValue = "") String  category,
-                                   @RequestParam(defaultValue = "") String  weekDay
+                                   @RequestParam(defaultValue = "") String  weekDay,
+                                   @RequestParam(defaultValue = "") String  territory,
+                                   @RequestParam(defaultValue = "") String  tin
     )  {
-        HttpEntity<?> clients = clientService.getClients(active, quickSearch, page, size, category, weekDay);
+        System.out.println(tin);
+        System.out.println(territory);
+        HttpEntity<?> clients = clientService.getClients(active, quickSearch, page, size, category, weekDay, territory, tin);
         return clients;
     }
 }
