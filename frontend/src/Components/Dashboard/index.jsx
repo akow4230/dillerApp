@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import './style.css';
 import DashboardTopBar from "./DashboardTopBar/index";
 import DashboardLeftMenu from "./DashboardLeftMenu/index";
-import { useSelector, useDispatch } from 'react-redux';
-import { navigateTo } from "../../redux/reducers/DashboardSlice";
+import {useDispatch, useSelector} from 'react-redux';
+import {navigateTo} from "../../redux/reducers/DashboardSlice";
 import {Outlet} from "react-router-dom";
+
 // import {useNavigate} from "react-router-dom"; // Import the navigateTo action creator
 
 function Index(props) {
@@ -12,7 +13,7 @@ function Index(props) {
     const response = useSelector((state) => state.dashboard);
     // const navigate = useNavigate();
     useEffect(() => {
-        dispatch({ type: 'dashboard/getDashboardData' });
+        dispatch({type: 'dashboard/getDashboardData'});
     }, [dispatch]);
     useEffect(() => {
         if (response?.error) {
@@ -22,15 +23,14 @@ function Index(props) {
     return (
         <div className={"dashboard"}>
             <div className="top-bar">
-                <DashboardTopBar data={response?.data} />
+                <DashboardTopBar data={response?.data}/>
             </div>
             <div className="bottom-bar d-flex">
                 <div className="left-menu">
-                    <DashboardLeftMenu />
+                    <DashboardLeftMenu/>
                 </div>
-                <div className={"right-menu w-100 p-4"} style={{background:"#c2c5d5"}}>
-                    {/*<UModal isSaving={false} hasSaveButton={true} elements={elements} title={"Modal"}/>*/}
-                    <Outlet />
+                <div className={"right-menu w-100 p-4"} style={{background: "#c2c5d5", overflowY: "auto"}}>
+                    <Outlet/>
                 </div>
             </div>
         </div>

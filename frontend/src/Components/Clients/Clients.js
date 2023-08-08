@@ -3,7 +3,6 @@ import ClientsModal from "./ClientsModal";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchClientsStart, setEditModalVisible, setModalVisible} from "../../redux/reducers/ClientsSlice";
 import {ToastContainer} from "react-toastify";
-import TerritoryUpdateButton from "../Territory/TerritoryUpdateButton";
 import Table from "../UniversalUI/Table/Table";
 import {changeSearchParams} from "../../redux/reducers/TableSlice";
 import {fetchCategoriesStart} from '../../redux/reducers/CustomerCategorySlice'
@@ -176,7 +175,9 @@ function Clients(props) {
                 borderRadius: "15px",
                 padding: "20px",
                 width: "100%",
-                overflowY: "auto"
+                overflowY: "auto",
+                height: '100%'
+
             }}>
                 <ToastContainer/>
                 <div className={"d-flex gap-3 align-items-center"}>
@@ -190,8 +191,8 @@ function Clients(props) {
                 <ClientsModal action={"Add client"} visible={modalVisible} onClose={closeModal}/>
                 <ClientsModal action={"Edit client"} data={editData} isEditing={true} visible={editModalVisible}
                               onClose={closeEditModal}/>
-                <div className='container'>
-                    <div className=''>
+                <div>
+                    <div>
 
                         <Table
                             isDark={false}

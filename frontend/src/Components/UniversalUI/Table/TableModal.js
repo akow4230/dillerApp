@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 function TableModal(props) {
     const dispatch = useDispatch()
-    const {modalColumns} = useSelector((state)=>state.table);
+    const {modalColumns} = useSelector((state) => state.table);
     return (
         <div>
             {

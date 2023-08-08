@@ -27,14 +27,14 @@ function Index(props) {
                 onMouseEnter={() => setClients(true)}
                 onMouseLeave={() => setClients(false)}
                 className="box"><i style={{
-                color: "white", fontSize: 35,
-                position: "relative"
+                color: "white", fontSize: 35
             }} className="fa-solid fa-users"></i>
                 <p style={{color: "white"}}>Clients</p>
                 {
                     clients ? <div
                         style={{
                             position: "absolute",
+                            zIndex: 99,
                             left: 95,
                             width: 200,
                             background: "#415a77",
@@ -42,30 +42,33 @@ function Index(props) {
                             border: "1px solid"
                         }}
                     >
-                        <Link style={{
-                            width: "100%",
-                            height: 50,
-                            border: "1px solid",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center"
-                        }}
-                        to="/dashboard/clients"
+                        <div
+                            onClick={() => navigate("/dashboard/clients")}
+                            style={{
+                                width: "100%",
+                                height: 50,
+                                border: "1px solid",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}
                         >
                             <b>Client</b>
-                        </Link>
-                        <Link style={{
-                            width: "100%",
-                            height: 50,
-                            border: "1px solid",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center"
-                        }}
-                        to='/dashboard/clients/map'
+                        </div>
+                        <div
+                            onClick={() => navigate("/dashboard/clients/map")}
+                            style={{
+                                width: "100%",
+                                height: 50,
+                                border: "1px solid",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}
+
                         >
                             <b>Client on map</b>
-                        </Link>
+                        </div>
                     </div> : ""
                 }
             </div>

@@ -90,11 +90,10 @@ function Filter(props) {
 
 
     return (
-        <div className="">
-
-            <div className="row">
+        <div className="" >
+            <div className="row" >
                 {param?.map(item=>
-                    <div key={item.name} className={"my-1 mx-1 "+ item.multi?"col-3":"col-2"} style={item.multi?{width: 320}:{width: 180}}>
+                    <div key={item.name} className={" position-relative "+ item.multi?"col-3":"col-2"} style={item.multi?{width: 320}:{width: 180}}>
                         <Select
                             name={item.name}
                             options={item.options}
@@ -105,6 +104,7 @@ function Filter(props) {
                             placeholder={item.placeholder}
                             isMulti={item.multi}
                             defaultValue={item.defaultValue}
+
                         />
 
                     </div>
