@@ -6,7 +6,7 @@ import {navigateTo} from "../reducers/DashboardSlice";
 function* saveValuesAsync(action) {
     try {
         const { url, data, hideModal,reset, isEditing } = action.payload;
-        console.log("hello")
+        console.log(url)
         const response = yield instance(url,isEditing?"PUT":"POST", data);
         console.log("hello")
         if (response!==undefined&&response.data===401){

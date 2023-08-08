@@ -1,15 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {Modal} from 'react-bootstrap';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import "./index.css"
 
 function UModal(props) {
     const dispatch = useDispatch();
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
-
+    useEffect(()=>{
+        reset(
+            props.data
+        )
+    },[props.isOpen])
     function saveValues(data) {
-        dispatch({type:"modal/saveValuesAsync", payload:{url:props.url, data:data, hideModal:props.toggle(), reset:reset()}})
+        dispatch({type:"modal/saveValuesAsync", payload:{url:props.url, data:data, hideModal:props.toggle(), reset:reset(), isEditing:props.isEditing}})
         console.log(data)
     }
 

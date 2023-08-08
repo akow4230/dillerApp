@@ -4,7 +4,10 @@ const initialState = {
     categories: [],
     loading: false,
     error: null,
-    modalVisible: false
+    modalVisible: false,
+    editModalVisible:false,
+    editData:{},
+    editDataUrl:""
 };
 
 const categorySlice = createSlice({
@@ -26,9 +29,18 @@ const categorySlice = createSlice({
         },
         setModalVisible: (state, action) => {
             state.modalVisible = action.payload
+        },
+        setEditModalVisible:(state, action)=>{
+            state.editModalVisible = action.payload
+        },
+        setEditData:(state, action)=>{
+            state.editData = action.payload
+        },
+        setEditDataUrl:(state, action)=>{
+            state.editDataUrl = action.payload;
         }
     },
 });
 
-export const {fetchCategoriesStart, fetchCategoriesSuccess, fetchCategoriesFailure, setModalVisible} = categorySlice.actions;
+export const {fetchCategoriesStart, fetchCategoriesSuccess, fetchCategoriesFailure, setModalVisible, setEditModalVisible, setEditData, setEditDataUrl} = categorySlice.actions;
 export default categorySlice.reducer;
