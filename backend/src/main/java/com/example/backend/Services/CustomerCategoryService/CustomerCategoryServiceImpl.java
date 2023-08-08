@@ -36,7 +36,7 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
     public Page<CustomerCategory> getCategoryFilter(String active, String search, PageRequest pageRequest) {
         Page<CustomerCategory> allTerritories = null;
         if (Objects.equals(active, "")) {
-            allTerritories = customerCategoryRepo.findAllByTitleContainingIgnoreCase(search, pageRequest);
+            allTerritories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderById(search, pageRequest);
             return allTerritories;
         }
         allTerritories = customerCategoryRepo.findAllByActiveAndTitleContainingIgnoreCase(Boolean.valueOf(active), search, pageRequest);
