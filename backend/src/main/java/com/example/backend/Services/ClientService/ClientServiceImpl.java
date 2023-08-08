@@ -40,6 +40,11 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.ok(clientRepo.getClientsByActive(active, quickSearch, categoryIds, weekDayIds, tin,territoryIds, pageRequest));
     }
 
+    @Override
+    public HttpEntity<?> getAllClients() {
+        return ResponseEntity.ok( clientRepo.findAll());
+    }
+
     private static List<Integer> getIdes(String word) {
         List<Integer> getIdes = new LinkedList<>();
         if (!word.equals("")) {

@@ -62,7 +62,7 @@ export const territorySlice = createSlice({
             state.error = null;
         },
         fetchClientsSuccess: (state, action) => {
-            state.territory = action.payload;
+            state.clients = action.payload;
             state.loading = false;
             state.error = null;
         },

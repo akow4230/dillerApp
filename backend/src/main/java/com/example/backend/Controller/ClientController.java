@@ -30,6 +30,14 @@ public class ClientController {
         return clientService.getClients(active, quickSearch, page, size, category, weekDay,territory, tin);
     }
 
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    public HttpEntity<?> getAllClient(
+    ) {
+//        System.out.println(7);
+        return clientService.getAllClients();
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public HttpEntity<?> addClient(@RequestBody ClientDTO clientDTO) {

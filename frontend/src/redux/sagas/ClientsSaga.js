@@ -17,7 +17,6 @@ import { toast } from "react-toastify";
 import {navigateTo} from "../reducers/DashboardSlice";
 function* saveClientsAsync(action) {
     try {
-        console.log(action.payload)
         const { clients, isEditing } = action.payload;
         if (!clients.longitude || !clients.latitude) {
             toast.error("You must select territory");
@@ -82,7 +81,7 @@ function* fetchClientsSaga() {
     try {
         const response = yield call(() => instance("/api/v1/client/all", "GET"))
         yield put(fetchClientsSuccess(response.data));
-        // console.log(response)
+        console.log(response)
     } catch (error) {
         yield put(fetchClientsFailure(error.message));
     }
