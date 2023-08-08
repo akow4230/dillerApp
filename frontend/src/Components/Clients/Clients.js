@@ -94,7 +94,7 @@ function Clients(props) {
             order: 8,
             render: (item) => {
                 // console.log(item?.category.region)
-                return <p>{item?.category.region}</p>
+                return <p>{item?.category?.region}</p>
             }
         }, {
             id: 9,

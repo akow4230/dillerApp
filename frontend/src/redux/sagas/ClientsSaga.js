@@ -18,8 +18,9 @@ import {navigateTo} from "../reducers/DashboardSlice";
 function* saveClientsAsync(action) {
     try {
         console.log(action.payload)
-        const { clients, isEditing } = action.payload;
-        if (!clients.longitude || !clients.latitude) {
+        const { longitude,latitude, id,data } = action.payload.clients;
+        const { isEditing } = action.payload;
+        if (!longitude || !latitude) {
             toast.error("You must select territory");
             return;
         }
