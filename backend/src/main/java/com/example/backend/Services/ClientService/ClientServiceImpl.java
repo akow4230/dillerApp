@@ -50,7 +50,7 @@ public class ClientServiceImpl implements ClientService {
 
     private static List<UUID> getUUIDes(String word) {
         List<UUID> getIdes = new LinkedList<>();
-        if (!word.equals("")) {
+        if (!word.isEmpty()) {
             String[] strArr = word.split(",");
             for (String s : strArr) {
                 getIdes.add(UUID.fromString(s));
