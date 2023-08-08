@@ -143,7 +143,7 @@ function Table({ isDark, columns, requestApi, filterParam, path }) {
             <div className={darkTheme ? 'bottomUI-dark' : 'bottomUI'} style={{ overflowY: 'auto' }}>
                 <div className={darkTheme ? 'my-table-dark' : 'my-table'}>
                     <table className={darkTheme ? 'table table-dark table-striped' : 'table table-bordered'}>
-                        <thead style={{position:"sticky", top:-1, zIndex:"10"}}>
+                        <thead style={{position:"sticky", top:-1, zIndex:2}}>
                         <tr>
                             {
                                 data?.columns?.map((item) => {

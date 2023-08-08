@@ -26,7 +26,6 @@ function* watchGetTableData(action) {
     action.payload.search.territory?.map(item=>{
         territory.push(item.value)
     })
-    console.log(territory)
     try {
         console.log(action.payload.url)
         const response = yield call(() => instance(action.payload.url, "GET", null, {active:action.payload.search.active.value, quickSearch:action.payload.search.quickSearch, category:category.join(','), weekDay:weekDay.join(','), tin:action.payload.search.tin?.value, territory:territory.join(',')}));

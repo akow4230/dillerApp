@@ -18,27 +18,31 @@ import {navigateTo} from "../reducers/DashboardSlice";
 function* saveClientsAsync(action) {
     try {
         console.log(action.payload)
-        const { clients, isEditing } = action.payload;
-        if (!clients.longitude || !clients.latitude) {
+        const { data, longitude, latitude, id } = action.payload.clients;
+        const { isEditing } = action.payload;
+        console.log(id)
+        if (!longitude || !latitude) {
             toast.error("You must select territory");
             return;
         }
+        console.log(data)
         const response = yield instance(
-            `/api/v1/client${isEditing ? "/" + clients.id : ""}`,
+            `/api/v1/client${isEditing ? "/" + id : ""}`,
             isEditing ? "PUT" : "POST",
             {
-                territory: clients.territory,
-                name: clients.name,
-                address:clients.address,
-                telephone:clients.telephone,
-                tin:clients.tin,
-                category:clients.category,
-                companyName:clients.companyName,
-                referencePoint:clients.referencePoint,
-                weekDays:clients.weekDays
+                name: data.name,
+                companyName:data.companyName,
+                territory: data.territory.value,
+                address:data.address,
+                phone:data.phone,
+                referencePoint:data.referencePoint,
+                tin:data.tin,
+                category:data.category.value,
+                weekdays:data.weekdays,
+                longitude,
+                latitude
             }
         );
-        console.log(response)
         if (response!==undefined&&response.data===401){
             toast.error("Authorization problem")
             yield put(navigateTo("/404"))
@@ -48,6 +52,7 @@ function* saveClientsAsync(action) {
         yield put(setModalVisible(false));
         yield put(setEditModalVisible(false));
     } catch (error) {
+        console.log(error.message)
         toast.error("An error occurred. Please try again later.");
     }
 }
@@ -80,9 +85,9 @@ function* handleMapClickAsync(action) {
 
 function* fetchClientsSaga() {
     try {
-        const response = yield call(() => instance("/api/v1/client/all", "GET"))
-        yield put(fetchClientsSuccess(response.data));
-        // console.log(response)
+        const response = yield call(() => instance("/api/v1/client", "GET"))
+        yield put(fetchClientsSuccess(response.data.content));
+        console.log(response.data.content)
     } catch (error) {
         yield put(fetchClientsFailure(error.message));
     }
