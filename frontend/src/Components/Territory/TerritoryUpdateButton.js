@@ -13,7 +13,7 @@ function TerritoryUpdateButton(props) {
 
     return (
         <div>
-            <Button style={{height:"40px", width:"40px", display:"flex", justifyContent:"center", alignItems:"center"}} onClick={editTerritoryData}><EditIcon /></Button>
+            <button className={"btn"} style={{height:"40px", width:"40px", display:"flex", justifyContent:"center", alignItems:"center"}} onClick={editTerritoryData}><EditIcon /></button>
         </div>
     );
 }

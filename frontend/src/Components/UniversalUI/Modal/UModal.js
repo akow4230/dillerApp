@@ -2,23 +2,24 @@ import React from 'react';
 import {useForm} from 'react-hook-form';
 import {Modal} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
-import {hideModal} from "../../../redux/reducers/ModalSlice";
 import "./index.css"
 
 function UModal(props) {
     const dispatch = useDispatch();
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
 
-    async function saveValues(data) {
-        // dispatch({ type: 'modal/saveValuesAsync', payload: { url: data.url, data } });
-        // reset();
-        console.log("Hl")
+    function saveValues(data) {
+        dispatch({type:"modal/saveValuesAsync", payload:{url:props.url, data:data, hideModal:props.toggle(), reset:reset()}})
+        console.log(data)
     }
 
     return (
         <div>
             <div className={'umodal'}>
-                <Modal show={props.isOpen} onHide={props.toggle} centered>
+                <Modal show={props.isOpen} onHide={()=>{
+                    props.toggle()
+                    reset()
+                }} centered>
                     <Modal.Header closeButton>
                         <Modal.Title>{props?.title}</Modal.Title>
                     </Modal.Header>
@@ -29,14 +30,14 @@ function UModal(props) {
                                     <div key={index}>
                                         {item.data ? React.cloneElement(item.data, {data: item}) :
                                             <div>
-                                                <label className="d-flex gap-2 fs-5">
-                                                    {item?.name + ':'}
-                                                    <input
-                                                        className="form-control"
-                                                        type={item.type}
-                                                        {...register(item?.key, {required: item?.name + ' is required'})}
-                                                    />
-                                                </label>
+                                                    <label className="d-flex gap-4 fs-6 align-items-center">
+                                                        <p className={"d-flex"}>{item?.name + ':'}</p>
+                                                        <input
+                                                            className={item.type==="checkbox"?"form-check":"form-control"}
+                                                            type={item.type}
+                                                            {...register(item?.key, item.required&&{required: item?.name + ' is required'})}
+                                                        />
+                                                    </label>
                                                 {errors[item?.key]?.message &&
                                                     <span className="error-message">{errors[item?.key].message}</span>}
                                             </div>}

@@ -29,7 +29,6 @@ function Filter(props) {
             ...searchParams,
             [name]: value,
         }))
-
             dispatch(changeCurrentPage());
             props.func({
                 ...searchParams,
@@ -72,7 +71,7 @@ function Filter(props) {
 
 
     const quickSearch = (
-        <div className="" >
+        <div className="">
             <label className="d-flex">
                 <p className="my-1">Quick search:</p>
                 <input
@@ -91,16 +90,17 @@ function Filter(props) {
 
 
     return (
-        <div className="" >
-            <div className="row" >
+        <div className="">
+
+            <div className="row">
                 {param?.map(item=>
-                    <div key={item.name} className={" position-relative "+ item.multi?"col-3":"col-2"} style={item.multi?{width: 320}:{width: 180}}>
+                    <div key={item.name} className={"my-1 mx-1 "+ item.multi?"col-3":"col-2"} style={item.multi?{width: 320}:{width: 180}}>
                         <Select
                             name={item.name}
                             options={item.options}
                             value={searchParams[item.name]}
                             onChange={(e) => handleCityChange({name: item.name, value: e})}
-                            style={{width: 70}}
+                            style={{width: 70,top:-1,position:"sticky", zIndex:11}}
                             styles={customStyles}
                             placeholder={item.placeholder}
                             isMulti={item.multi}

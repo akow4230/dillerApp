@@ -139,3 +139,9 @@
 .blob-btn__blob-supports {
     transform: translateZ(0) scale(1.4);
 }
+/* index.css */
+.umodal .modal-dialog {
+    width: auto !important;
+    max-width: 80%; /* You can adjust this value as needed */
+    margin: 0 auto;
+}

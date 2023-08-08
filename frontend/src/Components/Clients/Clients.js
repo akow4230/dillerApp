@@ -96,7 +96,7 @@ function Clients(props) {
             order: 8,
             render:(item)=>{
                 // console.log(item.territory)
-                return <p>{item?.category.name}</p>
+                return <p>{item?.category?.name}</p>
             }
         },{
             id: 9,
@@ -152,7 +152,7 @@ function Clients(props) {
             multi: true,
             options:  territory?.map(item => ({
                 value: item.id,
-                label: item.region,
+                label: item.title,
             })),
             // defaultValue: {value: '', label: ''},
             placeholder: 'City'

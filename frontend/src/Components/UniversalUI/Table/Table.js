@@ -1,18 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './style.css';
-import { Button, Select } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import {Button, Select} from 'antd';
+import {useDispatch, useSelector} from 'react-redux';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { changeTableColumns, changeTableDataPage, changeTableDataSize, changeTheme, getTableData, saveColumnsOrders, toggleModal } from '../../../redux/reducers/TableSlice';
+import {
+    changeTableColumns,
+    changeTableDataPage,
+    changeTableDataSize,
+    changeTheme,
+    getTableData,
+    saveColumnsOrders,
+    toggleModal
+} from '../../../redux/reducers/TableSlice';
 import Pagination from '@mui/material/Pagination';
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import Filter from '../filter/Filter';
 import axios from 'axios';
 import TableModal from './TableModal';
 import UModal from '../Modal/UModal';
 
-function Table({ isDark, columns, requestApi, filterParam, path }) {
+function Table({isDark, columns, requestApi, filterParam, path}) {
     const dispatch = useDispatch();
     const [settings, setSettings] = useState(false);
     const {
@@ -47,7 +55,7 @@ function Table({ isDark, columns, requestApi, filterParam, path }) {
                 }
             })
             .then((res) => {
-                const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                const blob = new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
                 const url = window.URL.createObjectURL(blob);
 
                 const a = document.createElement('a');
@@ -64,21 +72,23 @@ function Table({ isDark, columns, requestApi, filterParam, path }) {
 
     const elements = [
         {
-            data: <TableModal />
+            data: <TableModal/>
         }
     ];
     return (
         <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
-            <Filter param={filterParam} func={getData} />
+            <Filter param={filterParam} func={getData}/>
             <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
-                <Button onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i className="fa-solid fa-sliders"></i></Button>
+                <button className={"btn btn-light"} onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
+                    className="fa-solid fa-sliders" style={{zIndex:"auto"}}></i></button>
                 {
                     settings ? <div style={{
                         display: 'flex',
                         alignItems: 'center',
                         gap: 10
                     }}>
-                        <Button type={'dashed'} onClick={() => dispatch(toggleModal())}><i className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
+                        <button className={"btn btn-light d-flex align-items-center gap-2"} style={{width:"180px"}} type={'dashed'} onClick={() => dispatch(toggleModal())}><i
+                            className="fa-solid fa-gears"></i>Menu Control</button>
                         {/*<MaterialUISwitch*/}
                         {/*    checked={darkTheme}*/}
                         {/*    onChange={(e) => dispatch(changeTheme(e.target.checked))}*/}
@@ -88,7 +98,7 @@ function Table({ isDark, columns, requestApi, filterParam, path }) {
                                 return <FormControlLabel
                                     key={item?.id}
                                     value={item.id}
-                                    control={<Switch color="primary" />}
+                                    control={<Switch color="primary"/>}
                                     label={item.title}
                                     checked={item.show}
                                     labelPlacement={item.title}
@@ -136,14 +146,15 @@ function Table({ isDark, columns, requestApi, filterParam, path }) {
                                 },
                             ]}
                         />
-                        <Button type={'dashed'} onClick={getExcel}><i className="fa-solid fa-table"></i> &nbsp; Excel</Button>
+                        <Button type={'dashed'} onClick={getExcel}  style={{ zIndex: "auto !important"}}><i
+                            className="fa-solid fa-table"></i> &nbsp; Excel</Button>
                     </div>
                 }
             </div>
-            <div className={darkTheme ? 'bottomUI-dark' : 'bottomUI'} style={{ overflowY: 'auto' }}>
+            <div className={darkTheme ? 'bottomUI-dark' : 'bottomUI'} style={{overflowY: 'auto'}}>
                 <div className={darkTheme ? 'my-table-dark' : 'my-table'}>
                     <table className={darkTheme ? 'table table-dark table-striped' : 'table table-bordered'}>
-                        <thead style={{position:"sticky", top:-1, zIndex:"10"}}>
+                        <thead style={{position:"sticky", top:"-1"}}>
                         <tr>
                             {
                                 data?.columns?.map((item) => {
@@ -161,7 +172,7 @@ function Table({ isDark, columns, requestApi, filterParam, path }) {
                                     data?.columns?.map((col) => <td key={col?.id}>
                                         {col.render ? col.render(item) :
                                             col?.show &&
-                                            col.type === 'jsx' ? React.cloneElement(col.data, { data: item }) : col.show &&
+                                            col.type === 'jsx' ? React.cloneElement(col.data, {data: item}) : col.show &&
                                                 <p>{item[col?.key]}</p>
 
                                         }
@@ -170,6 +181,7 @@ function Table({ isDark, columns, requestApi, filterParam, path }) {
                                 }
                             </tr>)
                         }
+
                         </tbody>
                     </table>
                     <div style={{
@@ -179,25 +191,27 @@ function Table({ isDark, columns, requestApi, filterParam, path }) {
                         width: '100%',
                         height: 40
                     }}>
-                        {data.totalPage>1 && <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))} page={currentPage}
-                                                         count={data.totalPage}
-                                                         color={'primary'}
-                                                         variant={"outlined"}
-                                                         shape="rounded"/>}
+                        {data.totalPage > 1 &&
+                            <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))}
+                                        page={currentPage}
+                                        count={data.totalPage}
+                                        color={'primary'}
+                                        variant={"outlined"}
+                                        shape="rounded"/>}
 
                     </div>
                 </div>
 
             </div>
             <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} title={'Change order'}
-                    onSave={() => dispatch(saveColumnsOrders())} elements={elements} />
+                    onSave={() => dispatch(saveColumnsOrders())} elements={elements}/>
         </div>
     );
 }
 
 export default Table;
 
-const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+const MaterialUISwitch = styled(Switch)(({theme}) => ({
     width: 62,
     height: 34,
     padding: 7,

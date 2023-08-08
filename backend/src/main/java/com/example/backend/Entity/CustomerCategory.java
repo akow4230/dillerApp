@@ -14,9 +14,8 @@ public class CustomerCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String region;
+    private String  title;
     private  String code;
-    private String  name;
     private String description;
     private boolean active;
 

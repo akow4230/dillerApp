@@ -1,10 +1,10 @@
-
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
     categories: [],
     loading: false,
     error: null,
+    modalVisible: false
 };
 
 const categorySlice = createSlice({
@@ -24,8 +24,11 @@ const categorySlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+        setModalVisible: (state, action) => {
+            state.modalVisible = action.payload
+        }
     },
 });
 
-export const { fetchCategoriesStart, fetchCategoriesSuccess, fetchCategoriesFailure } = categorySlice.actions;
+export const {fetchCategoriesStart, fetchCategoriesSuccess, fetchCategoriesFailure, setModalVisible} = categorySlice.actions;
 export default categorySlice.reducer;

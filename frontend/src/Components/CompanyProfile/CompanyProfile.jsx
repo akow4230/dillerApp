@@ -10,19 +10,11 @@ function CompanyProfile() {
   }, []);
   const columns = [
     {
-      id: 5,
-      title: "Region",
-      key: "region",
-      type: "str",
-      show: true,
-      order: 4
-    },
-    {
       id: 1,
       title: "Id",
       key: "id",
       type: "int",
-      show: false,
+      show: true,
       order: 1
     },
     {
@@ -41,7 +33,14 @@ function CompanyProfile() {
       show: true,
       order: 3
     },
-
+    {
+      id: 5,
+      title: "Region",
+      key: "region",
+      type: "str",
+      show: true,
+      order: 4
+    },
     {
       id: 6,
       title: "Phone",
