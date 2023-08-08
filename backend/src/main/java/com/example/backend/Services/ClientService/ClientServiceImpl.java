@@ -7,7 +7,6 @@ import com.example.backend.Repository.CustomerCategoryRepo;
 import com.example.backend.Repository.TerritoryRepo;
 import com.example.backend.Repository.UserRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -28,21 +26,19 @@ public class ClientServiceImpl implements ClientService {
     private final CustomerCategoryRepo categoryRepo;
 
 
-
-
     @Override
-    public HttpEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay, String territory, String tin) {
+    public ResponseEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay, String territory, String tin) {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         List<Integer> categoryIds = getIdes(category);
         List<Integer> weekDayIds = getIdes(weekDay);
-        List<UUID> territoryIds=getUUIDes(territory);
+        List<UUID> territoryIds = getUUIDes(territory);
 
-        return ResponseEntity.ok(clientRepo.getClientsByActive(active, quickSearch, categoryIds, weekDayIds, tin,territoryIds, pageRequest));
+        return ResponseEntity.ok(clientRepo.getClientsByActive(active, quickSearch, categoryIds, weekDayIds, tin, territoryIds, pageRequest));
     }
 
     private static List<Integer> getIdes(String word) {
         List<Integer> getIdes = new LinkedList<>();
-        if (!word.equals("")) {
+        if (!word.isEmpty()) {
             String[] strArr = word.split(",");
             for (String s : strArr) {
                 getIdes.add(Integer.valueOf(s));
@@ -52,9 +48,10 @@ public class ClientServiceImpl implements ClientService {
         }
         return getIdes;
     }
+
     private static List<UUID> getUUIDes(String word) {
         List<UUID> getIdes = new LinkedList<>();
-        if (!word.equals("")) {
+        if (!word.isEmpty()) {
             String[] strArr = word.split(",");
             for (String s : strArr) {
                 getIdes.add(UUID.fromString(s));
