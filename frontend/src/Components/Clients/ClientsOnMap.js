@@ -49,6 +49,7 @@ function ClientsOnMap(props) {
 
                         )}
                         {territory?.map(item=>
+
                             <Placemark
                                 geometry={[item.latitude, item.longitude]}
                                 properties={{
