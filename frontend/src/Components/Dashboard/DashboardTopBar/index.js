@@ -15,6 +15,7 @@ function Index({data}) {
         localStorage.clear()
         navigate("/")
     }
+
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -32,7 +33,8 @@ function Index({data}) {
     }, []);
     return (
         <div className={"dashboardTopBar d-flex align-items-center"}>
-            <img src={logo} alt="Image Not Found" width={70} height={70} style={{borderRadius: "50%"}}/>
+            <img onClick={() => navigate("/dashboard")} src={logo} alt="Image Not Found" width={70} height={70}
+                 style={{borderRadius: "50%", cursor: "pointer"}}/>
             <div className={"top"}>
                 <div className="box mt-3">
                     <p>Supervisor</p>
@@ -74,14 +76,17 @@ function Index({data}) {
                     </FormControl>
                 </div>
                 <div className="d-flex gap-5">
-                    <div style={{background: "#8ac926", width:'150px'}} className="box d-flex align-items-center justify-content-center gap-2">
+                    <div style={{background: "#8ac926", width: '150px'}}
+                         className="box d-flex align-items-center justify-content-center gap-2">
                         <i className="fa-solid fa-circle-question"></i><p className={"my-3"}>Online Help</p>
                     </div>
                 </div>
             </div>
             <div style={{padding: 10}} className={"top"}>
-                <div style={{background: "#219ebc", width:"150px"}} className="box d-flex align-items-center justify-content-center gap-2">
-                    <i className="fa-solid fa-calendar-days"></i><p className={"my-3"}>{data?.currentDateAndTime ? data.currentDateAndTime : ""}</p>
+                <div style={{background: "#219ebc", width: "150px"}}
+                     className="box d-flex align-items-center justify-content-center gap-2">
+                    <i className="fa-solid fa-calendar-days"></i><p
+                    className={"my-3"}>{data?.currentDateAndTime ? data.currentDateAndTime : ""}</p>
                 </div>
                 <div style={{
                     marginLeft: 15,
