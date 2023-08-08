@@ -9,7 +9,6 @@ import TerritoryUpdateButton from "../Territory/TerritoryUpdateButton";
 
 function CustomerCategory(props) {
     useEffect(() => {
-        dispatch((fetchCategoriesStart()))
         dispatch(changeSearchParams({active:''}))
     }, [])
     const dispatch = useDispatch();
