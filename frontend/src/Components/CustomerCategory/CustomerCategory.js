@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ToastContainer} from "react-toastify";
-import {setModalVisible} from "../../redux/reducers/CustomerCategorySlice";
+import {fetchCategoriesStart, setModalVisible} from "../../redux/reducers/CustomerCategorySlice";
 import UModal from "../UniversalUI/Modal/UModal";
 import {useDispatch, useSelector} from "react-redux";
-import {saveColumnsOrders, toggleModal} from "../../redux/reducers/TableSlice";
+import {changeSearchParams, saveColumnsOrders, toggleModal} from "../../redux/reducers/TableSlice";
 import Table from "../UniversalUI/Table/Table";
 import TerritoryUpdateButton from "../Territory/TerritoryUpdateButton";
 
 function CustomerCategory(props) {
+    useEffect(() => {
+        dispatch(changeSearchParams({active:''}))
+    }, [])
     const dispatch = useDispatch();
     const category = useSelector((state) => state.category);
     const elements = [{
@@ -68,20 +71,22 @@ function CustomerCategory(props) {
             order: 4
         },
         {
-            id:5,
-            title:"Active",
-            key:"active",
-            type:"str",
-            show:true,
-            order:5
+            id: 5,
+            title: "Active",
+            key: "active",
+            type: "str",
+            show: true,
+            order: 5
         },
-        {id:6,
-            title:"Update",
-            key:"update",
-            type:"jsx",
-            show:true,
-            order:6,
-            data:<TerritoryUpdateButton />}
+        {
+            id: 6,
+            title: "Update",
+            key: "update",
+            type: "jsx",
+            show: true,
+            order: 6,
+            data: <TerritoryUpdateButton/>
+        }
     ]
     const filterParam = [
         {
@@ -96,7 +101,7 @@ function CustomerCategory(props) {
             defaultValue: {value: '', label: 'All'},
             placeholder: 'All'
         }
-        ]
+    ]
     return (
         <div style={{background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY: "auto"}}>
             <ToastContainer/>

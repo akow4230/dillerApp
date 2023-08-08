@@ -31,7 +31,7 @@ public class CustomerCategoryController {
     }
     @PostMapping
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    private HttpEntity<?> saveCategory(@RequestBody CustomerCategory category){
+    public HttpEntity<?> saveCategory(@RequestBody CustomerCategory category){
         return customerCategoryService.save(category);
     }
 }
