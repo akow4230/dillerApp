@@ -27,16 +27,7 @@ public class ClientServiceImpl implements ClientService {
     private final TerritoryRepo territoryRepo;
     private final CustomerCategoryRepo categoryRepo;
 
-    private Page<Client> getClientFilter(String active, String search, PageRequest pageRequest, List<Integer> categoryIds, List<Integer> weekDayIds) {
-        Page<Client> allClient = null;
-        if (Objects.equals(active, "")) {
-            allClient = clientRepo.getClientsWithSearch(search, categoryIds, weekDayIds, pageRequest);
-            return allClient;
-        }
-        boolean aBoolean = Boolean.parseBoolean(active);
-        allClient = clientRepo.getClientsByActive(aBoolean, search, categoryIds, weekDayIds, pageRequest);
-        return allClient;
-    }
+
 
 
     @Override
@@ -44,7 +35,9 @@ public class ClientServiceImpl implements ClientService {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         List<Integer> categoryIds = getIdes(category);
         List<Integer> weekDayIds = getIdes(weekDay);
-        return ResponseEntity.ok(getClientFilter(active, quickSearch, pageRequest, categoryIds, weekDayIds));
+        List<UUID> territoryIds=getUUIDes(territory);
+
+        return ResponseEntity.ok(clientRepo.getClientsByActive(active, quickSearch, categoryIds, weekDayIds, tin,territoryIds, pageRequest));
     }
 
     private static List<Integer> getIdes(String word) {
@@ -56,6 +49,16 @@ public class ClientServiceImpl implements ClientService {
             }
         } else {
             getIdes.add(0);
+        }
+        return getIdes;
+    }
+    private static List<UUID> getUUIDes(String word) {
+        List<UUID> getIdes = new LinkedList<>();
+        if (!word.equals("")) {
+            String[] strArr = word.split(",");
+            for (String s : strArr) {
+                getIdes.add(UUID.fromString(s));
+            }
         }
         return getIdes;
     }

@@ -29,13 +29,12 @@ function Filter(props) {
             ...searchParams,
             [name]: value,
         }))
-        if (name === 'quickSearch' || name === 'active') {
             dispatch(changeCurrentPage());
             props.func({
                 ...searchParams,
                 [name]: value,
             })
-        }
+
     };
     // const param=[
     //     {
@@ -101,7 +100,7 @@ function Filter(props) {
                             options={item.options}
                             value={searchParams[item.name]}
                             onChange={(e) => handleCityChange({name: item.name, value: e})}
-                            style={{width: 70}}
+                            style={{width: 70,top:-1,position:"sticky", zIndex:11}}
                             styles={customStyles}
                             placeholder={item.placeholder}
                             isMulti={item.multi}
@@ -111,13 +110,7 @@ function Filter(props) {
 
                     </div>
                 )}
-               <div className='col-2 mx-1 my-1 text-end'>
-                   {param?.length>1?
-                       <button className='btn btn-primary w-75' onClick={()=>props.func(searchParams)}>Filter</button>
-                       :
-                       ''
-                   }
-               </div>
+
                 <div className="d-flex justify-content-end text-end" >
 
                     {quickSearch}
