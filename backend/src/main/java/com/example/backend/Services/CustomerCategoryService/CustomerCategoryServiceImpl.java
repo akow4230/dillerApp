@@ -30,7 +30,7 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
     public HttpEntity<?> save(CustomerCategory category) {
         return ResponseEntity.ok(customerCategoryRepo.save(category));
     }
-    private Page<CustomerCategory> getCategoryFilter(String active, String search, PageRequest pageRequest) {
+    public Page<CustomerCategory> getCategoryFilter(String active, String search, PageRequest pageRequest) {
         Page<CustomerCategory> allTerritories = null;
         if (Objects.equals(active, "")) {
             allTerritories = customerCategoryRepo.findAllByTitleContainingIgnoreCase(search, pageRequest);

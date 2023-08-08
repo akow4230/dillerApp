@@ -36,23 +36,23 @@ function ClientsModal(props) {
     }, [])
     useEffect(() => {
         if (props.isEditing && props.visible) {
-            console.log(props.data)
             reset({
-                territory: { value: props.data.territory.id, label: props.data.territory.region },
+                territory: {value: props.data.territory.id, label: props.data.territory.region},
                 name: props.data.name,
                 address: props.data.address,
                 phone: props.data.phone,
                 tin: props.data.tin,
                 companyName: props.data.company,
                 referencePoint: props.data.referencePoint,
-                category: { value: props.data.category.id, label: props.data.category.name }
-            })
-            dispatch(setSelectedWeekdays(props.data.weekDay))
-            console.log(clients.selectedWeekdays)
-            dispatch(setMapState({center: [props.data.latitude, props.data.longitude], zoom: 5}))
-            dispatch(setLatitude(props.data.latitude))
-            dispatch(setLongitude(props.data.longitude))
-            dispatch(setTemplate([props.data.latitude, props.data.longitude]))
+                category: {value: props.data.category.id, label: props.data.category.name}
+            });
+            dispatch(setSelectedWeekdays(props.data.weekDay));
+            dispatch(setMapState({center: [props.data.latitude, props.data.longitude], zoom: 15}));
+            dispatch(setLatitude(props.data.latitude));
+            dispatch(setLongitude(props.data.longitude));
+            dispatch(setTemplate([props.data.latitude, props.data.longitude]));
+        } else {
+            reset();
         }
     }, [props.visible])
     useEffect(() => {

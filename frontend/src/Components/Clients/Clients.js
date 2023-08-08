@@ -60,7 +60,7 @@ function Clients(props) {
             order: 3,
             render: (item) => {
                 // console.log(item.territory)
-                return <p>{item?.territory.title}</p>
+                return <p>{item?.territory?.title}</p>
             }
         },
         {

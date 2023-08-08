@@ -34,12 +34,12 @@ function Index(props) {
                     clients ? <div
                         style={{
                             position: "absolute",
-                            zIndex: 99,
                             left: 95,
                             width: 200,
                             background: "#415a77",
                             color: "white",
-                            border: "1px solid"
+                            border: "1px solid",
+                            zIndex:"99"
                         }}
                     >
                         <div
