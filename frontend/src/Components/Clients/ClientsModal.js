@@ -227,7 +227,7 @@ function ClientsModal(props) {
                                                         {...field}
                                                         options={categories?.map(item => ({
                                                             value: item.id,
-                                                            label: item.name,
+                                                            label: item.title,
                                                         }))}
                                                         style={{width: 70}}
                                                         placeholder={'category'}

@@ -60,7 +60,7 @@ function Clients(props) {
             order: 3,
             render: (item) => {
                 // console.log(item.territory)
-                return <p>{item?.territory.title}</p>
+                return <p>{item?.territory?.title}</p>
             }
         },
         {
@@ -93,7 +93,7 @@ function Clients(props) {
             order: 8,
             render: (item) => {
                 // console.log(item?.category.region)
-                return <p>{item?.category?.region}</p>
+                return <p>{item?.category?.title}</p>
             }
         }, {
             id: 9,
@@ -131,7 +131,7 @@ function Clients(props) {
             multi: true,
             options: categories?.map(item => ({
                 value: item.id,
-                label: item.name,
+                label: item.title,
             })),
             // defaultValue: {value: '', label: ''},
             placeholder: 'Customer Category'

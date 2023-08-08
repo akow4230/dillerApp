@@ -1,6 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import { FullscreenControl, GeolocationControl, Map, Placemark, SearchControl, TrafficControl, TypeSelector, YMaps, ZoomControl} from "react-yandex-maps";
+import {
+    FullscreenControl,
+    GeolocationControl,
+    Map,
+    Panorama,
+    Placemark,
+    SearchControl,
+    TrafficControl,
+    TypeSelector,
+    YMaps,
+    ZoomControl
+} from "react-yandex-maps";
 import {fetchClientsStart} from "../../redux/reducers/ClientsSlice";
 import {getTableData} from "../../redux/reducers/TableSlice";
 import {fetchTerritoryStart} from "../../redux/reducers/TerritorySlice";
@@ -74,20 +85,7 @@ function ClientsOnMap(props) {
                         )}
 
 
-                        {/*<Placemark*/}
-                        {/*    geometry={shiftMapState.center}*/}
-                        {/*    properties={{*/}
-                        {/*        iconCaption: 'Shift academy',*/}
-                        {/*        balloonContent: "'Bizning o'quv markaz'",*/}
-                        {/*        hintContent: 'Zamonaviy dasturlash akademiyasi',*/}
-                        {/*    }}*/}
-                        {/*    options={{*/}
-                        {/*        preset: 'islands#yellowIcon',*/}
-                        {/*        iconColor: '#FF0000',*/}
-                        {/*        //   draggable: true,*/}
-                        {/*    }}*/}
-                        {/*    modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}*/}
-                        {/*/>*/}
+
                     </Map>
                 </YMaps>
 
