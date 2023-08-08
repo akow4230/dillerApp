@@ -25,14 +25,20 @@ function ClientsOnMap(props) {
             <div className=''>
                 <YMaps>
                     <Map
-
-                        humanDistance
+                         humanDistance
                         state={{ center: [39.76318977554918, 64.42578226984958], zoom: 11 }}
                         modules={['templateLayoutFactory']}
                         style={{ width: '100%', height: '500px' }} // Adjust the size here
                     >
+                        <FullscreenControl options={{float: "left"}}/>
+                        <GeolocationControl options={{float: "right"}}/>
+                        <TrafficControl options={{float: "right"}}/>
+                        <ZoomControl options={{float: "left"}}/>
+                        <TypeSelector options={{float: "right"}}/>
+                        <SearchControl options={{float: "left"}}/>
                         {clients?.map(item=>
                             <Placemark
+                                key={item.id}
                                 geometry={[item.latitude, item.longitude]}
                                 properties={{
                                     iconCaption: `${item.name}`,
@@ -42,15 +48,15 @@ function ClientsOnMap(props) {
                                 options={{
                                     preset: 'islands#blueIcon',
                                     iconColor: '#00FF00',
-                                    draggable: true,
+                                    draggable: false,
                                 }}
                                 modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
                             />
 
                         )}
                         {territory?.map(item=>
-
                             <Placemark
+                                key={item.id}
                                 geometry={[item.latitude, item.longitude]}
                                 properties={{
                                     iconCaption: `${item.title}`,
@@ -59,8 +65,8 @@ function ClientsOnMap(props) {
                                 }}
                                 options={{
                                     preset: 'islands#blueIcon',
-                                    iconColor: '#00FF00',
-                                    draggable: true,
+                                    iconColor: '#FF0000',
+                                    draggable: false,
                                 }}
                                 modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
                             />
