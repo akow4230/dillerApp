@@ -43,9 +43,10 @@ public class ClientController {
     public HttpEntity<?> addClient(@RequestBody ClientDTO clientDTO) {
         return clientService.addClient(clientDTO);
     }
-
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/{id}")
     public void editClient(@RequestBody ClientDTO clientDTO, @PathVariable UUID id) {
+        System.out.println(clientDTO);
         clientService.editClient(clientDTO, id);
     }
 
