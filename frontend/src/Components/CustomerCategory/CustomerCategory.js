@@ -3,13 +3,14 @@ import {ToastContainer} from "react-toastify";
 import {fetchCategoriesStart, setModalVisible} from "../../redux/reducers/CustomerCategorySlice";
 import UModal from "../UniversalUI/Modal/UModal";
 import {useDispatch, useSelector} from "react-redux";
-import {saveColumnsOrders, toggleModal} from "../../redux/reducers/TableSlice";
+import {changeSearchParams, saveColumnsOrders, toggleModal} from "../../redux/reducers/TableSlice";
 import Table from "../UniversalUI/Table/Table";
 import TerritoryUpdateButton from "../Territory/TerritoryUpdateButton";
 
 function CustomerCategory(props) {
     useEffect(() => {
         dispatch((fetchCategoriesStart()))
+        dispatch(changeSearchParams({active:''}))
     }, [])
     const dispatch = useDispatch();
     const category = useSelector((state) => state.category);
