@@ -13,8 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ClientDTO {
     private String name;
-    private String company;
-    private UUID agent;
+    private String companyName;
     private UUID territory;
     private String address;
     private String phone;
@@ -22,9 +21,7 @@ public class ClientDTO {
     private String tin;
     private Integer category;
     private boolean active;
-    private String typeOfEquipment;
-    private String equipment;
-    private List<WeekDay> weekDay;
+    private List<WeekDay> weekdays;
     private double longitude;
     private double latitude;
 }

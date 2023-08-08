@@ -9,38 +9,46 @@ import {
     TrafficControl, TypeSelector,
     ZoomControl
 } from 'react-yandex-maps';
-import {useForm} from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import {
     setLatitude,
     setLongitude,
     setTemplate,
     setMapState,
     saveClientsAction,
-    editClientsAction, pushWeekday, deleteWeekday
+    editClientsAction, pushWeekday, deleteWeekday, setSelectedWeekdays
 } from '../../redux/reducers/ClientsSlice';
 import "../Territory/styles.css"
 import {ToastContainer} from "react-toastify";
 import {fetchWeekdaysStart} from "../../redux/reducers/WeekDaySlice";
 import Select from "react-select";
+
 function ClientsModal(props) {
     const dispatch = useDispatch();
     const clients = useSelector((state) => state.clients);
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
-    const {weekdays} = useSelector((state)=>state.weekday);
-    const {territory}= useSelector(state=>state.territory)
-    const {  categories} = useSelector((state) => state.category);
+    const {weekdays} = useSelector((state) => state.weekday);
+    const {territory} = useSelector(state => state.territory)
+    const {categories} = useSelector((state) => state.category);
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetchWeekdaysStart())
-    },[])
+    }, [])
     useEffect(() => {
         if (props.isEditing && props.visible) {
+            console.log(props.data)
             reset({
-                title: props.data.title,
-                region: props.data.region,
-                code: props.data.code,
-                active: props.data.active
+                territory: { value: props.data.territory.id, label: props.data.territory.region },
+                name: props.data.name,
+                address: props.data.address,
+                phone: props.data.phone,
+                tin: props.data.tin,
+                companyName: props.data.company,
+                referencePoint: props.data.referencePoint,
+                category: { value: props.data.category.id, label: props.data.category.name }
             })
+            dispatch(setSelectedWeekdays(props.data.weekDay))
+            console.log(clients.selectedWeekdays)
             dispatch(setMapState({center: [props.data.latitude, props.data.longitude], zoom: 5}))
             dispatch(setLatitude(props.data.latitude))
             dispatch(setLongitude(props.data.longitude))
@@ -83,22 +91,26 @@ function ClientsModal(props) {
         });
     }
 
-    function saveclients(data) {
+    function saveClients(data) {
         console.log(data)
         dispatch(
             props.isEditing
                 ? editClientsAction({
                     clients: {
-                        data: {...data, weekdays:clients.selectedWeekdays},
+                        data: {...data, weekdays: clients.selectedWeekdays},
                         longitude: clients?.longitude,
                         latitude: clients?.latitude,
                         id: props.data.id
                     }, isEditing: true
                 })
                 : saveClientsAction({
-                    clients: {data:{...data,territory:clients.territory.value,weekdays:clients.selectedWeekdays}, longitude: clients?.longitude, latitude: clients?.latitude},
+                    clients: {
+                        data: {...data, weekdays: clients.selectedWeekdays},
+                        longitude: clients?.longitude,
+                        latitude: clients?.latitude
+                    },
                     isEditing: false,
-                    reset:reset({
+                    reset: reset({
                         title: "",
                         region: "",
                         code: "",
@@ -110,12 +122,13 @@ function ClientsModal(props) {
     }
 
     function selectWeekday(item, selected) {
-        if (!clients.selectedWeekdays.includes(item)){
+        if (!clients.selectedWeekdays.includes(item)) {
             dispatch(pushWeekday(item))
-        }else if (!selected){
+        } else if (!selected) {
             dispatch(deleteWeekday(item))
         }
     }
+
     return (
         <div>
             <ToastContainer style={{zIndex: "10000"}}/>
@@ -132,99 +145,128 @@ function ClientsModal(props) {
                         <p>{props.action}</p>
                     </header>
                     <div style={{display: "flex"}}>
-                        <div className="left-side w-75 py-4" style={{paddingLeft:"50px"}}>
-                            <form onSubmit={handleSubmit(saveclients)} className={"d-flex gap-5"}>
+                        <div className="left-side w-75 py-4" style={{paddingLeft: "50px"}}>
+                            <form onSubmit={handleSubmit(saveClients)} className={"d-flex gap-5"}>
                                 <div>
-                                    <label style={{width:"300px"}}>
+                                    <label style={{width: "300px"}}>
                                         Territory*
-                                        <Select
-                                            options={territory?.map(item => ({
-                                                value: item.id,
-                                                label: item.region,
-                                            }))}
-                                            {...register("territory", {required: "Territory is required"})}
+                                        <Controller
+                                            name='territory'
+                                            control={control}
+                                            render={({field}) => (
+                                                <>
+                                                    <Select
+                                                        {...field}
+                                                        options={territory?.map(item => ({
+                                                            value: item.id,
+                                                            label: item.region,
+                                                        }))}
+                                                        style={{width: 70}}
+                                                        placeholder={'territory'}/>
+                                                </>
+                                            )}
+                                        />
 
-                                            // onChange={(e) => console.log(e)}
-                                            style={{width: 70}}
-                                            placeholder={'territory'} />
-                                          </label>
+                                    </label>
                                     {errors.clients && <span className="error-message">{errors.clients.message}</span>}
                                     <br/>
-                                    <label style={{width:"300px"}}>
+                                    <label style={{width: "300px"}}>
                                         Name*
                                         <input type="text"
                                                className={"form-control my-2"} {...register("name", {required: "Name is required"})} />
                                     </label>
                                     {errors.name && <span className="error-message">{errors.name.message}</span>}
                                     <br/>
-                                    <label style={{width:"300px"}}>
+                                    <label style={{width: "300px"}}>
                                         Address
                                         <input type="text"
                                                className={"form-control my-2"} {...register("address", {required: "Address is required"})} />
                                     </label>
                                     {errors.address && <span className="error-message">{errors.address.message}</span>}
                                     <br/>
-                                    <label style={{width:"300px"}}>
+                                    <label style={{width: "300px"}}>
                                         Telephone
                                         <input type="text"
-                                               className={"form-control my-2"} {...register("telephone", {required: "Telephone is required"})} />
+                                               className={"form-control my-2"} {...register("phone", {required: "Phone number is required"})} />
                                     </label>
-                                    {errors.telephone && <span className="error-message">{errors.telephone.message}</span>}
+                                    {errors.phone &&
+                                        <span className="error-message">{errors.phone.message}</span>}
                                     <br/>
-                                    <label style={{width:"300px"}}>
+                                    <label style={{width: "300px"}}>
                                         TIN
                                         <input type="text"
-                                               className={"form-control my-2"} {...register("TIN")} />
+                                               className={"form-control my-2"} {...register("tin")} />
                                     </label>
                                     <br/>
                                 </div>
                                 <div>
-                                    <label style={{width:"300px"}}>
+                                    <label style={{width: "300px"}}>
                                         Company name
                                         <input type="text"
                                                className={"form-control my-2"} {...register("companyName", {required: "Company name is required"})} />
                                     </label>
-                                    {errors.companyName && <span className="error-message">{errors.companyName.message}</span>}
+                                    {errors.companyName &&
+                                        <span className="error-message">{errors.companyName.message}</span>}
                                     <br/>
-                                    <label style={{width:"300px"}}>
+                                    <label style={{width: "300px"}}>
                                         Reference point
                                         <input type="text"
                                                className={"form-control my-2"} {...register("referencePoint", {required: "Reference point is required"})} />
                                     </label>
-                                    {errors.referencePoint && <span className="error-message">{errors.referencePoint.message}</span>}
+                                    {errors.referencePoint &&
+                                        <span className="error-message">{errors.referencePoint.message}</span>}
                                     <br/>
-                                    <label style={{width:"300px"}}>
+                                    <label style={{width: "300px"}}>
                                         Category*
-                                        <Select
-                                            options={categories?.map(item => ({
-                                                value: item.id,
-                                                label: item.region,
-                                            }))}
-                                            {...register("category", {required: "category is required"})}
+                                        <Controller
+                                            name='category'
+                                            control={control}
+                                            render={({field}) => (
+                                                <>
+                                                    <Select
+                                                        {...field}
+                                                        options={categories?.map(item => ({
+                                                            value: item.id,
+                                                            label: item.name,
+                                                        }))}
+                                                        style={{width: 70}}
+                                                        placeholder={'category'}
+                                                    />
+                                                </>
+                                            )}
+                                        />
 
-                                            // onChange={(e) => console.log(e)}
-                                            style={{width: 70}}
-                                            placeholder={'category'} />
                                     </label>
-                                    {errors.category && <span className="error-message">{errors.category.message}</span>}
+                                    {errors.category &&
+                                        <span className="error-message">{errors.category.message}</span>}
                                     <br/>
-                                    <label style={{width:"300px"}}>
+                                    <label style={{width: "300px"}}>
                                         Visiting days
                                         <br/>
                                         <br/>
                                         <span className="d-flex justify-content-center gap-3 flex-wrap">
-                                              {weekdays.map(item=>
-                                                  <label className={"d-flex gap-2 align-items-center"} style={{fontSize:"10pt"}}>
-                                                      <p style={item.name==="SATURDAY" || item.name === "SUNDAY" ? {color:"red"}:{color:"black"}} className={"my-1"}>{item.name.substring(0, 3)}</p>
-                                                      <input type="checkbox" className={"form-check"} onChange={(e)=>selectWeekday(item, e.target.checked)}/>
+                                              {weekdays.map(item =>
+                                                  <label className={"d-flex gap-2 align-items-center"}
+                                                         style={{fontSize: "10pt"}}>
+                                                      <p style={item.name === "SATURDAY" || item.name === "SUNDAY" ? {color: "red"} : {color: "black"}}
+                                                         className={"my-1"}>{item.name.substring(0, 3)}</p>
+                                                      <input type="checkbox" className={"form-check"}
+                                                             checked={clients.selectedWeekdays.some(selectedItem => selectedItem.id === item.id)}
+                                                             onChange={(e) => selectWeekday(item, e.target.checked)}/>
                                                   </label>
                                               )}
                                         </span>
                                     </label>
                                 </div>
-                                <div style={{display: "flex", alignItems:"center", justifyContent:"center", width:"100%"}}>
+                                <div style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: "100%"
+                                }}>
                                     <button className="btn btn-primary"
-                                            style={{position: "absolute", bottom: "30px", left:"50px"}}>Save</button>
+                                            style={{position: "absolute", bottom: "30px", left: "50px"}}>Save
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -257,7 +299,8 @@ function ClientsModal(props) {
                                 <div className="inputs d-flex align-items-center">
                                     <label>
                                         Long <br/>
-                                        <input type="text" className={"w-75"} disabled={true} value={clients.longitude}/>
+                                        <input type="text" className={"w-75"} disabled={true}
+                                               value={clients.longitude}/>
                                     </label>
                                     <label className={"mx-4 my-2"}>
                                         Lat <br/>

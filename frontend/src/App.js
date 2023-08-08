@@ -12,7 +12,7 @@ import ErrorPage from "./Components/404/ErrorPage";
 import CompanyProfile from "./Components/CompanyProfile/CompanyProfile";
 import TestKeraksiz from "./Components/UniversalUI/filter/TestKeraksiz";
 import Clients from "./Components/Clients/Clients";
-import CustomerCategory from "./Components/CustomerCategory/CustomerCategory";
+import ClientsOnMap from "./Components/Clients/ClientsOnMap";
 
 function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,10 +72,10 @@ function App() {
 
                 <Route path="/dashboard/" element={<Dashboard />}>
                 <Route path="/dashboard/clients" element={<Clients />} />
+                <Route path="/dashboard/clients/map" element={<ClientsOnMap />} />
                     <Route path="/dashboard/settings/" element={<Settings />}>
                         <Route path={"/dashboard/settings/territory"} element={<Territory />} />
                         <Route path={"/dashboard/settings/company-profile"} element={<CompanyProfile />} />
-                        <Route path={"/dashboard/settings/customer-category"} element={<CustomerCategory />} />
                     </Route>
                 </Route>
                 <Route path="*" element={<ErrorPage />} />

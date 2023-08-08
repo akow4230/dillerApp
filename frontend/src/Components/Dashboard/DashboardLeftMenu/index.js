@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './style.css'
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function Index(props) {
     const [clients, setClients] = useState(false)
@@ -26,7 +26,7 @@ function Index(props) {
             <div
                 onMouseEnter={() => setClients(true)}
                 onMouseLeave={() => setClients(false)}
-                onClick={() => navigate("/dashboard/clients")} className="box"><i style={{
+                className="box"><i style={{
                 color: "white", fontSize: 35,
                 position: "relative"
             }} className="fa-solid fa-users"></i>
@@ -42,26 +42,30 @@ function Index(props) {
                             border: "1px solid"
                         }}
                     >
-                        <div style={{
+                        <Link style={{
                             width: "100%",
                             height: 50,
                             border: "1px solid",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center"
-                        }}>
-                            <b>Clients</b>
-                        </div>
-                        <div style={{
+                        }}
+                        to="/dashboard/clients"
+                        >
+                            <b>Client</b>
+                        </Link>
+                        <Link style={{
                             width: "100%",
                             height: 50,
                             border: "1px solid",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center"
-                        }}>
-                            <b>Clients on the map</b>
-                        </div>
+                        }}
+                        to='/dashboard/clients/map'
+                        >
+                            <b>Client on map</b>
+                        </Link>
                     </div> : ""
                 }
             </div>

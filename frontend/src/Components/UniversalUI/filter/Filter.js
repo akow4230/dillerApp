@@ -105,7 +105,6 @@ function Filter(props) {
                             placeholder={item.placeholder}
                             isMulti={item.multi}
                             defaultValue={item.defaultValue}
-
                         />
 
                     </div>

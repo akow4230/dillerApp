@@ -13,4 +13,6 @@ public interface ClientService {
 
     void editClient(ClientDTO clientDTO, UUID id);
     HttpEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay, String territory, String tin);
+
+    HttpEntity<?> getAllClients();
 }

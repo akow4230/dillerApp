@@ -21,22 +21,17 @@ public class Client {
     private UUID id;
 
     private String name;
-
     private String company;
-    @OneToOne
-    private User agent;
     @OneToOne
     private Territory territory;
     private String address;
     private String phone;
     private String referencePoint;
     private String tin;
-    @OneToOne
+    @ManyToOne
     private CustomerCategory category;
     private boolean active;
     private LocalDate dateOfRegistration;
-    private String typeOfEquipment;
-    private String equipment;
     @ManyToMany
     private List<WeekDay> weekDay;
     private double longitude;

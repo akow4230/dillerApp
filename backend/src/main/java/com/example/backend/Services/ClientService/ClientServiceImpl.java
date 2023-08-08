@@ -12,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +34,11 @@ public class ClientServiceImpl implements ClientService {
         List<UUID> territoryIds = getUUIDes(territory);
 
         return ResponseEntity.ok(clientRepo.getClientsByActive(active, quickSearch, categoryIds, weekDayIds, tin, territoryIds, pageRequest));
+    }
+
+    @Override
+    public HttpEntity<?> getAllClients() {
+        return ResponseEntity.ok( clientRepo.findAll());
     }
 
     private static List<Integer> getIdes(String word) {
@@ -63,7 +69,7 @@ public class ClientServiceImpl implements ClientService {
     public HttpEntity<?> addClient(ClientDTO clientDTO) {
         Client client = Client.builder()
                 .name(clientDTO.getName())
-                .company(clientDTO.getCompany())
+                .company(clientDTO.getCompanyName())
                 .territory(territoryRepo.findById(clientDTO.getTerritory()).get())
                 .address(clientDTO.getAddress())
                 .phone(clientDTO.getPhone())
@@ -71,7 +77,8 @@ public class ClientServiceImpl implements ClientService {
                 .tin(clientDTO.getTin())
                 .category(categoryRepo.findById(clientDTO.getCategory()).get())
                 .active(clientDTO.isActive())
-                .weekDay(clientDTO.getWeekDay())
+                .dateOfRegistration(LocalDate.now())
+                .weekDay(clientDTO.getWeekdays())
                 .longitude(clientDTO.getLongitude())
                 .latitude(clientDTO.getLatitude())
                 .build();
@@ -83,17 +90,15 @@ public class ClientServiceImpl implements ClientService {
     public void editClient(ClientDTO clientDTO, UUID id) {
         Client currentClient = clientRepo.findById(id).orElseThrow();
         currentClient.setId(id);
-        currentClient.setName(currentClient.getName());
-        currentClient.setCompany(clientDTO.getCompany());
-        currentClient.setAgent(userRepo.findById(clientDTO.getAgent()).orElseThrow());
+        currentClient.setName(clientDTO.getName());
+        currentClient.setCompany(clientDTO.getCompanyName());
         currentClient.setTerritory(territoryRepo.findById(clientDTO.getTerritory()).orElseThrow());
         currentClient.setAddress(clientDTO.getAddress());
         currentClient.setPhone(clientDTO.getPhone());
         currentClient.setReferencePoint(clientDTO.getReferencePoint());
         currentClient.setTin(clientDTO.getTin());
         currentClient.setCategory(categoryRepo.findById(clientDTO.getCategory()).orElseThrow());
-        currentClient.setActive(clientDTO.isActive());
-        currentClient.setWeekDay(currentClient.getWeekDay());
+        currentClient.setWeekDay(clientDTO.getWeekdays());
         currentClient.setLongitude(clientDTO.getLongitude());
         currentClient.setLatitude(clientDTO.getLatitude());
         clientRepo.save(currentClient);
