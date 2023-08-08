@@ -132,7 +132,7 @@ function Clients(props) {
             multi: true,
             options:  categories?.map(item => ({
                 value: item.id,
-                label: item.region,
+                label: item.name,
             })),
             // defaultValue: {value: '', label: ''},
             placeholder: 'Customer Category'
