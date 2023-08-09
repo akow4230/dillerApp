@@ -43,7 +43,7 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
 
     useEffect(() => {
         getData(searchParams);
-    }, [columns, currentPage, dispatch, pageSize, requestApi]);
+    }, [searchParams,columns, currentPage, dispatch, isDark, pageSize, requestApi]);
 
     function getExcel() {
         axios

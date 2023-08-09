@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
 import {ToastContainer} from "react-toastify";
-import {fetchCategoriesStart, setModalVisible} from "../../redux/reducers/CustomerCategorySlice";
+import {fetchCategoriesStart, setEditModalVisible, setModalVisible} from "../../redux/reducers/CustomerCategorySlice";
 import UModal from "../UniversalUI/Modal/UModal";
 import {useDispatch, useSelector} from "react-redux";
 import {changeSearchParams, saveColumnsOrders, toggleModal} from "../../redux/reducers/TableSlice";
 import Table from "../UniversalUI/Table/Table";
 import TerritoryUpdateButton from "../Territory/TerritoryUpdateButton";
+import CategoryUpdateButton from "./CustomerCategoryUpdateButton";
 
 function CustomerCategory(props) {
     useEffect(() => {
@@ -85,7 +86,7 @@ function CustomerCategory(props) {
             type: "jsx",
             show: true,
             order: 6,
-            data: <TerritoryUpdateButton/>
+            data: <CategoryUpdateButton/>
         }
     ]
     const filterParam = [
@@ -121,7 +122,8 @@ function CustomerCategory(props) {
             />
             <UModal isOpen={category.modalVisible} toggle={() => dispatch(setModalVisible(false))}
                     title={'Add client category'} url={"/api/v1/customercategory"} elements={elements}/>
-            <UModal/>
+            <UModal isOpen={category.editModalVisible} isEditing={true} toggle={() => dispatch(setEditModalVisible(false))}
+                    title={'Edit client category'} url={category.editDataUrl} data={category.editData} elements={elements}/>
         </div>
     );
 }

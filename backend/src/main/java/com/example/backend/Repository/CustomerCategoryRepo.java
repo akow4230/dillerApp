@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CustomerCategoryRepo extends JpaRepository<CustomerCategory, Integer> {
 
-    Page<CustomerCategory> findAllByTitleContainingIgnoreCase(String search, PageRequest pageRequest);
+    Page<CustomerCategory> findAllByTitleContainingIgnoreCaseOrderById(String search, PageRequest pageRequest);
     @Query(value = """
-            SELECT * from customer_category where lower(customer_category.title) like lower(concat('%',:search,'%')) and active=:active
+            SELECT * from customer_category where lower(customer_category.title) like lower(concat('%',:search,'%')) and active=:active order by customer_category.id
             """, nativeQuery = true)
     Page<CustomerCategory> findAllByActiveAndTitleContainingIgnoreCase(Boolean active, String search, PageRequest pageRequest);
 }

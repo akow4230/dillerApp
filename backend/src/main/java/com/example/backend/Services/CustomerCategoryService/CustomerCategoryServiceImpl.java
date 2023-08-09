@@ -2,6 +2,7 @@ package com.example.backend.Services.CustomerCategoryService;
 
 import com.example.backend.Entity.CustomerCategory;
 import com.example.backend.Entity.Territory;
+import com.example.backend.Payload.req.ReqEditTerritory;
 import com.example.backend.Repository.CustomerCategoryRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +36,7 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
     public Page<CustomerCategory> getCategoryFilter(String active, String search, PageRequest pageRequest) {
         Page<CustomerCategory> allTerritories = null;
         if (Objects.equals(active, "")) {
-            allTerritories = customerCategoryRepo.findAllByTitleContainingIgnoreCase(search, pageRequest);
+            allTerritories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderById(search, pageRequest);
             return allTerritories;
         }
         allTerritories = customerCategoryRepo.findAllByActiveAndTitleContainingIgnoreCase(Boolean.valueOf(active), search, pageRequest);
@@ -44,6 +47,21 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         Page<CustomerCategory> territoryFilter = getCategoryFilter(active, quickSearch, pageRequest);
         return ResponseEntity.ok(territoryFilter);
+    }
+
+    @Override
+    public void editTerritory(Integer id, CustomerCategory reqEditTerritory) {
+        Optional<CustomerCategory> byId = customerCategoryRepo.findById(id);
+        if (byId.isPresent()){
+            CustomerCategory customerCategory = byId.get();
+            customerCategory.setActive(reqEditTerritory.isActive());
+            customerCategory.setTitle(reqEditTerritory.getTitle());
+            customerCategory.setCode(reqEditTerritory.getCode());
+            customerCategory.setDescription(reqEditTerritory.getDescription());
+            customerCategoryRepo.save(customerCategory);
+        }else {
+            throw new IllegalArgumentException("Territory not found with ID: " + id);
+        }
     }
 
 }
