@@ -44,7 +44,7 @@ function ClientsModal(props) {
                 tin: props.data.tin,
                 companyName: props.data.company,
                 referencePoint: props.data.referencePoint,
-                category: {value: props.data.category.id, label: props.data.category.name}
+                category: {value: props.data.category.id, label: props.data.category.title}
             });
             dispatch(setSelectedWeekdays(props.data.weekDay));
             dispatch(setMapState({center: [props.data.latitude, props.data.longitude], zoom: 15}));

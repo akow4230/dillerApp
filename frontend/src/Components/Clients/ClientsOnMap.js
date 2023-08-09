@@ -15,10 +15,11 @@ import {
 import {fetchClientsStart} from "../../redux/reducers/ClientsSlice";
 import {getTableData} from "../../redux/reducers/TableSlice";
 import {fetchTerritoryStart} from "../../redux/reducers/TerritorySlice";
+import Loader from "../../ui/loader";
 
 function ClientsOnMap(props) {
     const dispatch = useDispatch();
-    const {clients}=useSelector(state=>(state.clients))
+    const {clients, loading}=useSelector(state=>(state.clients))
     const {territory } = useSelector((state)=>state.territory)
 
     // console.log(clients)
@@ -26,70 +27,77 @@ function ClientsOnMap(props) {
         dispatch(fetchClientsStart())
         dispatch(fetchTerritoryStart())
     }, [ dispatch ]);
-
+    console.log(loading)
 
     return (
         <div className='container'>
             <div>
                 <h1>Clients on Map </h1>
             </div>
-            <div className=''>
-                <YMaps>
-                    <Map
-                         humanDistance
-                        state={{ center: [39.76318977554918, 64.42578226984958], zoom: 11 }}
-                        modules={['templateLayoutFactory']}
-                        style={{ width: '100%', height: '500px' }} // Adjust the size here
-                    >
-                        <FullscreenControl options={{float: "left"}}/>
-                        <GeolocationControl options={{float: "right"}}/>
-                        <TrafficControl options={{float: "right"}}/>
-                        <ZoomControl options={{float: "left"}}/>
-                        <TypeSelector options={{float: "right"}}/>
-                        <SearchControl options={{float: "left"}}/>
-                        {clients?.map(item=>
-                            <Placemark
-                                key={item.id}
-                                geometry={[item.latitude, item.longitude]}
-                                properties={{
-                                    iconCaption: `${item.name}`,
-                                    balloonContent: `phone:${item.phone}`,
-                                    hintContent: `address:${item.address}`,
-                                }}
-                                options={{
-                                    preset: 'islands#blueIcon',
-                                    iconColor: '#00FF00',
-                                    draggable: false,
-                                }}
-                                modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
-                            />
+            {loading?
+                <Loader/>
+            :
+            <div>
 
-                        )}
-                        {territory?.map(item=>
-                            <Placemark
-                                key={item.id}
-                                geometry={[item.latitude, item.longitude]}
-                                properties={{
-                                    iconCaption: `${item.title}`,
-                                    balloonContent: `region:${item.region}`,
-                                    hintContent: `code:${item.code}`,
-                                }}
-                                options={{
-                                    preset: 'islands#blueIcon',
-                                    iconColor: '#FF0000',
-                                    draggable: false,
-                                }}
-                                modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
-                            />
+                <div className=''>
+                    <YMaps>
+                        <Map
+                            humanDistance
+                            state={{ center: [39.76318977554918, 64.42578226984958], zoom: 11 }}
+                            modules={['templateLayoutFactory']}
+                            style={{ width: '100%', height: '500px' }} // Adjust the size here
+                        >
+                            <FullscreenControl options={{float: "left"}}/>
+                            <GeolocationControl options={{float: "right"}}/>
+                            <TrafficControl options={{float: "right"}}/>
+                            <ZoomControl options={{float: "left"}}/>
+                            <TypeSelector options={{float: "right"}}/>
+                            <SearchControl options={{float: "left"}}/>
+                            {clients?.map(item=>
+                                <Placemark
+                                    key={item.id}
+                                    geometry={[item.latitude, item.longitude]}
+                                    properties={{
+                                        iconCaption: `${item.name}`,
+                                        balloonContent: `phone:${item.phone}`,
+                                        hintContent: `address:${item.address}`,
+                                    }}
+                                    options={{
+                                        preset: 'islands#blueIcon',
+                                        iconColor: '#00FF00',
+                                        draggable: false,
+                                    }}
+                                    modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
+                                />
 
-                        )}
+                            )}
+                            {territory?.map(item=>
+                                <Placemark
+                                    key={item.id}
+                                    geometry={[item.latitude, item.longitude]}
+                                    properties={{
+                                        iconCaption: `${item.title}`,
+                                        balloonContent: `region:${item.region}`,
+                                        hintContent: `code:${item.code}`,
+                                    }}
+                                    options={{
+                                        preset: 'islands#blueIcon',
+                                        iconColor: '#FF0000',
+                                        draggable: false,
+                                    }}
+                                    modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
+                                />
+
+                            )}
 
 
 
-                    </Map>
-                </YMaps>
+                        </Map>
+                    </YMaps>
 
+                </div>
             </div>
+            }
         </div>
     );
 }
