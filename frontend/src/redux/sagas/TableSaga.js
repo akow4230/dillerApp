@@ -9,6 +9,8 @@ import {
     getTableData,
     getTableDataSuccess
 } from "../reducers/TableSlice";
+import {toast} from "react-toastify";
+import {navigateTo} from "../reducers/DashboardSlice";
 
 
 function* watchGetTableData(action) {
@@ -24,11 +26,16 @@ function* watchGetTableData(action) {
     })
      let territory=[]
     action.payload.search.territory?.map(item=>{
-        territory.push(item.value)
+        territory?.push(item?.value)
     })
     try {
         console.log(action.payload.url)
-        const response = yield call(() => instance(action.payload.url, "GET", null, {active:action.payload.search.active.value, quickSearch:action.payload.search.quickSearch, category:category.join(','), weekDay:weekDay.join(','), tin:action.payload.search.tin?.value, territory:territory.join(',')}));
+        const response = yield call(() => instance(action.payload.url, "GET", null, {active:action?.payload?.search?.active?.value, quickSearch:action.payload.search.quickSearch, category:category.join(','), weekDay:weekDay.join(','), tin:action.payload.search.tin?.value, territory:territory.join(',')}));
+        console.log(response.data)
+        if (response.data === "Invalid token" || response.data === 401){
+            toast.error("Authorization problem")
+            yield put(navigateTo("/404"))
+        }
         yield put(getTableDataSuccess({
             data: response.data.content,
             totalPage: response.data.totalPages,
@@ -36,7 +43,8 @@ function* watchGetTableData(action) {
         }))
         // console.log(response.data)
     } catch (e) {
-
+        toast.error(e.message)
+        yield put(navigateTo("/404"))
     }
 }
 

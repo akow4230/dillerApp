@@ -44,7 +44,7 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
     useEffect(() => {
         getData(searchParams);
     }, [searchParams,columns, currentPage, dispatch, isDark, pageSize, requestApi]);
-
+    console.log(path)
     function getExcel() {
         axios
             .get(`http://localhost:8080/api/v1/${path}/getExcel?active=${searchParams.active.value}&search=${searchParams.quickSearch}`, {
@@ -58,7 +58,7 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
 
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'territory.xlsx';
+                a.download = path+'.xlsx';
                 a.click();
 
                 window.URL.revokeObjectURL(url);

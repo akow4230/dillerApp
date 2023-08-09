@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface CompanyRepo extends JpaRepository<Company, Integer> {
@@ -26,5 +27,18 @@ public interface CompanyRepo extends JpaRepository<Company, Integer> {
              join users u on c.owner_id = u.id
              where lower(c.name||''||c.region) like lower(concat('%',:search,'%'))
                 """, nativeQuery = true)
-    Page<CompanyProfileProjection> findByCompanyId(PageRequest pageRequest, String search);
+    Page<CompanyProfileProjection> findByCompanyId(PageRequest pageRequest, String search); @Query(value = """
+            SELECT 
+            c.id, c.email,
+            c.name as companyName, 
+            c.region, 
+            c.support_phone as supportPhone,
+            u.phone as name,t.title 
+            from company c 
+             join company_territory ct on c.id = ct.company_id
+             join territory t on t.id = ct.territory_id
+             join users u on c.owner_id = u.id
+             where lower(c.name||''||c.region) like lower(concat('%',:search,'%'))
+                """, nativeQuery = true)
+    List<CompanyProfileProjection> findByCompanyIdExcel(String search);
 }

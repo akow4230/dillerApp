@@ -35,10 +35,12 @@ function TerritoryModal(props) {
                 code: props.data.code,
                 active: props.data.active
             })
-            dispatch(setMapState({center: [props.data.latitude, props.data.longitude], zoom: 5}))
+            dispatch(setMapState({center: [props.data.latitude, props.data.longitude], zoom: 15}))
             dispatch(setLatitude(props.data.latitude))
             dispatch(setLongitude(props.data.longitude))
             dispatch(setTemplate([props.data.latitude, props.data.longitude]))
+        } else {
+            reset()
         }
     }, [props.visible])
     useEffect(() => {
@@ -91,7 +93,7 @@ function TerritoryModal(props) {
                 : saveTerritoryAction({
                     territory: {...data, longitude: territory?.longitude, latitude: territory?.latitude},
                     isEditing: false,
-                    reset:reset({
+                    reset: reset({
                         title: "",
                         region: "",
                         code: "",

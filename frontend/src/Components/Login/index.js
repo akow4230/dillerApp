@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import shiftLogo from "../images/shiftLogo.jpg";
 import { UserLogIn } from "../../redux/reducers/LoginSlice";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import PhoneInput from "react-phone-number-input";

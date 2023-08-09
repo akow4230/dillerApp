@@ -151,7 +151,7 @@ function Clients(props) {
             multi: true,
             options: territory?.map(item => ({
                 value: item.id,
-                label: item.region,
+                label: item.title,
             })),
             // defaultValue: {value: '', label: ''},
             placeholder: 'City'

@@ -37,7 +37,7 @@ function ClientsModal(props) {
     useEffect(() => {
         if (props.isEditing && props.visible) {
             reset({
-                territory: {value: props.data.territory.id, label: props.data.territory.region},
+                territory: {value: props.data.territory.id, label: props.data.territory.title},
                 name: props.data.name,
                 address: props.data.address,
                 phone: props.data.phone,
@@ -159,7 +159,7 @@ function ClientsModal(props) {
                                                         {...field}
                                                         options={territory?.map(item => ({
                                                             value: item.id,
-                                                            label: item.region,
+                                                            label: item.title,
                                                         }))}
                                                         style={{width: 70}}
                                                         placeholder={'territory'}/>

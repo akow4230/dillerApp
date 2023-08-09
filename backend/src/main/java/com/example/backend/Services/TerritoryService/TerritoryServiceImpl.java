@@ -4,12 +4,11 @@ import com.example.backend.Entity.Territory;
 import com.example.backend.Payload.req.ReqEditTerritory;
 import com.example.backend.Payload.req.ReqTerritory;
 import com.example.backend.Repository.TerritoryRepo;
+import com.example.backend.Services.CompanyService.CompanyServiceImpl;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -76,6 +75,13 @@ public class TerritoryServiceImpl implements TerritoryService {
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Company info");
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex()); // Choose the color you want
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        Font headerFont = workbook.createFont();
+        headerFont.setFontHeightInPoints((short) 15);
+        headerFont.setColor(IndexedColors.WHITE.getIndex()); // Set font color for the header row
+        cellStyle.setFont(headerFont);
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("ID");
         row.createCell(1).setCellValue("Region");
@@ -84,6 +90,11 @@ public class TerritoryServiceImpl implements TerritoryService {
         row.createCell(4).setCellValue("Active");
         row.createCell(5).setCellValue("Longitude");
         row.createCell(6).setCellValue("Latitude");
+        for (int i = 0; i < 7; i++) {
+            row.getCell(i).setCellStyle(cellStyle);
+            sheet.autoSizeColumn(i); // Automatically adjust column width to fit content
+
+        }
         int counter = 1;
         for (Territory territory : territoryFilter) {
             Row dataRow = sheet.createRow(counter);
@@ -95,6 +106,7 @@ public class TerritoryServiceImpl implements TerritoryService {
             dataRow.createCell(4).setCellValue(territory.isActive()?"active":"No active");
             dataRow.createCell(5).setCellValue(territory.getLongitude());
             dataRow.createCell(6).setCellValue(territory.getLatitude());
+            CompanyServiceImpl.autoSizeColumn(sheet, dataRow);
         }
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

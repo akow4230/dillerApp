@@ -82,6 +82,7 @@ function CompanyProfile() {
         isDark={false}
         requestApi={"/api/v1/company/profile?page={page}&size={limit}"}
         columns={columns}
+        path={"company/profile"}
       />
     </div>
   );
