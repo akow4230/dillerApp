@@ -4,7 +4,6 @@ import {Link, Outlet, useLocation} from "react-router-dom";
 import {
     getSettings
 } from "../../redux/reducers/SettingsSlice";
-
 function Settings() {
     const dispatch = useDispatch();
     const {settingsArray, isLoading} = useSelector(

@@ -19,10 +19,9 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
     private String name;
     private String company;
-    @OneToOne
+    @ManyToOne
     private Territory territory;
     private String address;
     private String phone;

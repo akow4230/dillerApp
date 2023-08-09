@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     FullscreenControl,
@@ -34,6 +34,16 @@ function ClientsModal(props) {
     useEffect(() => {
         dispatch(fetchWeekdaysStart())
     }, [])
+    const defaultValues = {
+        territory: null,
+        name: "",
+        address: "",
+        phone: "",
+        tin: "",
+        companyName: "",
+        referencePoint: "",
+        category: null,
+    };
     useEffect(() => {
         if (props.isEditing && props.visible) {
             reset({
@@ -52,7 +62,8 @@ function ClientsModal(props) {
             dispatch(setLongitude(props.data.longitude));
             dispatch(setTemplate([props.data.latitude, props.data.longitude]));
         } else {
-            reset();
+            reset(defaultValues);
+            dispatch(setSelectedWeekdays([]));
         }
     }, [props.visible])
     useEffect(() => {
@@ -71,18 +82,10 @@ function ClientsModal(props) {
         return null;
     }
 
-    function handleSearchResult(event) {
-        const searchResultCoords = event.get('result')?.geometry?.getCoordinates(); // Use optional chaining here
-        if (searchResultCoords) {
-            dispatch(setMapState({center: searchResultCoords, zoom: 15}));
-        }
-    }
-
     function handleMapClick(event) {
         const coords = event.get('coords');
         dispatch({type: "clients/handleMapClick", payload: coords});
     }
-
 
     function handleMapClear() {
         dispatch({
