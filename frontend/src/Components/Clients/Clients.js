@@ -213,6 +213,7 @@ function Clients(props) {
                             requestApi={"/api/v1/client?page={page}&size={limit}"}
                             columns={columns}
                             filterParam={filterParam}
+                            path={"client"}
                         />
                     </div>
                 </div>

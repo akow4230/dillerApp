@@ -57,10 +57,24 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
     }, [searchParams,columns, currentPage, dispatch, isDark, pageSize, requestApi]);
     console.log(path)
     function getExcel() {
+        let category=[]
+        searchParams.category?.map(item=>{
+            category.push(item.value)
+        })
+        let weekDay=[]
+        searchParams.weekDay?.map(item=>{
+            weekDay.push(item.value)
+        })
+        let territory=[]
+        searchParams.territory?.map(item=>{
+            territory?.push(item?.value)
+        })
         axios
-            .get(`http://localhost:8080/api/v1/${path}/getExcel?active=${searchParams.active.value}&search=${searchParams.quickSearch}`, {
+            .get(`http://localhost:8080/api/v1/${path}/getExcel`, {
                 responseType: 'arraybuffer', headers: {
                     Authorization: localStorage.getItem('access_token')
+                },params:{
+                    active:searchParams.active?.value, quickSearch:searchParams.quickSearch, category:category.join(','), weekDay:weekDay.join(','), tin:searchParams.tin?.value, territory:territory.join(',')
                 }
             })
             .then((res) => {
