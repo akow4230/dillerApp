@@ -14,7 +14,7 @@ import {
 } from "react-yandex-maps";
 import {useDispatch, useSelector} from "react-redux";
 import {setOneClientMapModal, setEditData, setEditModalVisible} from "../../redux/reducers/ClientsSlice";
-import { Button, Dropdown } from 'react-bootstrap';
+import {Dropdown} from 'react-bootstrap';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {Modal} from 'react-bootstrap';
 import '../../Components/UniversalUI/Modal/index.css'
