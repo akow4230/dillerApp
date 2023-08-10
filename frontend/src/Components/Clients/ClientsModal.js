@@ -159,12 +159,14 @@ function ClientsModal(props) {
                                                 <>
                                                     <Select
                                                         {...field}
-                                                        options={territory?.map(item => ({
+                                                        options={territory?.filter(item => item.active).map(item => ({
                                                             value: item.id,
                                                             label: item.title,
                                                         }))}
-                                                        style={{width: 70}}
-                                                        placeholder={'territory'}/>
+                                                        style={{ width: 70 }}
+                                                        placeholder={'territory'}
+                                                    />
+
                                                 </>
                                             )}
                                         />
@@ -227,11 +229,11 @@ function ClientsModal(props) {
                                                 <>
                                                     <Select
                                                         {...field}
-                                                        options={categories?.map(item => ({
+                                                        options={categories?.filter(item => item.active).map(item => ({
                                                             value: item.id,
                                                             label: item.title,
                                                         }))}
-                                                        style={{width: 70}}
+                                                        style={{ width: 70 }}
                                                         placeholder={'category'}
                                                     />
                                                 </>

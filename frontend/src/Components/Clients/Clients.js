@@ -107,7 +107,17 @@ function Clients(props) {
             key: "dateOfRegistration",
             type: "str",
             show: true,
-            order: 9
+            order: 9,
+            render: (item) => {
+                const dateParts = item?.dateOfRegistration;
+
+                if (dateParts && dateParts.length === 3) {
+                    const formattedDate = `${dateParts[2].toString().padStart(2, '0')}.${dateParts[1].toString().padStart(2, '0')}.${dateParts[0]}`;
+                    return <p>{formattedDate}</p>;
+                }
+
+                return null; // Handle invalid dateOfRegistration format if necessary
+            }
         },{
             id: 10,
             title: "TIN",

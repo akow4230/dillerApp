@@ -45,7 +45,7 @@ function ClientUpdateButton(props) {
                        <EditIcon />Edit
                     </Dropdown.Item>
                     <Dropdown.Item onClick={()=>showLocation() } ><div><LocationOnIcon/>Location</div></Dropdown.Item>
-                    <Dropdown.Item ></Dropdown.Item>
+                    {/*<Dropdown.Item ></Dropdown.Item>*/}
                 </Dropdown.Menu>
             </Dropdown>
             <div className={'umodal'}>
@@ -58,10 +58,10 @@ function ClientUpdateButton(props) {
                     <Modal.Body>
                         <YMaps>
                             <Map
-                                humanDistance
+                                // humanDistance
                                 state={{ center: [editData?.latitude, editData?.longitude], zoom: 13 }}
                                 modules={['templateLayoutFactory']}
-                                style={{ width: '100%', height: '500px' }} // Adjust the size here
+                                style={{ width: '100%', height: '500px' }}
                             >
                                 <FullscreenControl options={{float: "left"}}/>
                                 <GeolocationControl options={{float: "right"}}/>
@@ -80,7 +80,7 @@ function ClientUpdateButton(props) {
                                         }}
                                         options={{
                                             preset: 'islands#blueIcon',
-                                            iconColor: '#00FF00',
+                                            iconColor: `${editData?.active?'#00FF00':'#FF0000'}`,
                                             draggable: false,
                                         }}
                                         modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
