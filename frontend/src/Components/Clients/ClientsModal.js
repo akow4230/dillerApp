@@ -123,7 +123,6 @@ function ClientsModal(props) {
         );
 
     }
-
     function selectWeekday(item, selected) {
         if (!clients.selectedWeekdays.includes(item)) {
             dispatch(pushWeekday(item))

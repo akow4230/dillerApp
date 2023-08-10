@@ -1,16 +1,21 @@
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Link, Outlet, useLocation} from "react-router-dom";
+import {Link, Outlet, useLocation, useNavigate} from "react-router-dom";
 import {
     getSettings
 } from "../../redux/reducers/SettingsSlice";
+
 function Settings() {
     const dispatch = useDispatch();
     const {settingsArray, isLoading} = useSelector(
         state => state.settings
     );
     const location = useLocation();
+    const navigate = useNavigate()
     useEffect(() => {
+        if (location.pathname === "/dashboard/settings") {
+            navigate("/dashboard/settings/company-profile")
+        }
         dispatch(getSettings());
     }, [dispatch]);
 
