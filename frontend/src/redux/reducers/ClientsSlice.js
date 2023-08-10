@@ -14,7 +14,8 @@ const initialState = {
     latitude: "",
     longitude: "",
     editData: {},
-    selectedWeekdays: []
+    selectedWeekdays: [],
+    clientMapModal:false
 };
 
 export const territorySlice = createSlice({
@@ -53,6 +54,9 @@ export const territorySlice = createSlice({
         },
         setEditData: (state, action) => {
             state.editData = action.payload
+        },
+        setOneClientMapModal:(state)=>{
+            state.clientMapModal=!state.clientMapModal
         },
         saveClientsAction: (state, action) => {
         },
@@ -100,6 +104,7 @@ export const {
     fetchClientsSuccess,
     setSelectedWeekdays,
     pushWeekday,
-    deleteWeekday
+    deleteWeekday,
+    setOneClientMapModal
 } = territorySlice.actions
 export default territorySlice.reducer;

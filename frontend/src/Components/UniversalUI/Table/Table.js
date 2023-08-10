@@ -30,15 +30,26 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
         searchParams
     } = useSelector((state) => state.table);
 
-    function getData(search) {
-        dispatch(getTableData({
-            url: requestApi,
-            page: currentPage,
-            size: pageSize,
-            columns: columns,
-            isDark: isDark,
-            search
-        }));
+    function getData(search, changePage=false) {
+        if(changePage){
+            dispatch(getTableData({
+                url: requestApi,
+                page: 1,
+                size: pageSize,
+                columns: columns,
+                isDark: isDark,
+                search
+            }));
+        }else {
+            dispatch(getTableData({
+                url: requestApi,
+                page: currentPage,
+                size: pageSize,
+                columns: columns,
+                isDark: isDark,
+                search
+            }));
+        }
     }
 
     useEffect(() => {

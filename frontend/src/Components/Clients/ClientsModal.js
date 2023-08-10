@@ -37,20 +37,20 @@ function ClientsModal(props) {
     useEffect(() => {
         if (props.isEditing && props.visible) {
             reset({
-                territory: {value: props.data.territory.id, label: props.data.territory.title},
-                name: props.data.name,
-                address: props.data.address,
-                phone: props.data.phone,
-                tin: props.data.tin,
-                companyName: props.data.company,
-                referencePoint: props.data.referencePoint,
-                category: {value: props.data.category.id, label: props.data.category.title}
+                territory: {value: props.data?.territory?.id, label: props.data?.territory?.title},
+                name: props.data?.name,
+                address: props.data?.address,
+                phone: props.data?.phone,
+                tin: props.data?.tin,
+                companyName: props.data?.company,
+                referencePoint: props.data?.referencePoint,
+                category: {value: props.data?.category?.id, label: props.data?.category?.title}
             });
-            dispatch(setSelectedWeekdays(props.data.weekDay));
-            dispatch(setMapState({center: [props.data.latitude, props.data.longitude], zoom: 15}));
-            dispatch(setLatitude(props.data.latitude));
-            dispatch(setLongitude(props.data.longitude));
-            dispatch(setTemplate([props.data.latitude, props.data.longitude]));
+            dispatch(setSelectedWeekdays(props.data?.weekDay));
+            dispatch(setMapState({center: [props.data?.latitude, props.data?.longitude], zoom: 15}));
+            dispatch(setLatitude(props.data?.latitude));
+            dispatch(setLongitude(props.data?.longitude));
+            dispatch(setTemplate([props.data?.latitude, props.data?.longitude]));
         } else {
             reset();
         }
@@ -251,7 +251,7 @@ function ClientsModal(props) {
                                                       <p style={item.name === "SATURDAY" || item.name === "SUNDAY" ? {color: "red"} : {color: "black"}}
                                                          className={"my-1"}>{item.name.substring(0, 3)}</p>
                                                       <input type="checkbox" className={"form-check"}
-                                                             checked={clients.selectedWeekdays.some(selectedItem => selectedItem.id === item.id)}
+                                                             checked={clients.selectedWeekdays?.some(selectedItem => selectedItem.id === item.id)}
                                                              onChange={(e) => selectWeekday(item, e.target.checked)}/>
                                                   </label>
                                               )}

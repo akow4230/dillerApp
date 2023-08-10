@@ -1,7 +1,6 @@
 package com.example.backend.Repository;
 
 import com.example.backend.Entity.Client;
-import com.example.backend.Payload.res.ResClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,9 +39,7 @@ public interface ClientRepo extends JpaRepository<Client, UUID> {
                (t.id IN :territoryIds)
              )        
        AND (
-                 LOWER(c.name) LIKE LOWER(concat('%', :search, '%'))
-             OR LOWER(c.address) LIKE LOWER(concat('%', :search, '%'))
-             OR LOWER(c.phone) LIKE LOWER(concat('%', :search, '%'))
+             LOWER(c.phone || '' || c.address || '' || c.name || ' '||c.tin || c.reference_point) LIKE LOWER(concat('%', :search, '%'))
          )
         AND(
            CASE

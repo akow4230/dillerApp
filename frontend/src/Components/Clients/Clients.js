@@ -1,7 +1,12 @@
 import React, {useEffect} from 'react';
 import ClientsModal from "./ClientsModal";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchClientsStart, setEditModalVisible, setModalVisible} from "../../redux/reducers/ClientsSlice";
+import {
+    fetchClientsStart,
+    setEditModalVisible,
+    setModalVisible,
+    setOneClientMapModal
+} from "../../redux/reducers/ClientsSlice";
 import {ToastContainer} from "react-toastify";
 import Table from "../UniversalUI/Table/Table";
 import {changeSearchParams} from "../../redux/reducers/TableSlice";
@@ -9,6 +14,7 @@ import {fetchCategoriesStart} from '../../redux/reducers/CustomerCategorySlice'
 import {fetchWeekdaysStart} from '../../redux/reducers/WeekDaySlice'
 import {fetchTerritoryStart} from "../../redux/reducers/TerritorySlice";
 import ClientUpdateButton from "./ClientUpdateButton";
+
 
 function Clients(props) {
     const dispatch = useDispatch();
@@ -102,14 +108,21 @@ function Clients(props) {
             type: "str",
             show: true,
             order: 9
+        },{
+            id: 10,
+            title: "TIN",
+            key: "tin",
+            type: "str",
+            show: true,
+            order: 10
         },
         {
-            id: 10,
+            id: 11,
             title: "Update",
             key: "update",
             type: "jsx",
             show: true,
-            order: 10,
+            order: 11,
             data: <ClientUpdateButton/>
         }
     ]
@@ -185,6 +198,7 @@ function Clients(props) {
                     <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add
                         Client
                     </button>
+
                 </div>
                 <hr/>
 
@@ -202,6 +216,7 @@ function Clients(props) {
                         />
                     </div>
                 </div>
+
             </div>
 
         </div>

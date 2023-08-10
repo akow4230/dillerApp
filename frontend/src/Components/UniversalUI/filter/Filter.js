@@ -10,6 +10,7 @@ function Filter(props) {
     const customStyles = {
         control: (provided) => ({
             ...provided,
+            marginTop:5,
             borderRadius: 8,
             minHeight: 15,
             border: '1px solid #d1d1d1',
@@ -25,49 +26,19 @@ function Filter(props) {
 
     const handleCityChange = (obj) => {
         const {name, value} = obj;
+        // set searchParams
         dispatch(changeSearchParams({
             ...searchParams,
             [name]: value,
         }))
-            dispatch(changeCurrentPage());
-            props.func({
+        // sent request
+        dispatch(changeCurrentPage());
+        props.func({
                 ...searchParams,
                 [name]: value,
-            })
+            }, true)
 
     };
-    // const param=[
-    //     {
-    //      id:1,
-    //      name:'active',
-    //      multi:false,
-    //      options:[
-    //          {value: '', label: 'All'},
-    //          {value: 'true', label: 'Active'},
-    //          {value: 'false', label: 'NoActive'}
-    //      ],
-    //      defaultValue:{value: '', label: 'All'},
-    //         placeholder:''
-    //     },
-    //     {
-    //         id:2,
-    //         name:'week',
-    //         multi:true,
-    //         options:[
-    //             {value: 'MONDAY', label: 'Monday'},
-    //             {value: 'TUESDAY', label: 'Tuesday'},
-    //             {value: 'WEDNESDAY', label: 'Wednesday'},
-    //             {value: 'THURSDAY', label: 'Thursday'},
-    //             {value: 'FRIDAY', label: 'Friday'},
-    //             {value: 'SATURDAY', label: 'Saturday'},
-    //         ],
-    //         defaultValue:[],
-    //         placeholder:'week days'
-    //
-    //     },
-    //
-    //  ]
-
 
 
     const quickSearch = (

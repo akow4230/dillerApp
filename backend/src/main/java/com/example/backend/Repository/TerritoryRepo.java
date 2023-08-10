@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface TerritoryRepo extends JpaRepository<Territory, UUID> {
     @Query(value = """
-            SELECT * from territory where lower(territory.title||''||territory.region) like lower(concat('%',:search,'%')) and active=:active
+            SELECT * from territory where lower((territory.title||''||territory.region) ||''|| territory.code) like lower(concat('%',:search,'%')) and active=:active
             """, nativeQuery = true)
     Page<Territory> findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(Boolean active, String search, PageRequest pageRequest);
 
