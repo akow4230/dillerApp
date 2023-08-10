@@ -39,7 +39,7 @@ public interface ClientRepo extends JpaRepository<Client, UUID> {
                (t.id IN :territoryIds)
              )        
        AND (
-             LOWER(c.phone || '' || c.address || '' || c.name || ' '||c.tin || c.reference_point) LIKE LOWER(concat('%', :search, '%'))
+             LOWER(c.phone || '' || c.address || '' || c.name || ' '||c.tin || c.reference_point || ''||c.company) LIKE LOWER(concat('%', :search, '%'))
          )
         AND(
            CASE

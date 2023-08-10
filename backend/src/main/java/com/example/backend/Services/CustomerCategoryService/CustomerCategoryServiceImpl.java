@@ -50,7 +50,7 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
             allTerritories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderById(search, pageRequest);
             return allTerritories;
         }
-        allTerritories = customerCategoryRepo.findAllByActiveAndTitleContainingIgnoreCase(Boolean.valueOf(active), search, pageRequest);
+        allTerritories = customerCategoryRepo.findBySearch(Boolean.valueOf(active), search, pageRequest);
         return allTerritories;
     }
 
