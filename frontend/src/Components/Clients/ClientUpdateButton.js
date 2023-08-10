@@ -17,6 +17,7 @@ import {setOneClientMapModal, setEditData, setEditModalVisible} from "../../redu
 import { Button, Dropdown } from 'react-bootstrap';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {Modal} from 'react-bootstrap';
+import '../../Components/UniversalUI/Modal/index.css'
 function ClientUpdateButton(props) {
     const dispatch = useDispatch();
     const {clientMapModal, editData } = useSelector((state) => state.clients);
@@ -58,7 +59,7 @@ function ClientUpdateButton(props) {
                         <YMaps>
                             <Map
                                 humanDistance
-                                state={{ center: [editData?.latitude, editData?.longitude], zoom: 12 }}
+                                state={{ center: [editData?.latitude, editData?.longitude], zoom: 13 }}
                                 modules={['templateLayoutFactory']}
                                 style={{ width: '100%', height: '500px' }} // Adjust the size here
                             >

@@ -63,6 +63,8 @@ public class AutoRun implements CommandLineRunner {
             userRepo.save(user);
             Territory territory = Territory.builder()
                     .title("Bukhara city, Muhammad Iqbol district")
+                    .region("territory region 1")
+                    .code("T0001")
                     .build();
             Territory savedTerritory = territoryRepo.save(territory);
             Company company = Company.builder()

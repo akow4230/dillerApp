@@ -57,10 +57,10 @@ public class TerritoryServiceImpl implements TerritoryService {
     private Page<Territory> getTerritoryFilter(String active, String search, PageRequest pageRequest) {
         Page<Territory> allTerritories = null;
         if (Objects.equals(active, "")) {
-            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(search, search, pageRequest);
+            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCase(search, search,search, pageRequest);
             return allTerritories;
         }
-        allTerritories = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(Boolean.valueOf(active), search, pageRequest);
+        allTerritories = territoryRepo.findWhitSearch(Boolean.valueOf(active), search, pageRequest);
         return allTerritories;
     }
 
