@@ -34,9 +34,8 @@ public class CompanyServiceImpl implements CompanyService {
     private final AuthService authService;
 
     @Override
-    public HttpEntity<?> getInfo(String accessToken) {
-        User decode = authService.decode(accessToken);
-        DashboardProjection dashboardInfo = companyRepo.getDashboardInfo(decode.getId());
+    public HttpEntity<?> getInfo(User user) {
+        DashboardProjection dashboardInfo = companyRepo.getDashboardInfo(user.getId());
         System.out.println(dashboardInfo);
         return ResponseEntity.ok(dashboardInfo);
     }

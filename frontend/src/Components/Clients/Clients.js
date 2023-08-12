@@ -60,12 +60,11 @@ function Clients(props) {
         {
             id: 3,
             title: "territory",
-            key: "territory.title",
+            key: "territory",
             type: "str",
             show: true,
             order: 3,
             render: (item) => {
-                // console.log(item.territory)
                 return <p>{item?.territory?.title}</p>
             }
         },

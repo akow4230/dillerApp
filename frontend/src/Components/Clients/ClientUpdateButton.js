@@ -27,7 +27,7 @@ function ClientUpdateButton(props) {
         dispatch(setEditModalVisible(true))
     }
 
-    console.log(props.data.name)
+    // console.log(props.data.name)
 
     function showLocation(){
         dispatch(setEditData(props.data))

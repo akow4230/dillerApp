@@ -7,7 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 
 public interface CompanyService {
-    HttpEntity<?> getInfo(String accessToken);
+    HttpEntity<?> getInfo(User user);
 
     HttpEntity<?> getCompanyProfile(Integer size, Integer page, User user, String quickSearch);
 

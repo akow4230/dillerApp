@@ -29,9 +29,9 @@ function* watchGetTableData(action) {
         territory?.push(item?.value)
     })
     try {
-        console.log(action.payload.url)
+        // console.log(action.payload.url)
         const response = yield call(() => instance(action.payload.url, "GET", null, {active:action?.payload?.search?.active?.value, quickSearch:action.payload.search.quickSearch, category:category.join(','), weekDay:weekDay.join(','), tin:action.payload.search.tin?.value, territory:territory.join(',')}));
-        console.log(response.data)
+        // console.log(response.data)
         if (response.data === "Invalid token" || response.data === 401){
             toast.error("Authorization problem")
             yield put(navigateTo("/404"))

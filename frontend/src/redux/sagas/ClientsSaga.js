@@ -50,7 +50,7 @@ function* saveClientsAsync(action) {
         yield put(setModalVisible(false));
         yield put(setEditModalVisible(false));
     } catch (error) {
-        console.log(error.message)
+        // console.log(error.message)
         toast.error("An error occurred. Please try again later.");
     }
 }
@@ -85,7 +85,7 @@ function* fetchClientsSaga() {
     try {
         const response = yield call(() => instance("/api/v1/client", "GET"))
         yield put(fetchClientsSuccess(response.data.content));
-        console.log(response.data.content)
+        // console.log(response.data.content)
     } catch (error) {
         yield put(fetchClientsFailure(error.message));
     }

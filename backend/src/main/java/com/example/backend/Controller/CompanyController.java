@@ -20,8 +20,8 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @GetMapping("/dashboard")
-    public HttpEntity<?> getDashboard(@RequestHeader("Authorization") String authorization) {
-        return companyService.getInfo(authorization);
+    public HttpEntity<?> getDashboard(@CurrentUser User user) {
+        return companyService.getInfo(user);
     }
 
     @GetMapping("/profile")
