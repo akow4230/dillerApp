@@ -93,12 +93,12 @@ function Clients(props) {
         }, {
             id: 8,
             title: "category",
-            key: "category.region",
+            key: "category.title",
             type: "str",
             show: true,
             order: 8,
-            render: (item) => {
-                // console.log(item?.category.region)
+            render: (item, show) => {
+                console.log(show)
                 return <p>{item?.category?.title}</p>
             }
         }, {
@@ -110,7 +110,6 @@ function Clients(props) {
             order: 9,
             render: (item) => {
                 const dateParts = item?.dateOfRegistration;
-
                 if (dateParts && dateParts.length === 3) {
                     const formattedDate = `${dateParts[2].toString().padStart(2, '0')}.${dateParts[1].toString().padStart(2, '0')}.${dateParts[0]}`;
                     return <p>{formattedDate}</p>;
@@ -118,7 +117,7 @@ function Clients(props) {
 
                 return null; // Handle invalid dateOfRegistration format if necessary
             }
-        },{
+        }, {
             id: 10,
             title: "TIN",
             key: "tin",
@@ -223,6 +222,7 @@ function Clients(props) {
                             requestApi={"/api/v1/client?page={page}&size={limit}"}
                             columns={columns}
                             filterParam={filterParam}
+                            path={"client"}
                         />
                     </div>
                 </div>

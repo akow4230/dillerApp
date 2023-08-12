@@ -30,8 +30,8 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
         searchParams
     } = useSelector((state) => state.table);
 
-    function getData(search, changePage=false) {
-        if(changePage){
+    function getData(search, changePage = false) {
+        if (changePage) {
             dispatch(getTableData({
                 url: requestApi,
                 page: 1,
@@ -40,7 +40,7 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                 isDark: isDark,
                 search
             }));
-        }else {
+        } else {
             dispatch(getTableData({
                 url: requestApi,
                 page: currentPage,
@@ -54,13 +54,27 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
 
     useEffect(() => {
         getData(searchParams);
-    }, [searchParams,columns, currentPage, dispatch, isDark, pageSize, requestApi]);
-    console.log(path)
+    }, [searchParams, columns, currentPage, dispatch, isDark, pageSize, requestApi]);
+
     function getExcel() {
+        let category=[]
+        searchParams.category?.map(item=>{
+            category.push(item.value)
+        })
+        let weekDay=[]
+        searchParams.weekDay?.map(item=>{
+            weekDay.push(item.value)
+        })
+        let territory=[]
+        searchParams.territory?.map(item=>{
+            territory?.push(item?.value)
+        })
         axios
-            .get(`http://localhost:8080/api/v1/${path}/getExcel?active=${searchParams.active.value}&search=${searchParams.quickSearch}`, {
+            .get(`http://localhost:8080/api/v1/${path}/getExcel`, {
                 responseType: 'arraybuffer', headers: {
                     Authorization: localStorage.getItem('access_token')
+                },params:{
+                    active:searchParams.active?.value, quickSearch:searchParams.quickSearch, category:category.join(','), weekDay:weekDay.join(','), tin:searchParams.tin?.value, territory:territory.join(',')
                 }
             })
             .then((res) => {
@@ -69,7 +83,7 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
 
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = path+'.xlsx';
+                a.download = path + '.xlsx';
                 a.click();
 
                 window.URL.revokeObjectURL(url);
@@ -84,24 +98,28 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
             data: <TableModal/>
         }
     ];
+
+    function getValueByKeys(obj, keys) {
+        const keysArray = keys.split("+").map((key) => key.trim());
+        const values = keysArray.map((key) =>
+            key.split('.').reduce((acc, k) => (acc && acc[k]) || '', obj)
+        );
+        return values.join(" ");
+    }
+
     return (
         <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
             <Filter param={filterParam} func={getData}/>
             <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
-                <button className={"btn btn-light"} onClick={() => setSettings(!settings)} type={settings ? 'primary' : 'dashed'}><i
-                    className="fa-solid fa-sliders" style={{zIndex:"auto"}}></i></button>
+                <button className={"btn btn-light"} onClick={() => setSettings(!settings)}><i
+                    className="fa-solid fa-sliders" style={{zIndex: "auto"}}></i></button>
                 {
                     settings ? <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: 10
+                        gap: 10,
+                        overflowX: "auto"
                     }}>
-                        <button className={"btn btn-light d-flex align-items-center gap-2"} style={{width:"180px"}} type={'dashed'} onClick={() => dispatch(toggleModal())}><i
-                            className="fa-solid fa-gears"></i>Menu Control</button>
-                        {/*<MaterialUISwitch*/}
-                        {/*    checked={darkTheme}*/}
-                        {/*    onChange={(e) => dispatch(changeTheme(e.target.checked))}*/}
-                        {/*/>*/}
                         <Button type={'dashed'} onClick={() => dispatch(toggleModal())}><i
                             className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
                         {
@@ -157,15 +175,15 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                                 },
                             ]}
                         />
-                        <Button type={'dashed'} onClick={getExcel}  style={{ zIndex: "auto !important"}}><i
+                        <Button type={'dashed'} onClick={getExcel} style={{zIndex: "auto !important"}}><i
                             className="fa-solid fa-table"></i> &nbsp; Excel</Button>
                     </div>
                 }
             </div>
-            <div className={darkTheme ? 'bottomUI-dark' : 'bottomUI'} style={{overflowY: 'auto'}}>
-                <div className={darkTheme ? 'my-table-dark' : 'my-table'}>
-                    <table className={darkTheme ? 'table table-dark table-striped' : 'table table-bordered'}>
-                        <thead style={{position:"sticky", top:"-1"}}>
+            <div className={'bottomUI'} style={{overflowY: 'auto'}}>
+                <div className={'my-table'}>
+                    <table className="table">
+                        <thead style={{position: "sticky", top: "-1"}}>
                         <tr>
                             {
                                 data?.columns?.map((item) => {
@@ -181,14 +199,14 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                             data?.data?.map(item => <tr key={item?.id}>
                                 {
                                     data?.columns?.map((col) => <td key={col?.id}>
-                                        {col.render ? col.render(item) :
-                                            col?.show &&
-                                            col.type === 'jsx' ? React.cloneElement(col.data, {data: item}) : col.show &&
-                                                <p>{item[col?.key]}</p>
-
-                                        }
                                         {
-                                        }</td>)
+                                            col?.show &&
+                                            col.type === 'jsx' ? React.cloneElement(col.data, {
+                                                data: item
+                                            }) : col.show &&
+                                                <p>{getValueByKeys(item, col.key)}</p>
+                                        }
+                                    </td>)
                                 }
                             </tr>)
                         }

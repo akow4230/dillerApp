@@ -2,11 +2,15 @@ package com.example.backend.Controller;
 
 import com.example.backend.DTO.ClientDTO;
 import com.example.backend.Services.ClientService.ClientService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @CrossOrigin
@@ -24,17 +28,36 @@ public class ClientController {
                                    @RequestParam(defaultValue = "5") Integer size,
                                    @RequestParam(defaultValue = "") String category,
                                    @RequestParam(defaultValue = "") String weekDay,
-                                    @RequestParam(defaultValue = "") String  territory,
-                                   @RequestParam(defaultValue = "") String  tin
+                                   @RequestParam(defaultValue = "") String territory,
+                                   @RequestParam(defaultValue = "") String tin
     ) {
-        return clientService.getClients(active, quickSearch, page, size, category, weekDay,territory, tin);
+        return clientService.getClients(active, quickSearch, page, size, category, weekDay, territory, tin);
     }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @GetMapping("/getExcel")
+    public ResponseEntity<Resource> getExcel(HttpServletResponse response,
+                                             @RequestParam(defaultValue = "") String active,
+                                             @RequestParam(defaultValue = "") String quickSearch,
+                                             @RequestParam(defaultValue = "") String category,
+                                             @RequestParam(defaultValue = "") String weekDay,
+                                             @RequestParam(defaultValue = "") String territory,
+                                             @RequestParam(defaultValue = "") String tin
+    ) throws IOException {
+        System.out.println(active);
+        System.out.println(quickSearch);
+        System.out.println(category);
+        System.out.println(weekDay);
+        System.out.println(territory);
+        System.out.println(tin);
+        return clientService.getExcel(response, active, quickSearch, category, weekDay, territory, tin);
+    }
+
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public HttpEntity<?> getAllClient(
     ) {
-//        System.out.println(7);
         return clientService.getAllClients();
     }
 
@@ -43,6 +66,7 @@ public class ClientController {
     public HttpEntity<?> addClient(@RequestBody ClientDTO clientDTO) {
         return clientService.addClient(clientDTO);
     }
+
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/{id}")
     public void editClient(@RequestBody ClientDTO clientDTO, @PathVariable UUID id) {
