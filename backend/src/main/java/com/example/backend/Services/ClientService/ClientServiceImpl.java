@@ -9,6 +9,7 @@ import com.example.backend.Repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -67,23 +68,29 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public HttpEntity<?> addClient(ClientDTO clientDTO) {
-        Client client = Client.builder()
-                .name(clientDTO.getName())
-                .company(clientDTO.getCompanyName())
-                .territory(territoryRepo.findById(clientDTO.getTerritory()).get())
-                .address(clientDTO.getAddress())
-                .phone(clientDTO.getPhone())
-                .referencePoint(clientDTO.getReferencePoint())
-                .tin(clientDTO.getTin())
-                .category(categoryRepo.findById(clientDTO.getCategory()).get())
-                .active(clientDTO.isActive())
-                .dateOfRegistration(LocalDate.now())
-                .weekDay(clientDTO.getWeekdays())
-                .longitude(clientDTO.getLongitude())
-                .latitude(clientDTO.getLatitude())
-                .build();
-        clientRepo.save(client);
-        return ResponseEntity.ok("Client Saved successfully");
+        System.out.println(clientDTO.isActive());
+        try {
+            Client client = Client.builder()
+                    .name(clientDTO.getName())
+                    .company(clientDTO.getCompanyName())
+                    .territory(territoryRepo.findById(clientDTO.getTerritory()).get())
+                    .address(clientDTO.getAddress())
+                    .phone(clientDTO.getPhone())
+                    .referencePoint(clientDTO.getReferencePoint())
+                    .tin(clientDTO.getTin())
+                    .category(categoryRepo.findById(clientDTO.getCategory()).get())
+                    .active(clientDTO.isActive())
+                    .dateOfRegistration(LocalDate.now())
+                    .weekDay(clientDTO.getWeekdays())
+                    .longitude(clientDTO.getLongitude())
+                    .latitude(clientDTO.getLatitude())
+                    .build();
+            clientRepo.save(client);
+            return ResponseEntity.ok("Client Saved successfully");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while saving the client");
+        }
     }
 
     @Override
@@ -101,6 +108,7 @@ public class ClientServiceImpl implements ClientService {
         currentClient.setWeekDay(clientDTO.getWeekdays());
         currentClient.setLongitude(clientDTO.getLongitude());
         currentClient.setLatitude(clientDTO.getLatitude());
+        currentClient.setActive(clientDTO.isActive());
         clientRepo.save(currentClient);
     }
 }

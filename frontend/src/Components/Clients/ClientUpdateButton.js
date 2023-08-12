@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import {
     FullscreenControl,
@@ -14,61 +14,80 @@ import {
 } from "react-yandex-maps";
 import {useDispatch, useSelector} from "react-redux";
 import {setOneClientMapModal, setEditData, setEditModalVisible} from "../../redux/reducers/ClientsSlice";
-import {Dropdown} from 'react-bootstrap';
+import {Button, Dropdown} from 'react-bootstrap';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {Modal} from 'react-bootstrap';
-import '../../Components/UniversalUI/Modal/index.css'
+
 function ClientUpdateButton(props) {
     const dispatch = useDispatch();
-    const {clientMapModal, editData } = useSelector((state) => state.clients);
+    const {clientMapModal, editData} = useSelector((state) => state.clients);
 
     function editClientData() {
         dispatch(setEditData(props.data))
         dispatch(setEditModalVisible(true))
     }
 
-    console.log(props.data.name)
-
-    function showLocation(){
+    function showLocation() {
         dispatch(setEditData(props.data))
         dispatch(setOneClientMapModal())
     }
 
+    const [isYMapsLoaded, setIsYMapsLoaded] = useState(false);
+
+    useEffect(() => {
+        if (clientMapModal) {
+            const script = document.createElement('script');
+            script.src = 'https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=en_US';
+            script.async = true;
+            script.onload = () => {
+
+                setIsYMapsLoaded(true);
+            };
+            document.head.appendChild(script);
+
+            return () => {
+                document.head.removeChild(script);
+            };
+        }
+    }, [clientMapModal]);
+
     return (
         <div>
-            <Dropdown  >
+            <Dropdown>
                 <Dropdown.Toggle variant="primary" id="dropdown-basic">
                     tools
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                    <Dropdown.Item   onClick={editClientData}>
-                       <EditIcon />Edit
+                    <Dropdown.Item onClick={editClientData}>
+                        <EditIcon/>Edit
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={()=>showLocation() } ><div><LocationOnIcon/>Location</div></Dropdown.Item>
-                    {/*<Dropdown.Item ></Dropdown.Item>*/}
+                    <Dropdown.Item onClick={showLocation}>
+                        <div><LocationOnIcon/>Location</div>
+                    </Dropdown.Item>
+                    <Dropdown.Item></Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             <div className={'umodal'}>
-                <Modal show={clientMapModal} onHide={
-                    ()=>dispatch(setOneClientMapModal())
-                } centered>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{editData?.name}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <YMaps>
-                            <Map
-                                // humanDistance
-                                state={{ center: [editData?.latitude, editData?.longitude], zoom: 13 }}
-                                modules={['templateLayoutFactory']}
-                                style={{ width: '100%', height: '500px' }}
-                            >
-                                <FullscreenControl options={{float: "left"}}/>
-                                <GeolocationControl options={{float: "right"}}/>
-                                <TrafficControl options={{float: "right"}}/>
-                                <ZoomControl options={{float: "left"}}/>
-                                <TypeSelector options={{float: "right"}}/>
-                                <SearchControl options={{float: "left"}}/>
+                {isYMapsLoaded && (
+                    <Modal show={clientMapModal} onHide={() => {
+                        dispatch(setOneClientMapModal())
+                        setIsYMapsLoaded(false)
+                    }} centered>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{editData?.name}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <YMaps>
+                                <Map
+                                    state={{center: [editData?.latitude, editData?.longitude], zoom: 12}}
+                                    style={{width: '100%', height: '500px'}}
+                                >
+                                    <FullscreenControl options={{float: "left"}}/>
+                                    <GeolocationControl options={{float: "right"}}/>
+                                    <TrafficControl options={{float: "right"}}/>
+                                    <ZoomControl options={{float: "left"}}/>
+                                    <TypeSelector options={{float: "right"}}/>
+                                    <SearchControl options={{float: "left"}}/>
 
                                     <Placemark
                                         key={editData?.id}
@@ -85,16 +104,11 @@ function ClientUpdateButton(props) {
                                         }}
                                         modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
                                     />
-
-
-
-
-
-
-                            </Map>
-                        </YMaps>
-                    </Modal.Body>
-                </Modal>
+                                </Map>
+                            </YMaps>
+                        </Modal.Body>
+                    </Modal>
+                )}
             </div>
         </div>
 

@@ -22,6 +22,7 @@ import {
 } from '../../redux/reducers/TerritorySlice';
 import "./styles.css"
 import {ToastContainer, toast} from "react-toastify";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 function TerritoryModal(props) {
     const dispatch = useDispatch();
@@ -113,11 +114,14 @@ function TerritoryModal(props) {
                         background: "#6690a7",
                         color: "white",
                         display: "flex",
+                        justifyContent:"space-between",
                         alignItems: "center",
                         paddingLeft: "20px",
+                        paddingRight: "20px",
                         paddingTop: "10px"
                     }}>
                         <p>{props.action}</p>
+                        <button style={{background:"none", border:"none"}} onClick={()=>props.onClose()}><CancelIcon /></button>
                     </header>
                     <div style={{display: "flex"}}>
                         <div className="left-side w-50 p-5">

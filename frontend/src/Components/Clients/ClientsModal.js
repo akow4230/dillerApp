@@ -22,7 +22,7 @@ import "../Territory/styles.css"
 import {ToastContainer} from "react-toastify";
 import {fetchWeekdaysStart} from "../../redux/reducers/WeekDaySlice";
 import Select from "react-select";
-
+import CancelIcon from '@mui/icons-material/Cancel';
 function ClientsModal(props) {
     const dispatch = useDispatch();
     const clients = useSelector((state) => state.clients);
@@ -140,11 +140,14 @@ function ClientsModal(props) {
                         background: "#6690a7",
                         color: "white",
                         display: "flex",
+                        justifyContent:"space-between",
                         alignItems: "center",
                         paddingLeft: "20px",
+                        paddingRight: "20px",
                         paddingTop: "10px"
                     }}>
                         <p>{props.action}</p>
+                        <button style={{background:"none", border:"none"}} onClick={()=>props.onClose()}><CancelIcon /></button>
                     </header>
                     <div style={{display: "flex"}}>
                         <div className="left-side w-75 py-4" style={{paddingLeft: "50px"}}>
@@ -200,6 +203,12 @@ function ClientsModal(props) {
                                         TIN
                                         <input type="text"
                                                className={"form-control my-2"} {...register("tin")} />
+                                    </label>
+                                    <br/>
+                                    <label style={{width: "300px", display:"flex", alignItems:"center", gap:"10px"}}>
+                                        Active
+                                        <input type="checkbox"
+                                               className={"form-check my-2"} {...register("active")} />
                                     </label>
                                     <br/>
                                 </div>
