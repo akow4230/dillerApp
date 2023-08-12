@@ -38,12 +38,16 @@ function* saveClientsAsync(action) {
                 category:data.category.value,
                 weekdays:data.weekdays,
                 longitude,
-                latitude
+                latitude,
+                active:data.active
             }
         );
+        console.log(response)
         if (response!==undefined&&response.data===401){
             toast.error("Authorization problem")
             yield put(navigateTo("/404"))
+        }else if(response?.error){
+            throw new Error("Unique error")
         }
         yield put(resetTerritory());
         toast.success(`Client ${isEditing ? "edited" : "saved"} successfully`);

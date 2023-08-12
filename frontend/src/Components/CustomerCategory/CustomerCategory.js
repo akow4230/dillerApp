@@ -17,7 +17,8 @@ function CustomerCategory(props) {
     const elements = [{
         name: "Title*",
         type: "text",
-        key: "title"
+        key: "title",
+        required: true
     },
         {
             name: "Description",
