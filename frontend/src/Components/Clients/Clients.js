@@ -60,7 +60,7 @@ function Clients(props) {
         {
             id: 3,
             title: "territory",
-            key: "territory",
+            key: "territory.title",
             type: "str",
             show: true,
             order: 3,
@@ -97,14 +97,13 @@ function Clients(props) {
             show: true,
             order: 8,
             render: (item, show) => {
-                console.log(show)
                 return <p>{item?.category?.title}</p>
             }
         }, {
             id: 9,
             title: "dateOfRegistration",
             key: "dateOfRegistration",
-            type: "str",
+            type: "date",
             show: true,
             order: 9,
             render: (item) => {
@@ -114,7 +113,7 @@ function Clients(props) {
                     return <p>{formattedDate}</p>;
                 }
 
-                return null; // Handle invalid dateOfRegistration format if necessary
+                return null;
             }
         }, {
             id: 10,

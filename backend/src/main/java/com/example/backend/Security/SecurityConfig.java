@@ -1,6 +1,5 @@
 package com.example.backend.Security;
 
-import com.example.backend.Entity.User;
 import com.example.backend.Repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +33,8 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        auth->auth
+                        auth -> auth
+                                .requestMatchers("/api/v1/bot").permitAll()
                                 .requestMatchers("/api/v1/auth/register").permitAll()
                                 .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/v1/auth/refresh").permitAll()
@@ -49,10 +49,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> {
-
-            return usersRepository.findByPhone(username).orElseThrow();
-        };
+        return username -> usersRepository.findByPhone(username).orElseThrow();
     }
 
     @Bean

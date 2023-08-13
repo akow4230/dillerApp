@@ -47,7 +47,6 @@ function App() {
         const handleStorageChange = (event) => {
             if (!localStorage.getItem("access_token")) {
                 navigate("/");
-                console.log("Hello")
             } else {
                 checkSecurity();
             }

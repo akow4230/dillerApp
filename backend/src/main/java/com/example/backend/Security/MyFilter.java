@@ -31,10 +31,10 @@ public class MyFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String token = request.getHeader("Authorization");
         String requestPath = request.getRequestURI();
-        if (requestPath.equals("/api/v1/auth/login") || requestPath.equals("/api/v1/auth/access") || requestPath.equals("/api/v1/auth/refresh")) {
+        if (requestPath.equals("/api/v1/bot") || requestPath.equals("/api/v1/auth/login") || requestPath.equals("/api/v1/auth/access") || requestPath.equals("/api/v1/auth/refresh")) {
             try {
                 filterChain.doFilter(request, response);
-            }catch (Exception e){
+            } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
                 response.getWriter().write("Invalid token");
                 response.getWriter().flush();
