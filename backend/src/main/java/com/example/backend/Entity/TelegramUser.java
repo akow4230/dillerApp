@@ -24,8 +24,15 @@ public class TelegramUser {
     @Enumerated(value = EnumType.STRING)
     private BotState state;
     private Integer messageId;
-    @Transient
     private int currentPage;
+    private Integer customCategoryId;
+    private UUID territoryId;
+    private String clientPhone;
+    private String clientAddress;
+    private String clientInn;
+    private Double clientLongitude;
+    private Double clientLatitude;
+    private String clientName;
     public TelegramUser(Long chatId, BotState state) {
         this.chatId = chatId;
         this.state = state;

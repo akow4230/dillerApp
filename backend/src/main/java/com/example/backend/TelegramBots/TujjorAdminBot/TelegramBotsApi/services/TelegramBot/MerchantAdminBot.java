@@ -10,8 +10,7 @@ import com.example.backend.Repository.ClientRepo;
 import com.example.backend.Repository.CustomerCategoryRepo;
 import com.example.backend.Repository.TelegramUserRepo;
 import com.example.backend.Repository.TerritoryRepo;
-import com.example.backend.TelegramBots.TujjorAdminBot.TelegramBotsApi.entiy.MockData.MockData;
-import com.example.backend.TelegramBots.TujjorAdminBot.TelegramBotsApi.entiy.PageNation;
+import com.example.backend.TelegramBots.TujjorAdminBot.TelegramBotsApi.entity.PageNation;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -72,25 +71,28 @@ public class MerchantAdminBot implements TelegramWebhookBot {
                     PageRequest pageRequest = PageRequest.of(telegramUser.getCurrentPage(), 10);
                     sendSelectCustomCategoryMenu(chatId, pageRequest);
                 } else if (telegramUser.getState().equals(BotState.ENTER_CLIENT_NAME)) {
-                    MockData.client.setName(message.getText());
+                    telegramUser.setClientName(message.getText());
+                    changeData(telegramUser);
                     sendMessageForGetClientAddress(chatId);
                 } else if (telegramUser.getState().equals(BotState.ENTER_CLIENT_ADDRESS)) {
-                    MockData.client.setAddress(message.getText());
+                    telegramUser.setClientAddress(message.getText());
+                    changeData(telegramUser);
                     sendMsgForGetPhoneNumber(chatId);
                 } else if (telegramUser.getState().equals(BotState.ENTER_CLIENT_PHONE)) {
-                    MockData.client.setPhone(message.getText());
+                    telegramUser.setClientPhone(message.getText());
+                    changeData(telegramUser);
                     sendMsgForGetClientINN(chatId);
                 } else if (telegramUser.getState().equals(BotState.ENTER_CLIENT_INN)) {
-                    MockData.client.setInn(message.getText());
+                    telegramUser.setClientInn(message.getText());
+                    changeData(telegramUser);
                     sendLocationForGetClientLocation(chatId);
                 }
             } else if (message.hasLocation()) {
                 if (telegramUser.getState().equals(BotState.ENTER_CLIENT_LOCATION)) {
                     Location location = message.getLocation();
-                    Double longitude = location.getLongitude();
-                    Double latitude = location.getLatitude();
-                    MockData.client.setLongitude(longitude);
-                    MockData.client.setLatitude(latitude);
+                    telegramUser.setClientLatitude(location.getLatitude());
+                    telegramUser.setClientLongitude(location.getLongitude());
+                    changeData(telegramUser);
                     saveClient(chatId);
                 }
             }
@@ -104,8 +106,9 @@ public class MerchantAdminBot implements TelegramWebhookBot {
                 } else if (data.equals(BotCallBackData.PAGE_NATION_NEXT.name())) {
                     sendSelectCustomCategoryMenu(chatId, pageNationNext(chatId));
                 } else {
-                    MockData.client.setCustomCategoryId(Integer.valueOf(data));
+                    telegramUser.setCustomCategoryId(Integer.valueOf(data));
                     telegramUser.setCurrentPage(0);
+                    changeData(telegramUser);
                     execute.send(new DeleteMessage(chatId.toString(), telegramUser.getMessageId()));
                     sendClientTerritoryMenu(chatId, PageRequest.of(telegramUser.getCurrentPage(), 10));
                 }
@@ -115,8 +118,9 @@ public class MerchantAdminBot implements TelegramWebhookBot {
                 } else if (data.equals(BotCallBackData.PAGE_NATION_NEXT.name())) {
                     sendClientTerritoryMenu(chatId, pageNationNext(chatId));
                 } else {
-                    MockData.client.setTerritoryId(UUID.fromString(data));
+                    telegramUser.setTerritoryId(UUID.fromString(data));
                     telegramUser.setCurrentPage(0);
+                    changeData(telegramUser);
                     execute.send(new DeleteMessage(chatId.toString(), telegramUser.getMessageId()));
                     sendMessageForGetClientName(chatId);
                 }
@@ -124,21 +128,27 @@ public class MerchantAdminBot implements TelegramWebhookBot {
         }
     }
 
+    private void changeData(TelegramUser telegramUser) {
+        telegramUserRepo.save(telegramUser);
+    }
+
     @Transactional
     public void saveClient(Long chatId) {
         try {
-            CustomerCategory customerCategory = customerCategoryRepo.findById(MockData.client.getCustomCategoryId()).orElseThrow();
-            Territory territory = territoryRepo.findById(MockData.client.getTerritoryId()).orElseThrow();
+            CustomerCategory customerCategory = customerCategoryRepo.findById(telegramUser.getCustomCategoryId()).orElseThrow();
+            Territory territory = territoryRepo.findById(telegramUser.getTerritoryId()).orElseThrow();
             clientRepo.save(Client.builder()
                     .category(customerCategory)
                     .territory(territory)
-                    .name(MockData.client.getName())
-                    .phone(MockData.client.getPhone())
-                    .longitude(MockData.client.getLongitude())
-                    .latitude(MockData.client.getLatitude())
-                    .tin(MockData.client.getInn())
-                    .address(MockData.client.getAddress())
+                    .name(telegramUser.getClientName())
+                    .phone(telegramUser.getClientPhone())
+                    .longitude(telegramUser.getClientLongitude())
+                    .latitude(territory.getLatitude())
+                    .tin(telegramUser.getClientInn())
+                    .address(telegramUser.getClientAddress())
                     .dateOfRegistration(LocalDate.now())
+                    .referencePoint("")
+                    .company("")
                     .build());
             execute.send(SendMessage.builder()
                     .chatId(chatId)
@@ -219,6 +229,7 @@ public class MerchantAdminBot implements TelegramWebhookBot {
 
     private PageRequest pageNationNext(Long chatId) {
         telegramUser.setCurrentPage(telegramUser.getCurrentPage() + 1);
+        changeData(telegramUser);
         PageRequest pageRequest = PageRequest.of(telegramUser.getCurrentPage(), 10);
         execute.send(new DeleteMessage(chatId.toString(), telegramUser.getMessageId()));
         return pageRequest;
@@ -226,6 +237,7 @@ public class MerchantAdminBot implements TelegramWebhookBot {
 
     private PageRequest pageNationPrev(Long chatId) {
         telegramUser.setCurrentPage(telegramUser.getCurrentPage() - 1);
+        changeData(telegramUser);
         PageRequest pageRequest = PageRequest.of(telegramUser.getCurrentPage(), 10);
         execute.send(new DeleteMessage(chatId.toString(), telegramUser.getMessageId()));
         return pageRequest;

@@ -1,4 +1,4 @@
-package com.example.backend.TelegramBots.TujjorAdminBot.TelegramBotsApi.entiy;
+package com.example.backend.TelegramBots.TujjorAdminBot.TelegramBotsApi.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -16,9 +16,9 @@ public interface ClientRepo extends JpaRepository<Client, UUID> {
             SELECT DISTINCT
               c.*
             FROM client c
-                right JOIN customer_category cc ON cc.id = c.category_id
-                right JOIN client_week_day cwd on c.id = cwd.client_id
-                right JOIN territory t on t.id = c.territory_id
+                left JOIN customer_category cc ON cc.id = c.category_id
+                left JOIN client_week_day cwd on c.id = cwd.client_id
+                left JOIN territory t on t.id = c.territory_id
             WHERE
                 ( cc.id IN :categoryIds OR 0 IN :categoryIds)
                 AND ( cwd.week_day_id IN :weekDayIds OR 0 IN :weekDayIds)
