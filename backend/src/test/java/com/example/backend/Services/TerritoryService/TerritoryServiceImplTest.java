@@ -1,9 +1,9 @@
 package com.example.backend.Services.TerritoryService;
-
 import com.example.backend.Entity.Territory;
 import com.example.backend.Payload.req.ReqEditTerritory;
 import com.example.backend.Payload.req.ReqTerritory;
 import com.example.backend.Repository.TerritoryRepo;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -13,12 +13,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
-
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 class TerritoryServiceImplTest {
     @Mock
@@ -53,51 +53,53 @@ class TerritoryServiceImplTest {
     }
 
     @Test
-    void itShouldGetTerritoryByActive() {
-        //Given
-        Territory territory = new Territory(
-                null, "1reg", "1title", "1code", true, 1.1, 1.2
-        );
-        Territory territory2 = new Territory(
-                null, "2reg", "2title", "2code", true, 1.1, 1.2
-        );
-        boolean active = true;
-        String search = "tit";
-        PageRequest pageable = PageRequest.of(1, 5);
-        Page<Territory> mockPage = new PageImpl<>(Arrays.asList(territory, territory2), pageable, 2);
-        //When
-        Mockito.when(territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(active, search, pageable)).thenReturn(mockPage);
-        Page<Territory> territoryPage = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(active, search, pageable);
-        //Then
-        assertEquals(mockPage, territoryPage);
+    public void testGetTerritoryWithActiveEmpty() {
+        Territory territory = Territory.builder()
+                .title("Test Territory")
+                .region("Test Region")
+                .longitude(43.434)
+                .latitude(44.456)
+                .active(true)
+                .build();
+        List<Territory> territoryList = List.of(territory);
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<Territory> mockPage = new PageImpl<>(territoryList, pageRequest, territoryList.size());
+        Mockito.when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCase(
+                        anyString(), anyString(), anyString(), any(PageRequest.class)))
+                .thenReturn(mockPage);
 
+        HttpEntity<?> result = underTest.getTerritory("", "search", 1, 10);
+        Page<Territory> resultBody = (Page<Territory>) result.getBody();
+
+        Assertions.assertEquals(territoryList, mockPage.getContent());
+        assert resultBody != null;
+        Assertions.assertEquals(mockPage.getContent(), resultBody.getContent());
     }
 
+
     @Test
-    void itShouldGetTerritoryActiveNull() {
-        //Given
-        Territory territory = new Territory(
-                null, "1reg", "1title", "1code", true, 1.1, 1.2
-        );
-        Territory territory2 = new Territory(
-                null, "2reg", "2title", "2code", true, 1.1, 1.2
-        );
-        //When
-        String title = "tit";
-        String region = "reg";
-        PageRequest pageable = PageRequest.of(1, 5);
-        Page<Territory> mockPage = new PageImpl<>(Arrays.asList(territory, territory2), pageable, 2);
-        Mockito.when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(title, region, pageable)).thenReturn(mockPage);
-        Page<Territory> territoryPage = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(title, region, pageable);
-        //Then
-        assertEquals(mockPage, territoryPage);
+    public void testGetTerritoryWithActiveTrue() {
+        Territory territory = Territory.builder()
+                .title("Test Territory")
+                .region("Test Region")
+                .longitude(43.434)
+                .latitude(44.456)
+                .active(true)
+                .build();
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        List<Territory> territoryList = List.of(territory);
+        Page<Territory> mockPage = new PageImpl<>(territoryList, pageRequest, territoryList.size());
+        Mockito.when(territoryRepo.findWhitSearch(true, "", pageRequest))
+                .thenReturn(mockPage);
+        HttpEntity<?> result = underTest.getTerritory("true", "search", 1, 10);
+        Assertions.assertEquals(territoryList, mockPage.getContent());
     }
 
     @Test
     void itShouldEditTerritory() {
         //Given
         UUID id = UUID.randomUUID();
-        ReqEditTerritory reqEditTerritory = new ReqEditTerritory("tit", "code","region", true, 1, 2);
+        ReqEditTerritory reqEditTerritory = new ReqEditTerritory("tit", "code", "region", true, 1, 2);
 
         Territory editingterritory = new Territory(
                 id, "reg",
@@ -116,5 +118,17 @@ class TerritoryServiceImplTest {
                 && territory.isActive() == reqEditTerritory.isActive()
                 && territory.getLatitude() == (reqEditTerritory.getLatitude())
                 && territory.getLongitude() == (reqEditTerritory.getLongitude())));
+    }
+
+    @Test
+    void itShouldGetAll() {
+        //Given
+        Territory territory1 = new Territory();
+        List<Territory> mockTerritories = List.of(territory1);
+        //When
+        Mockito.when(territoryRepo.findAll()).thenReturn(mockTerritories);
+        HttpEntity<?> all = underTest.getAll();
+        //Then
+        Assertions.assertEquals(mockTerritories,all.getBody());
     }
 }

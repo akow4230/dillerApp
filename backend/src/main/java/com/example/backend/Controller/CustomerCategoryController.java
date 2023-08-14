@@ -1,7 +1,6 @@
 package com.example.backend.Controller;
 
 import com.example.backend.Entity.CustomerCategory;
-import com.example.backend.Payload.req.ReqEditTerritory;
 import com.example.backend.Services.CustomerCategoryService.CustomerCategoryService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @RestController
 @RequestMapping ("/api/v1/customercategory")
@@ -49,12 +47,14 @@ public class CustomerCategoryController {
     @GetMapping("/getExcel")
     public ResponseEntity<Resource> getExcel(HttpServletResponse response,
                                              @RequestParam(defaultValue = "") String active,
-                                             @RequestParam(defaultValue = "") String search
+                                             @RequestParam(defaultValue = "") String quickSearch
     ) throws IOException {
-        if (search.equals("undefined")){
+        System.out.println(active);
+        System.out.println("salom "+quickSearch+" valom");
+        if (quickSearch.equals("")){
             return customerCategoryService.getExcel(response, active, "");
         }else {
-            return customerCategoryService.getExcel(response, active, search);
+            return customerCategoryService.getExcel(response, active, quickSearch);
 
         }
     }

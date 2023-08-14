@@ -1,26 +1,19 @@
 package com.example.backend.Repository;
 
 import com.example.backend.Entity.Territory;
-import com.example.backend.Services.TerritoryService.TerritoryService;
-import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
@@ -39,12 +32,10 @@ class TerritoryRepoTest {
         );
         boolean active = true;
         String search = "tit";
-        PageRequest pageable = PageRequest.of(1, 5);
-        Page<Territory> mockPage = new PageImpl<>(Arrays.asList(territory, territory2), pageable, 2);
-        when(territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(active, search, pageable)).thenReturn(mockPage);
+        when(territoryRepo.findAllByActiveAndRegionAndTitle(active, search)).thenReturn(List.of(territory2, territory));
 
-        Page<Territory> territoryPage = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(active, search, pageable);
-        assertEquals(mockPage, territoryPage);
+        List<Territory> territoryPage = territoryRepo.findAllByActiveAndRegionAndTitle(active, search);
+        assertEquals(List.of(territory2, territory), territoryPage);
 
     }
 
@@ -58,12 +49,13 @@ class TerritoryRepoTest {
         );
         String title = "tit";
         String region = "reg";
+        String code = "code";
         PageRequest pageable = PageRequest.of(1, 5);
         Page<Territory> mockPage = new PageImpl<>(Arrays.asList(territory, territory2), pageable, 2);
 
-        when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(title, region, pageable)).thenReturn(mockPage);
+        when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCase(title, region, code, pageable)).thenReturn(mockPage);
 
-        Page<Territory> territoryPage = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase(title, region, pageable);
+        Page<Territory> territoryPage = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCase(title, region, code, pageable);
         assertEquals(mockPage, territoryPage);
     }
 }

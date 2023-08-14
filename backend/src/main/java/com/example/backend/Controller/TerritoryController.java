@@ -50,12 +50,12 @@ public class TerritoryController {
     @GetMapping("/getExcel")
     public ResponseEntity<Resource> getExcel(HttpServletResponse response,
                                              @RequestParam(defaultValue = "") String active,
-                                             @RequestParam(defaultValue = "") String search
+                                             @RequestParam(defaultValue = "") String quickSearch
     ) throws IOException {
-        if (search.equals("undefined")){
+        if (quickSearch.equals("")){
             return territoryService.getExcel(response, active, "");
         }else {
-            return territoryService.getExcel(response, active, search);
+            return territoryService.getExcel(response, active, quickSearch);
 
         }
     }

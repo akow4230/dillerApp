@@ -2,6 +2,7 @@ package com.example.backend.Services.CustomerCategoryService;
 
 import com.example.backend.Entity.CustomerCategory;
 import com.example.backend.Entity.Territory;
+import com.example.backend.ExcelTools;
 import com.example.backend.Payload.req.ReqEditTerritory;
 import com.example.backend.Repository.CustomerCategoryRepo;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +26,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.example.backend.Services.CompanyService.CompanyServiceImpl.*;
 
 @Service
 @RequiredArgsConstructor
@@ -79,31 +82,21 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
     @Override
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
         List<CustomerCategory> customerCategories = null;
-        if (Objects.equals(active, "undefined")) {
+        if (Objects.equals(active, "")) {
             customerCategories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderById(search);
         } else {
-            System.out.println(active);
             customerCategories = customerCategoryRepo.findAllByActiveAndTitleContaining(Boolean.valueOf(active), search);
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Category info");
-        CellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex()); // Choose the color you want
-        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        Font headerFont = workbook.createFont();
-        headerFont.setFontHeightInPoints((short) 15);
-        headerFont.setColor(IndexedColors.WHITE.getIndex()); // Set font color for the header row
-        cellStyle.setFont(headerFont);
-        Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("ID");
-        row.createCell(1).setCellValue("Title");
-        row.createCell(2).setCellValue("Code");
-        row.createCell(3).setCellValue("Description");
-        row.createCell(4).setCellValue("Active");
-        for (int i = 0; i < 5; i++) {
-            row.getCell(i).setCellStyle(cellStyle);
-            sheet.autoSizeColumn(i);
-        }
+        CellStyle cellStyle = ExcelTools.createHeaderCellStyle(workbook);
+        createHeaderRow(sheet, cellStyle);
+        generateColumns(customerCategories, sheet);
+        ExcelTools.autoSizeColumns(sheet);
+        return getResourceResponseEntity(workbook);
+    }
+
+    private static void generateColumns(List<CustomerCategory> customerCategories, Sheet sheet) {
         int counter = 1;
         for (CustomerCategory territory : customerCategories) {
             Row dataRow = sheet.createRow(counter);
@@ -114,21 +107,20 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
             dataRow.createCell(3).setCellValue(territory.getDescription());
             dataRow.createCell(4).setCellValue(territory.isActive() ? "active" : "No active");
         }
+    }
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        workbook.write(outputStream);
-        workbook.close();
+    private void createHeaderRow(Sheet sheet, CellStyle cellStyle) {
+        Row headerRow = sheet.createRow(0);
+        String[] headers = {
+                "ID", "Title", "Code", "Description", "Active"
+        };
 
-        ByteArrayResource resource = new ByteArrayResource(outputStream.toByteArray());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=CustomerCategoryInfo.xlsx");
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .headers(headers)
-                .body(resource);
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(cellStyle);
+            sheet.autoSizeColumn(i);
+        }
     }
 
 

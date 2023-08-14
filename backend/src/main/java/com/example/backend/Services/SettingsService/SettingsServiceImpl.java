@@ -17,7 +17,6 @@ public class SettingsServiceImpl implements SettingsService {
         try {
             return ResponseEntity.ok(settingsRepo.findAll());
         } catch (Exception e) {
-            // Handle the exception and return an error response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching settings.");
         }
     }

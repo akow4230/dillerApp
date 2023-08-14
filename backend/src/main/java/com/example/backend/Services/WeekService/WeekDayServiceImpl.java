@@ -12,10 +12,8 @@ import org.springframework.stereotype.Service;
 public class WeekDayServiceImpl implements WeekDayService {
     private final WeekDayRepo weekDayRepo;
 
-
     @Override
     public HttpEntity<?> getWeekDays() {
        return ResponseEntity.ok(weekDayRepo.findAll());
-
     }
 }

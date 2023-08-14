@@ -19,6 +19,8 @@ public interface TerritoryRepo extends JpaRepository<Territory, UUID> {
 
 
     List<Territory> findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(String title, String region);
-
-    List<Territory> findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(Boolean active, String title, String region);
+    @Query(value = """
+            SELECT * from territory where lower((territory.title||''||territory.region) ||''|| territory.code) like lower(concat('%',:search,'%')) and active=:active
+            """, nativeQuery = true)
+    List<Territory> findAllByActiveAndRegionAndTitle(Boolean active, String search);
 }

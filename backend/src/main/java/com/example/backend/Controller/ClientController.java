@@ -44,12 +44,6 @@ public class ClientController {
                                              @RequestParam(defaultValue = "") String territory,
                                              @RequestParam(defaultValue = "") String tin
     ) throws IOException {
-        System.out.println(active);
-        System.out.println(quickSearch);
-        System.out.println(category);
-        System.out.println(weekDay);
-        System.out.println(territory);
-        System.out.println(tin);
         return clientService.getExcel(response, active, quickSearch, category, weekDay, territory, tin);
     }
 

@@ -28,7 +28,7 @@ function Index() {
           );
         }
       } else {
-        toast.error("Phone number must be 13 digits like +998 XX XXX XXXX");
+        toast.error("Phone number must be 13 digits like +998 XX XXX-XX-XX");
       }
     } else {
       toast.error("Please choose Uzbekistan");

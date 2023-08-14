@@ -1,32 +1,28 @@
 package com.example.backend.Services.TerritoryService;
 
 import com.example.backend.Entity.Territory;
+import com.example.backend.ExcelTools;
 import com.example.backend.Payload.req.ReqEditTerritory;
 import com.example.backend.Payload.req.ReqTerritory;
 import com.example.backend.Repository.TerritoryRepo;
-import com.example.backend.Services.CompanyService.CompanyServiceImpl;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.example.backend.Services.CompanyService.CompanyServiceImpl.getResourceResponseEntity;
 
 @Service
 @RequiredArgsConstructor
@@ -54,81 +50,27 @@ public class TerritoryServiceImpl implements TerritoryService {
         return ResponseEntity.ok(territoryFilter);
     }
 
-    private Page<Territory> getTerritoryFilter(String active, String search, PageRequest pageRequest) {
-        Page<Territory> allTerritories = null;
-        if (Objects.equals(active, "")) {
-            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCase(search, search,search, pageRequest);
-            return allTerritories;
-        }
-        allTerritories = territoryRepo.findWhitSearch(Boolean.valueOf(active), search, pageRequest);
-        return allTerritories;
-    }
-
     @Override
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
         List<Territory> territoryFilter = null;
-        if (Objects.equals(active, "undefined")) {
+        if (Objects.equals(active, "")) {
             territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(search, search);
         } else {
-            System.out.println(active);
-            territoryFilter = territoryRepo.findAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(Boolean.valueOf(active), search, search);
+            territoryFilter = territoryRepo.findAllByActiveAndRegionAndTitle(Boolean.valueOf(active), search);
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Company info");
-        CellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex()); // Choose the color you want
-        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        Font headerFont = workbook.createFont();
-        headerFont.setFontHeightInPoints((short) 15);
-        headerFont.setColor(IndexedColors.WHITE.getIndex()); // Set font color for the header row
-        cellStyle.setFont(headerFont);
-        Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("ID");
-        row.createCell(1).setCellValue("Region");
-        row.createCell(2).setCellValue("Title");
-        row.createCell(3).setCellValue("Code");
-        row.createCell(4).setCellValue("Active");
-        row.createCell(5).setCellValue("Longitude");
-        row.createCell(6).setCellValue("Latitude");
-        for (int i = 0; i < 7; i++) {
-            row.getCell(i).setCellStyle(cellStyle);
-            sheet.autoSizeColumn(i); // Automatically adjust column width to fit content
-
-        }
-        int counter = 1;
-        for (Territory territory : territoryFilter) {
-            Row dataRow = sheet.createRow(counter);
-            counter++;
-            dataRow.createCell(0).setCellValue(territory.getId().toString());
-            dataRow.createCell(1).setCellValue(territory.getRegion());
-            dataRow.createCell(2).setCellValue(territory.getTitle());
-            dataRow.createCell(3).setCellValue(territory.getCode());
-            dataRow.createCell(4).setCellValue(territory.isActive()?"active":"No active");
-            dataRow.createCell(5).setCellValue(territory.getLongitude());
-            dataRow.createCell(6).setCellValue(territory.getLatitude());
-            CompanyServiceImpl.autoSizeColumn(sheet, dataRow);
-        }
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        workbook.write(outputStream);
-        workbook.close();
-
-        ByteArrayResource resource = new ByteArrayResource(outputStream.toByteArray());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=CompanyInfo.xlsx");
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .headers(headers)
-                .body(resource);
+        CellStyle cellStyle = ExcelTools.createHeaderCellStyle(workbook);
+        createHeaderRow(sheet, cellStyle);
+        generateColumns(territoryFilter, sheet);
+        ExcelTools.autoSizeColumns(sheet);
+        return getResourceResponseEntity(workbook);
     }
+
 
     @Override
     public void editTerritory(UUID id, ReqEditTerritory reqEditTerritory) {
         Optional<Territory> territoryById = territoryRepo.findById(id);
-
         if (territoryById.isPresent()) {
             Territory EditingTerritory = territoryById.get();
             EditingTerritory.setId(id);
@@ -150,4 +92,39 @@ public class TerritoryServiceImpl implements TerritoryService {
         return ResponseEntity.ok(all);
     }
 
+    private Page<Territory> getTerritoryFilter(String active, String search, PageRequest pageRequest) {
+        Page<Territory> allTerritories = null;
+        if (Objects.equals(active, "")) {
+            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCase(search, search, search, pageRequest);
+            return allTerritories;
+        }
+        allTerritories = territoryRepo.findWhitSearch(Boolean.valueOf(active), search, pageRequest);
+        return allTerritories;
+    }
+
+    private static void generateColumns(List<Territory> territoryFilter, Sheet sheet) {
+        int counter = 1;
+        for (Territory territory : territoryFilter) {
+            Row dataRow = sheet.createRow(counter);
+            counter++;
+            dataRow.createCell(0).setCellValue(territory.getId().toString());
+            dataRow.createCell(1).setCellValue(territory.getRegion());
+            dataRow.createCell(2).setCellValue(territory.getTitle());
+            dataRow.createCell(3).setCellValue(territory.getCode());
+            dataRow.createCell(4).setCellValue(territory.isActive() ? "active" : "No active");
+            dataRow.createCell(5).setCellValue(territory.getLongitude());
+            dataRow.createCell(6).setCellValue(territory.getLatitude());
+        }
+    }
+
+    private void createHeaderRow(Sheet sheet, CellStyle cellStyle) {
+        Row headerRow = sheet.createRow(0);
+        String[] headers = {"ID", "Region", "Title", "Code", "Active", "Longitude", "Latitude"};
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(cellStyle);
+            sheet.autoSizeColumn(i);
+        }
+    }
 }
