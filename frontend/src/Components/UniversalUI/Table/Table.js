@@ -21,6 +21,7 @@ import UModal from '../Modal/UModal';
 import {useLocation} from "react-router-dom";
 
 function Table({isDark, columns, requestApi, filterParam, path}) {
+    const baseURL="http://localhost:8080"
     const dispatch = useDispatch();
     const [settings, setSettings] = useState(false);
     const {
@@ -58,26 +59,29 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
     }, [searchParams, columns, currentPage, dispatch, isDark, pageSize, requestApi]);
 
     function getExcel() {
-        let category=[]
-        console.log(filterParam)
-        console.log(searchParams)
-        searchParams.category?.map(item=>{
+        let category = []
+        searchParams.category?.map(item => {
             category.push(item.value)
         })
-        let weekDay=[]
-        searchParams.weekDay?.map(item=>{
+        let weekDay = []
+        searchParams.weekDay?.map(item => {
             weekDay.push(item.value)
         })
-        let territory=[]
-        searchParams.territory?.map(item=>{
+        let territory = []
+        searchParams.territory?.map(item => {
             territory?.push(item?.value)
         })
         axios
-            .get(`https://meprog.cf/api/v1/${path}/getExcel`, {
+            .get(`${baseURL}/api/v1/${path}/getExcel`, {
                 responseType: 'arraybuffer', headers: {
                     Authorization: localStorage.getItem('access_token')
-                },params:{
-                    active:searchParams.active?.value, quickSearch:searchParams.quickSearch, category:category.join(','), weekDay:weekDay.join(','), tin:searchParams.tin?.value, territory:territory.join(',')
+                }, params: {
+                    active: searchParams.active?.value,
+                    quickSearch: searchParams.quickSearch,
+                    category: category.join(','),
+                    weekDay: weekDay.join(','),
+                    tin: searchParams.tin?.value,
+                    territory: territory.join(',')
                 }
             })
             .then((res) => {
@@ -130,19 +134,27 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                                 return <FormControlLabel
                                     key={item?.id}
                                     value={item.id}
-                                    control={<Switch color="primary"/>}
-                                    label={item.title}
+                                    control={<Switch color="primary" />}
+                                    label={
+                                        <div style={{ display: 'flex', flexDirection: 'column-reverse', alignItems: 'center',margin:0 }}>
+                                            <span style={{fontSize:"14px"}}>{item.title}</span>
+                                        </div>
+                                    }
                                     checked={item.show}
-                                    labelPlacement={item.title}
-                                    onChange={(e) => dispatch(changeTableColumns({
-                                        id: item.id,
-                                        checked: e.target.checked,
-                                        columns: data.columns
-                                    }))}
+                                    labelPlacement="top"
+                                    onChange={(e) =>
+                                        dispatch(
+                                            changeTableColumns({
+                                                id: item.id,
+                                                checked: e.target.checked,
+                                                columns: data.columns,
+                                            })
+                                        )
+                                    }
                                 />
+
                             })
                         }
-
                     </div> : <div style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -188,32 +200,32 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                     <table className="table">
                         <thead style={{position: "sticky", top: "-1"}}>
                         <tr>
-                            {
-                                data?.columns?.map((item) => {
-                                    return <th key={item?.id}>
-                                        <p className={item?.show ? '' : 'hidden'}>{item?.title}</p>
+                            {data?.columns
+                                ?.filter((item) => item?.show)
+                                .map((item) => (
+                                    <th key={item?.id}>
+                                        <p>{item?.title}</p>
                                     </th>
-                                })
-                            }
+                                ))}
                         </tr>
                         </thead>
                         <tbody>
-                        {
-                            data?.data?.map(item => <tr key={item?.id}>
-                                {
-                                    data?.columns?.map((col) => <td key={col?.id}>
-                                        {
-                                            col?.show &&
-                                            col.type === 'jsx' ? React.cloneElement(col.data, {
+                        {data?.data?.map((item) => (
+                            <tr key={item?.id}>
+                                {data?.columns?.filter((col) => col?.show).map((col) => (
+                                    <td key={col?.id}>
+                                        {col.type === 'jsx' ? (
+                                            React.cloneElement(col.data, {
                                                 data: item
-                                            }) : col.show &&
-                                                <p>{getValueByKeys(item, col.key)}</p>
+                                            })
+                                        ) : col.type==='date'?col?.render(item):(
+                                            <p>{getValueByKeys(item, col.key)}</p>
+                                        )
                                         }
-                                    </td>)
-                                }
-                            </tr>)
-                        }
-
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
                     <div style={{

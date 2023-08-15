@@ -33,6 +33,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -146,7 +147,7 @@ public class MerchantAdminBot implements TelegramWebhookBot {
                     .latitude(territory.getLatitude())
                     .tin(telegramUser.getClientInn())
                     .address(telegramUser.getClientAddress())
-                    .dateOfRegistration(LocalDate.now())
+                    .dateOfRegistration(LocalDateTime.now())
                     .referencePoint("")
                     .company("")
                     .build());

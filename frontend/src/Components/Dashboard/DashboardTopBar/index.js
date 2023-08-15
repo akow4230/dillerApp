@@ -46,14 +46,13 @@ function Index({data}) {
                     <FormControl sx={{m: 1, minWidth: 120}} size="small">
                         <InputLabel style={{color: "white"}} id="demo-select-small-label">Cash register</InputLabel>
                         <Select
+                            style={{zIndex:100000}}
                             labelId="demo-select-small-label"
                             id="demo-select-small"
-                            // value={}
                             label="Cash register"
-                            // onChange={}
                         >
-                            <MenuItem value="">
-                                <em>None</em>
+                            <MenuItem  value="">
+                                <em style={{zIndex: 10}}>None</em>
                             </MenuItem>
                         </Select>
                     </FormControl>

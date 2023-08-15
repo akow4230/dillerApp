@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.glassfish.grizzly.http.util.TimeStamp;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -111,7 +113,7 @@ public class ClientServiceImpl implements ClientService {
                     .tin(clientDTO.getTin())
                     .category(categoryRepo.findById(clientDTO.getCategory()).get())
                     .active(clientDTO.isActive())
-                    .dateOfRegistration(LocalDate.now())
+                    .dateOfRegistration(LocalDateTime.now())
                     .weekDay(clientDTO.getWeekdays())
                     .longitude(clientDTO.getLongitude())
                     .latitude(clientDTO.getLatitude())

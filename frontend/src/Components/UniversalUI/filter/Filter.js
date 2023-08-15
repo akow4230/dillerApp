@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Select from 'react-select';
-import {connect, useDispatch} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import {changeCurrentPage, changeSearchParams} from "../../../redux/reducers/TableSlice";
 import {useLocation} from "react-router-dom";
 
@@ -12,7 +12,7 @@ function Filter(props) {
     const customStyles = {
         control: (provided) => ({
             ...provided,
-            marginTop:5,
+            marginTop: 5,
             borderRadius: 8,
             minHeight: 15,
             border: '1px solid #d1d1d1',
@@ -22,8 +22,8 @@ function Filter(props) {
     useEffect(() => {
         if (searchParams.active === undefined) {
             props.func({active: ' ', quickSearch: searchParams.quickSearch})
-            // console.log(searchParams.quickSearch)
         }
+        dispatch((changeSearchParams({quickSearch: ""})))
     }, [])
 
     const handleCityChange = (obj) => {
@@ -36,9 +36,9 @@ function Filter(props) {
         // sent request
         dispatch(changeCurrentPage());
         props.func({
-                ...searchParams,
-                [name]: value,
-            }, true)
+            ...searchParams,
+            [name]: value,
+        }, true)
 
     };
 
@@ -63,16 +63,17 @@ function Filter(props) {
 
 
     return (
-        <div className="" >
-            <div className="row" >
-                {param?.map(item=>
-                    <div key={item.name} className={" position-relative "+ item.multi?"col-3":"col-2"} style={item.multi?{width: 320}:{width: 180}}>
+        <div className="">
+            <div className="row">
+                {param?.map(item =>
+                    <div key={item.name} className={" position-relative " + item.multi ? "col-3" : "col-2"}
+                         style={item.multi ? {width: 320} : {width: 180}}>
                         <Select
                             name={item.name}
                             options={item.options}
                             value={searchParams[item.name]}
                             onChange={(e) => handleCityChange({name: item.name, value: e})}
-                            style={{width: 70,top:-1,position:"sticky", zIndex:11}}
+                            style={{width: 70, top: -1, position: "sticky", zIndex: 11}}
                             styles={customStyles}
                             placeholder={item.placeholder}
                             isMulti={item.multi}
@@ -83,8 +84,7 @@ function Filter(props) {
                     </div>
                 )}
 
-                <div className="d-flex justify-content-end text-end" >
-
+                <div className="d-flex justify-content-end text-end">
                     {quickSearch}
                 </div>
                 <div>
