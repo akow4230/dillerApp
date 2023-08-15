@@ -19,10 +19,13 @@ import {
     editClientsAction, pushWeekday, deleteWeekday, setSelectedWeekdays
 } from '../../redux/reducers/ClientsSlice';
 import "../Territory/styles.css"
-import {ToastContainer} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import {fetchWeekdaysStart} from "../../redux/reducers/WeekDaySlice";
 import Select from "react-select";
 import CancelIcon from '@mui/icons-material/Cancel';
+import {UserLogIn} from "../../redux/reducers/LoginSlice";
+import PhoneInput from "react-phone-number-input";
+
 function ClientsModal(props) {
     const dispatch = useDispatch();
     const clients = useSelector((state) => state.clients);
@@ -54,7 +57,7 @@ function ClientsModal(props) {
                 tin: props.data?.tin,
                 companyName: props.data?.company,
                 referencePoint: props.data?.referencePoint,
-                active:props.data?.active,
+                active: props.data?.active,
                 category: {value: props.data?.category?.id, label: props.data?.category?.title}
             });
             dispatch(setSelectedWeekdays(props.data?.weekDay));
@@ -96,34 +99,41 @@ function ClientsModal(props) {
     }
 
     function saveClients(data) {
-        console.log(data)
-        dispatch(
-            props.isEditing
-                ? editClientsAction({
-                    clients: {
-                        data: {...data, weekdays: clients.selectedWeekdays},
-                        longitude: clients?.longitude,
-                        latitude: clients?.latitude,
-                        id: props.data.id
-                    }, isEditing: true
-                })
-                : saveClientsAction({
-                    clients: {
-                        data: {...data, weekdays: clients.selectedWeekdays},
-                        longitude: clients?.longitude,
-                        latitude: clients?.latitude
-                    },
-                    isEditing: false,
-                    reset: reset({
-                        title: "",
-                        region: "",
-                        code: "",
-                        active: ""
-                    })
-                })
-        );
-
+        if (data.phone.startsWith("+998")) {
+            if (data.phone.length === 13) {
+                dispatch(
+                    props.isEditing
+                        ? editClientsAction({
+                            clients: {
+                                data: {...data, weekdays: clients.selectedWeekdays},
+                                longitude: clients?.longitude,
+                                latitude: clients?.latitude,
+                                id: props.data.id
+                            }, isEditing: true
+                        })
+                        : saveClientsAction({
+                            clients: {
+                                data: {...data, weekdays: clients.selectedWeekdays},
+                                longitude: clients?.longitude,
+                                latitude: clients?.latitude
+                            },
+                            isEditing: false,
+                            reset: reset({
+                                title: "",
+                                region: "",
+                                code: "",
+                                active: ""
+                            })
+                        })
+                );
+            } else {
+                toast.error("Phone number must be 13 digits like +998 XX XXX-XX-XX");
+            }
+        } else {
+            toast.error("Please choose Uzbekistan");
+        }
     }
+
     function selectWeekday(item, selected) {
         if (!clients.selectedWeekdays.includes(item)) {
             dispatch(pushWeekday(item))
@@ -141,21 +151,22 @@ function ClientsModal(props) {
                         background: "#6690a7",
                         color: "white",
                         display: "flex",
-                        justifyContent:"space-between",
+                        justifyContent: "space-between",
                         alignItems: "center",
                         paddingLeft: "20px",
                         paddingRight: "20px",
                         paddingTop: "10px"
                     }}>
                         <p>{props.action}</p>
-                        <button style={{background:"none", border:"none"}} onClick={()=>props.onClose()}><CancelIcon /></button>
+                        <button style={{background: "none", border: "none"}} onClick={() => props.onClose()}>
+                            <CancelIcon/></button>
                     </header>
-                    <div style={{display: "flex"}}>
+                    <div style={{display: "flex",justifyContent:"center"}}>
                         <div className="left-side w-75 py-4" style={{paddingLeft: "50px"}}>
                             <form onSubmit={handleSubmit(saveClients)} className={"d-flex gap-5"}>
                                 <div>
-                                    <label style={{width: "300px"}}>
-                                        Territory*
+                                    <label style={{width: "300px",marginBottom:"15px"}}>
+                                        <p style={{marginBottom:"10px"}}>Territory</p>
                                         <Controller
                                             name='territory'
                                             control={control}
@@ -167,7 +178,7 @@ function ClientsModal(props) {
                                                             value: item.id,
                                                             label: item.title,
                                                         }))}
-                                                        style={{ width: 70 }}
+                                                        style={{width: 70}}
                                                         placeholder={'territory'}
                                                     />
 
@@ -179,34 +190,50 @@ function ClientsModal(props) {
                                     {errors.clients && <span className="error-message">{errors.clients.message}</span>}
                                     <br/>
                                     <label style={{width: "300px"}}>
-                                        Name*
+                                        <span style={{fontSize:"17px",color:errors.name?"red":""}}>Name</span> {errors.name && <span style={{fontSize:"17px"}} className="error-message">{errors.name.message}</span>}
                                         <input type="text"
-                                               className={"form-control my-2"} {...register("name", {required: "Name is required"})} />
+                                               className={"form-control my-2"} {...register("name", {required: "is required"})} />
                                     </label>
-                                    {errors.name && <span className="error-message">{errors.name.message}</span>}
+
                                     <br/>
                                     <label style={{width: "300px"}}>
-                                        Address
+                                        <span style={{fontSize:"17px",color:errors.address?"red":""}}>Address</span> {errors.address && <span style={{fontSize:"17px"}} className="error-message">{errors.address.message}</span>}
                                         <input type="text"
-                                               className={"form-control my-2"} {...register("address", {required: "Address is required"})} />
+                                               className={"form-control my-2"} {...register("address", {required: " is required"})} />
                                     </label>
-                                    {errors.address && <span className="error-message">{errors.address.message}</span>}
+
                                     <br/>
                                     <label style={{width: "300px"}}>
-                                        Telephone
-                                        <input type="text"
-                                               className={"form-control my-2"} {...register("phone", {required: "Phone number is required"})} />
+                                        <span style={{fontSize:"17px",color:errors.phone?"red":""}}>Phone Number</span>   {errors.phone && (
+                                        <span style={{fontSize:"17px"}} className='error-message'>{errors.phone.message}!</span>
+                                    )}
+                                        <Controller
+                                            name='phone'
+                                            control={control}
+                                            defaultValue='+998'
+                                            rules={{ required: " is required" }}
+                                            render={({ field }) => (
+                                                <div className='my-1 '>
+                                                    <PhoneInput
+                                                        {...field}
+                                                        value={"+998"}
+                                                        defaultCountry='UZ'
+                                                        limitMaxLength={true}
+                                                        placeholder='+998'
+                                                    />
+                                                </div>
+                                            )}
+                                        />
+                                        {/*<input type="text"*/}
+                                        {/*       className={"form-control my-2"} {...register("phone", {required: "Phone number is required"})} />*/}
                                     </label>
-                                    {errors.phone &&
-                                        <span className="error-message">{errors.phone.message}</span>}
-                                    <br/>
                                     <label style={{width: "300px"}}>
                                         TIN
                                         <input type="text"
                                                className={"form-control my-2"} {...register("tin")} />
                                     </label>
                                     <br/>
-                                    <label style={{width: "300px", display:"flex", alignItems:"center", gap:"10px"}}>
+                                    <label style={{width: "300px", display: "flex", alignItems: "center", gap: "10px"}}>
                                         Active
                                         <input type="checkbox"
                                                className={"form-check my-2"} {...register("active")} />
@@ -215,23 +242,22 @@ function ClientsModal(props) {
                                 </div>
                                 <div>
                                     <label style={{width: "300px"}}>
-                                        Company name
+                                        <span style={{fontSize:"17px",color:errors.companyName?"red":""}}>Company Name</span>  {errors.companyName &&
+                                        <span style={{fontSize:"17px"}} className="error-message">{errors.companyName.message}</span>}
                                         <input type="text"
-                                               className={"form-control my-2"} {...register("companyName", {required: "Company name is required"})} />
+                                               className={"form-control my-2"} {...register("companyName", {required: " is required"})} />
                                     </label>
-                                    {errors.companyName &&
-                                        <span className="error-message">{errors.companyName.message}</span>}
                                     <br/>
                                     <label style={{width: "300px"}}>
-                                        Reference point
+                                        <span style={{fontSize:"17px",color:errors.referencePoint?"red":""}}>Reference point</span> {errors.referencePoint &&
+                                        <span style={{fontSize:"17px"}} className="error-message">{errors.referencePoint.message}</span>}
                                         <input type="text"
-                                               className={"form-control my-2"} {...register("referencePoint", {required: "Reference point is required"})} />
+                                               className={"form-control my-2"} {...register("referencePoint", {required: " is required"})} />
                                     </label>
-                                    {errors.referencePoint &&
-                                        <span className="error-message">{errors.referencePoint.message}</span>}
+
                                     <br/>
                                     <label style={{width: "300px"}}>
-                                        Category*
+                                        <p style={{marginBottom:"10px"}}>Category</p>
                                         <Controller
                                             name='category'
                                             control={control}
@@ -243,7 +269,7 @@ function ClientsModal(props) {
                                                             value: item.id,
                                                             label: item.title,
                                                         }))}
-                                                        style={{ width: 70 }}
+                                                        style={{width: 70}}
                                                         placeholder={'category'}
                                                     />
                                                 </>
@@ -254,9 +280,9 @@ function ClientsModal(props) {
                                     {errors.category &&
                                         <span className="error-message">{errors.category.message}</span>}
                                     <br/>
+                                    <br/>
                                     <label style={{width: "300px"}}>
                                         Visiting days
-                                        <br/>
                                         <br/>
                                         <span className="d-flex justify-content-center gap-3 flex-wrap">
                                               {weekdays.map(item =>
@@ -284,7 +310,7 @@ function ClientsModal(props) {
                                 </div>
                             </form>
                         </div>
-                        <div className="right-side p-5">
+                        <div  className="right-side col-md-5 p-5">
                             <Map
                                 onLoad={(e) => {
                                     console.log(e);

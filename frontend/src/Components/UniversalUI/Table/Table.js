@@ -148,9 +148,13 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                                                key={item?.id}
                                                value={item.id}
                                                control={<Switch color="primary"/>}
-                                               label={item.title}
+                                               label={
+                                                   <div style={{ display: 'flex', flexDirection: 'column-reverse', alignItems: 'center',margin:0 }}>
+                                                       <span style={{fontSize:"14px"}}>{item.title}</span>
+                                                   </div>
+                                               }
                                                checked={item.show}
-                                               labelPlacement={item.title}
+                                               labelPlacement="top"
                                                onChange={(e) => dispatch(changeTableColumns({
                                                    id: item.id,
                                                    checked: e.target.checked,
