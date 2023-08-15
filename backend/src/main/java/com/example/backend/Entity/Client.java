@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.glassfish.grizzly.http.util.TimeStamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +32,8 @@ public class Client {
     @ManyToOne
     private CustomerCategory category;
     private boolean active;
-    private LocalDate dateOfRegistration;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime dateOfRegistration;
     @ManyToMany
     private List<WeekDay> weekDay;
     private double longitude;

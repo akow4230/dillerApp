@@ -20,9 +20,9 @@ import axios from 'axios';
 import TableModal from './TableModal';
 import UModal from '../Modal/UModal';
 import {useLocation} from "react-router-dom";
-import Loader from "../../../ui/loader";
 
 function Table({isDark, columns, requestApi, filterParam, path}) {
+    const baseURL="http://localhost:8080"
     const dispatch = useDispatch();
     const [settings, setSettings] = useState(false);
     const {
@@ -62,23 +62,30 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
 
     function getExcel() {
         let category=[]
+        console.log(filterParam)
+        console.log(searchParams)
         searchParams.category?.map(item=>{
             category.push(item.value)
         })
-        let weekDay=[]
-        searchParams.weekDay?.map(item=>{
+        let weekDay = []
+        searchParams.weekDay?.map(item => {
             weekDay.push(item.value)
         })
-        let territory=[]
-        searchParams.territory?.map(item=>{
+        let territory = []
+        searchParams.territory?.map(item => {
             territory?.push(item?.value)
         })
         axios
-            .get(`https://meprog.cf/api/v1/${path}/getExcel`, {
+            .get(`${baseURL}/api/v1/${path}/getExcel`, {
                 responseType: 'arraybuffer', headers: {
                     Authorization: localStorage.getItem('access_token')
-                },params:{
-                    active:searchParams.active?.value, quickSearch:searchParams.quickSearch, category:category.join(','), weekDay:weekDay.join(','), tin:searchParams.tin?.value, territory:territory.join(',')
+                }, params: {
+                    active: searchParams.active?.value,
+                    quickSearch: searchParams.quickSearch,
+                    category: category.join(','),
+                    weekDay: weekDay.join(','),
+                    tin: searchParams.tin?.value,
+                    territory: territory.join(',')
                 }
             })
             .then((res) => {
@@ -117,46 +124,43 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
         }, 1000);
     },[])
     return (
-        <div>
-            {isLoading ? <Loader />
-                :
-            <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
-                <Filter param={filterParam} func={getData}/>
-                <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
-                    <button className={"btn btn-light"} onClick={() => setSettings(!settings)}><i
-                        className="fa-solid fa-sliders" style={{zIndex: "auto"}}></i></button>
-                    {
-                        settings ? <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 10,
-                            overflowX: "auto"
-                        }}>
-                            <Button type={'dashed'} onClick={() => dispatch(toggleModal())}><i
-                                className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
-                            {
-                                data.columns?.map((item, index) => {
-                                    return <FormControlLabel
-                                        key={item?.id}
-                                        value={item.id}
-                                        control={<Switch color="primary"/>}
-                                        label={item.title}
-                                        checked={item.show}
-                                        labelPlacement={item.title}
-                                        onChange={(e) => dispatch(changeTableColumns({
-                                            id: item.id,
-                                            checked: e.target.checked,
-                                            columns: data.columns
-                                        }))}
-                                    />
-                                })
-                            }
+        <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
+            <Filter param={filterParam} func={getData}/>
+            <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
+                <button className={"btn btn-light"} onClick={() => setSettings(!settings)}><i
+                    className="fa-solid fa-sliders" style={{zIndex: "auto"}}></i></button>
+                {
+                    settings ? <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        overflowX: "auto"
+                    }}>
+                        <Button type={'dashed'} onClick={() => dispatch(toggleModal())}><i
+                            className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
+                        {
+                            data.columns?.map((item, index) => {
+                                return <FormControlLabel
+                                    key={item?.id}
+                                    value={item.id}
+                                    control={<Switch color="primary"/>}
+                                    label={item.title}
+                                    checked={item.show}
+                                    labelPlacement={item.title}
+                                    onChange={(e) => dispatch(changeTableColumns({
+                                        id: item.id,
+                                        checked: e.target.checked,
+                                        columns: data.columns
+                                    }))}
+                                />
+                            })
+                        }
 
-                        </div> : <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 10
-                        }}>
+                    </div> : <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10
+                    }}>
 
                             <Select
                                 defaultValue={pageSize}
@@ -197,32 +201,32 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                         <table className="table">
                             <thead style={{position: "sticky", top: "-1"}}>
                             <tr>
-                                {
-                                    data?.columns?.map((item) => {
-                                        return <th key={item?.id}>
-                                            <p className={item?.show ? '' : 'hidden'}>{item?.title}</p>
+                                {data?.columns
+                                    ?.filter((item) => item?.show)
+                                    .map((item) => (
+                                        <th key={item?.id}>
+                                            <p>{item?.title}</p>
                                         </th>
-                                    })
-                                }
+                                    ))}
                             </tr>
                             </thead>
                             <tbody>
-                            {
-                                data?.data?.map(item => <tr key={item?.id}>
-                                    {
-                                        data?.columns?.map((col) => <td key={col?.id}>
-                                            {
-                                                col?.show &&
-                                                col.type === 'jsx' ? React.cloneElement(col.data, {
+                            {data?.data?.map((item) => (
+                                <tr key={item?.id}>
+                                    {data?.columns?.filter((col) => col?.show).map((col) => (
+                                        <td key={col?.id}>
+                                            {col.type === 'jsx' ? (
+                                                React.cloneElement(col.data, {
                                                     data: item
-                                                }) : col.show &&
-                                                    <p>{getValueByKeys(item, col.key)}</p>
+                                                })
+                                            ) : col.type==='date'?col?.render(item):(
+                                                <p>{getValueByKeys(item, col.key)}</p>
+                                            )
                                             }
-                                        </td>)
-                                    }
-                                </tr>)
-                            }
-
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
                             </tbody>
                         </table>
                         <div style={{
@@ -240,19 +244,13 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                                             variant={"outlined"}
                                             shape="rounded"/>}
 
-                        </div>
                     </div>
-
                 </div>
-                <UModal isOpen={modal} toggle={() => {
-                    alert("Hello")
-                    dispatch(toggleModal())
-                }} title={'Change order'}
-                        onSave={() => dispatch(saveColumnsOrders())} elements={elements}/>
-            </div>
-            }
-        </div>
 
+            </div>
+            <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} title={'Change order'}
+                    onSave={() => dispatch(saveColumnsOrders())} elements={elements}/>
+        </div>
     );
 }
 

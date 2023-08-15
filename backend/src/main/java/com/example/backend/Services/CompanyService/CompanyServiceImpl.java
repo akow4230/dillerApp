@@ -1,13 +1,9 @@
 package com.example.backend.Services.CompanyService;
-
-import com.example.backend.Entity.Company;
-import com.example.backend.Entity.CustomerCategory;
 import com.example.backend.Entity.User;
 import com.example.backend.ExcelTools;
 import com.example.backend.Projection.CompanyProfileProjection;
 import com.example.backend.Projection.DashboardProjection;
 import com.example.backend.Repository.CompanyRepo;
-import com.example.backend.Services.AuthService.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -22,18 +18,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepo companyRepo;
-    private final AuthService authService;
-
     @Override
     public HttpEntity<?> getInfo(User user) {
         DashboardProjection dashboardInfo = companyRepo.getDashboardInfo(user.getId());

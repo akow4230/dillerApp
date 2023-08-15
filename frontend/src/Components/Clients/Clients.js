@@ -51,7 +51,7 @@ function Clients(props) {
         },
         {
             id: 2,
-            title: "Company Name",
+            title: "Company",
             key: "company",
             type: "str",
             show: true,
@@ -108,13 +108,15 @@ function Clients(props) {
             order: 9,
             render: (item) => {
                 const dateParts = item?.dateOfRegistration;
-                if (dateParts && dateParts.length === 3) {
+                if (dateParts && dateParts.length >= 3) {
                     const formattedDate = `${dateParts[2].toString().padStart(2, '0')}.${dateParts[1].toString().padStart(2, '0')}.${dateParts[0]}`;
-                    return <p>{formattedDate}</p>;
+                    const formattedTime = `${dateParts[3].toString().padStart(2, '0')}:${dateParts[4].toString().padStart(2, '0')}`;
+                    return <p>{formattedDate} {formattedTime}</p>;
                 }
 
                 return null;
             }
+
         }, {
             id: 10,
             title: "TIN",

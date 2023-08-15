@@ -5,9 +5,6 @@ import DashboardLeftMenu from "./DashboardLeftMenu/index";
 import {useDispatch, useSelector} from 'react-redux';
 import {navigateTo} from "../../redux/reducers/DashboardSlice";
 import {Outlet} from "react-router-dom";
-
-// import {useNavigate} from "react-router-dom"; // Import the navigateTo action creator
-
 function Index(props) {
     const dispatch = useDispatch();
     const response = useSelector((state) => state.dashboard);
@@ -29,7 +26,7 @@ function Index(props) {
                 <div className="left-menu">
                     <DashboardLeftMenu/>
                 </div>
-                <div className={"right-menu w-100 p-4"} style={{background: "#c2c5d5", overflowY: "auto"}}>
+                <div className={"right-menu w-100 p-2"} style={{background: "#c2c5d5", overflowY: "auto"}}>
                     <Outlet/>
                 </div>
             </div>

@@ -4,7 +4,7 @@ export default function (url, method, data, param) {
     let token = localStorage.getItem("access_token");
     console.log(url)
     return axios({
-        url: "https://meprog.cf" + url,
+        url: "http://localhost:8080" + url,
         method: method,
         data: data,
         headers: {
@@ -27,12 +27,12 @@ export default function (url, method, data, param) {
                 };
             }
             return axios({
-                url: `https://meprog.cf/api/v1/auth/refresh?refreshToken=${localStorage.getItem("refresh_token")}`,
+                url: `http://localhost:8080/api/v1/auth/refresh?refreshToken=${localStorage.getItem("refresh_token")}`,
                 method: "POST"
             }).then((res) => {
                 localStorage.setItem("access_token", res.data);
                 return axios({
-                    url: "https://meprog.cf" + url,
+                    url: "http://localhost:8080" + url,
                     method: method,
                     data: data,
                     headers: {
