@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import {
+    changeSearchParams,
     changeTableColumns,
     changeTableDataPage,
     changeTableDataSize,
@@ -17,6 +18,7 @@ import Filter from '../filter/Filter';
 import axios from 'axios';
 import TableModal from './TableModal';
 import UModal from '../Modal/UModal';
+import {useLocation} from "react-router-dom";
 
 function Table({isDark, columns, requestApi, filterParam, path}) {
     const dispatch = useDispatch();
@@ -29,7 +31,6 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
         modal,
         searchParams
     } = useSelector((state) => state.table);
-
     function getData(search, changePage = false) {
         if (changePage) {
             dispatch(getTableData({
@@ -58,6 +59,8 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
 
     function getExcel() {
         let category=[]
+        console.log(filterParam)
+        console.log(searchParams)
         searchParams.category?.map(item=>{
             category.push(item.value)
         })
@@ -70,7 +73,7 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
             territory?.push(item?.value)
         })
         axios
-            .get(`http://localhost:8080/api/v1/${path}/getExcel`, {
+            .get(`https://meprog.cf/api/v1/${path}/getExcel`, {
                 responseType: 'arraybuffer', headers: {
                     Authorization: localStorage.getItem('access_token')
                 },params:{

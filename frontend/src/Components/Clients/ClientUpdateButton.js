@@ -1,17 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import {
-    FullscreenControl,
-    GeolocationControl,
-    Map,
-    Panorama,
-    Placemark,
-    SearchControl,
-    TrafficControl,
-    TypeSelector,
-    YMaps,
-    ZoomControl
-} from "react-yandex-maps";
+import { GeolocationControl, Map, Placemark, SearchControl, TrafficControl, TypeSelector, YMaps, ZoomControl } from "react-yandex-maps";
 import {useDispatch, useSelector} from "react-redux";
 import {setOneClientMapModal, setEditData, setEditModalVisible} from "../../redux/reducers/ClientsSlice";
 import {Button, Dropdown} from 'react-bootstrap';
@@ -31,26 +20,6 @@ function ClientUpdateButton(props) {
         dispatch(setEditData(props.data))
         dispatch(setOneClientMapModal())
     }
-
-    const [isYMapsLoaded, setIsYMapsLoaded] = useState(false);
-
-    useEffect(() => {
-        if (clientMapModal) {
-            const script = document.createElement('script');
-            script.src = 'https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=en_US';
-            script.async = true;
-            script.onload = () => {
-
-                setIsYMapsLoaded(true);
-            };
-            document.head.appendChild(script);
-
-            return () => {
-                document.head.removeChild(script);
-            };
-        }
-    }, [clientMapModal]);
-
     return (
         <div>
             <Dropdown>
@@ -68,10 +37,9 @@ function ClientUpdateButton(props) {
                 </Dropdown.Menu>
             </Dropdown>
             <div className={'umodal'}>
-                {isYMapsLoaded && (
+
                     <Modal show={clientMapModal} onHide={() => {
                         dispatch(setOneClientMapModal())
-                        setIsYMapsLoaded(false)
                     }} centered>
                         <Modal.Header closeButton>
                             <Modal.Title>{editData?.name}</Modal.Title>
@@ -82,12 +50,13 @@ function ClientUpdateButton(props) {
                                     state={{center: [editData?.latitude, editData?.longitude], zoom: 12}}
                                     style={{width: '100%', height: '500px'}}
                                 >
-                                    <FullscreenControl options={{float: "left"}}/>
-                                    <GeolocationControl options={{float: "right"}}/>
-                                    <TrafficControl options={{float: "right"}}/>
-                                    <ZoomControl options={{float: "left"}}/>
-                                    <TypeSelector options={{float: "right"}}/>
-                                    <SearchControl options={{float: "left"}}/>
+                                    {GeolocationControl!==undefined&&<div>
+                                        <GeolocationControl options={{float: "right"}}/>
+                                        <TrafficControl options={{float: "right"}}/>
+                                        <ZoomControl options={{float: "left"}}/>
+                                        <TypeSelector options={{float: "right"}}/>
+                                        <SearchControl options={{float: "left"}}/>
+                                    </div>}
 
                                     <Placemark
                                         key={editData?.id}
@@ -108,7 +77,6 @@ function ClientUpdateButton(props) {
                             </YMaps>
                         </Modal.Body>
                     </Modal>
-                )}
             </div>
         </div>
 

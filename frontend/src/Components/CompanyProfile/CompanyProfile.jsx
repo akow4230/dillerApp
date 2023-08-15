@@ -6,7 +6,7 @@ import { changeSearchParams } from "../../redux/reducers/TableSlice";
 function CompanyProfile() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(changeSearchParams({ active: "" }));
+    dispatch(changeSearchParams({active:'', quickSearch: ""}))
   }, []);
   const columns = [
     {

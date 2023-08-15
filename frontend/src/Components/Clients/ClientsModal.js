@@ -54,6 +54,7 @@ function ClientsModal(props) {
                 tin: props.data?.tin,
                 companyName: props.data?.company,
                 referencePoint: props.data?.referencePoint,
+                active:props.data?.active,
                 category: {value: props.data?.category?.id, label: props.data?.category?.title}
             });
             dispatch(setSelectedWeekdays(props.data?.weekDay));

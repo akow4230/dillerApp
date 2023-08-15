@@ -31,7 +31,7 @@ function Clients(props) {
     const {weekdays} = useSelector((state) => state.weekday);
     const {territory} = useSelector((state) => state.territory)
     useEffect(() => {
-        dispatch(changeSearchParams({active: ""}))
+        dispatch(changeSearchParams({active:'', quickSearch: ""}))
         dispatch(fetchCategoriesStart())
         dispatch(fetchWeekdaysStart())
         dispatch(fetchTerritoryStart())

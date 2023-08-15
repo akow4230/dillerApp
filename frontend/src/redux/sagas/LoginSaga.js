@@ -11,10 +11,10 @@ function* workLoginUser(action) {
     console.log("Hello")
     yield put(signUserStart());
     const response = yield call(() =>
-      axios.post(
-        "http://localhost:8080/api/v1/auth/login",
-        action.payload.formData
-      )
+        axios.post(
+            "https://meprog.cf/api/v1/auth/login",
+            action.payload.formData
+        )
     );
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
@@ -29,7 +29,7 @@ function* workLoginUser(action) {
       action.payload.navigate("/dashboard");
     }
   } catch (error) {
-    if (error.response.status === 403) {
+    if (error.response.status === 401 || error.status.status === 403) {
       yield put(UserFailure("Login or password is wrong"));
     }
   }
