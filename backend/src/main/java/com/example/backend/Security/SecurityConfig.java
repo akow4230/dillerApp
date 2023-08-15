@@ -29,20 +29,37 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .cors(Customizer.withDefaults())
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests(
+//                        auth -> auth
+//                                .requestMatchers("/api/v1/bot").permitAll()
+//                                .requestMatchers("/api/v1/auth/register").permitAll()
+//                                .requestMatchers("/api/v1/auth/login").permitAll()
+//                                .requestMatchers("/api/v1/auth/refresh").permitAll()
+//                                .requestMatchers("/api/v1/auth/student").permitAll()
+//                                .requestMatchers("/dashboard").permitAll()
+//                                .requestMatchers("/").permitAll()
+//
+////                                .requestMatchers("/api/v1/territory/getExcel").permitAll()
+//                                .anyRequest().authenticated()
+//
+//                )
+//                .addFilterBefore(myFilter, UsernamePasswordAuthenticationFilter.class);
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/api/v1/bot").permitAll()
-                                .requestMatchers("/api/v1/auth/register").permitAll()
-                                .requestMatchers("/api/v1/auth/login").permitAll()
-                                .requestMatchers("/api/v1/auth/refresh").permitAll()
-                                .requestMatchers("/api/v1/auth/student").permitAll()
-//                                .requestMatchers("/api/v1/territory/getExcel").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/", "/index.html", "/static/**", "/*.ico", "/*.json", "/*.png").permitAll()
+                                .requestMatchers("/api/v1/bot", "/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/refresh", "/api/v1/auth/student").permitAll()
+                                .anyRequest().permitAll()
                 )
                 .addFilterBefore(myFilter, UsernamePasswordAuthenticationFilter.class);
+        // Add more security configurations as needed
+
+//        return http.build();
         return http.build();
     }
 

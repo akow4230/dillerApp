@@ -31,47 +31,49 @@ public class MyFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String token = request.getHeader("Authorization");
         String requestPath = request.getRequestURI();
-        if (requestPath.equals("/api/v1/bot") || requestPath.equals("/api/v1/auth/login") || requestPath.equals("/api/v1/auth/access") || requestPath.equals("/api/v1/auth/refresh")) {
-            try {
-                filterChain.doFilter(request, response);
-            } catch (Exception e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-                response.getWriter().write("Invalid token");
-                response.getWriter().flush();
+        if (requestPath.startsWith("/api")) {
+            if (requestPath.equals("/api/v1/bot") || requestPath.equals("/api/v1/auth/login") || requestPath.equals("/dashboard") || requestPath.equals("/api/v1/auth/access") || requestPath.equals("/api/v1/auth/refresh")) {
+                try {
+                    filterChain.doFilter(request, response);
+                } catch (Exception e) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+                    response.getWriter().write("Invalid token");
+                    response.getWriter().flush();
+                    return;
+                }
                 return;
             }
-            return;
-        }
 
-        if (token != null) {
-            try {
-                String subject = jwtService.extractSubjectFromJwt(token);
-                UserDetails userDetails = userRepo.findById(UUID.fromString(subject)).orElseThrow();
+            if (token != null) {
+                try {
+                    String subject = jwtService.extractSubjectFromJwt(token);
+                    UserDetails userDetails = userRepo.findById(UUID.fromString(subject)).orElseThrow();
 //                System.out.println(userDetails.getUsername());
-                UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            } catch (ExpiredJwtException e) {
+                    UsernamePasswordAuthenticationToken authenticationToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                } catch (ExpiredJwtException e) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+                    response.getWriter().write("Token expired");
+                    response.getWriter().flush();
+                    return;
+                } catch (Exception e) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+                    response.getWriter().write("Invalid token");
+                    response.getWriter().flush();
+                    return;
+                }
+            } else {
+                // No Authorization header found, throw 401 Unauthorized error
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-                response.getWriter().write("Token expired");
-                response.getWriter().flush();
-                return;
-            } catch (Exception e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-                response.getWriter().write("Invalid token");
+                response.getWriter().write("Authorization header missing");
                 response.getWriter().flush();
                 return;
             }
-        } else {
-            // No Authorization header found, throw 401 Unauthorized error
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-            response.getWriter().write("Authorization header missing");
-            response.getWriter().flush();
-            return;
         }
         filterChain.doFilter(request, response);
     }

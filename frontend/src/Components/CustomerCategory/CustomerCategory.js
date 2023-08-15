@@ -10,7 +10,7 @@ import CategoryUpdateButton from "./CustomerCategoryUpdateButton";
 
 function CustomerCategory(props) {
     useEffect(() => {
-        dispatch(changeSearchParams({active:''}))
+        dispatch(changeSearchParams({active:'', quickSearch: ""}))
     }, [])
     const dispatch = useDispatch();
     const category = useSelector((state) => state.category);

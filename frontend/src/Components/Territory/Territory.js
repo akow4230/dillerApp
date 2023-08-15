@@ -14,7 +14,7 @@
         const dispatch = useDispatch();
         const { modalVisible, editModalVisible, defValueOfMap, mapState, editData } = useSelector((state) => state.territory);
         useEffect(()=>{
-            dispatch(changeSearchParams({active:""}))
+            dispatch(changeSearchParams({active:'', quickSearch: ""}))
         },[dispatch])
         const columns = [
             {

@@ -1,24 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import {
-    FullscreenControl,
-    GeolocationControl,
-    Map,
-    Panorama,
-    Placemark,
-    SearchControl,
-    TrafficControl,
-    TypeSelector,
-    YMaps,
-    ZoomControl
-} from "react-yandex-maps";
+import { GeolocationControl, Map, Placemark, SearchControl, TrafficControl, TypeSelector, YMaps, ZoomControl } from "react-yandex-maps";
 import {useDispatch, useSelector} from "react-redux";
 import {setOneClientMapModal, setEditData, setEditModalVisible} from "../../redux/reducers/ClientsSlice";
 import {Button, Dropdown} from 'react-bootstrap';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {Modal} from 'react-bootstrap';
 import '../../Components/UniversalUI/Modal/index.css'
-import Loader from "../../ui/loader";
 function ClientUpdateButton(props) {
     const dispatch = useDispatch();
     const {clientMapModal, editData} = useSelector((state) => state.clients);
@@ -68,29 +56,27 @@ function ClientUpdateButton(props) {
                     <Dropdown.Item></Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-           <div>
-
-                   <div className={'umodal'}>
-                       {isYMapsLoaded && (
-                           <Modal show={clientMapModal} onHide={() => {
-                               dispatch(setOneClientMapModal())
-                               setIsYMapsLoaded(false)
-                           }} centered>
-                               <Modal.Header closeButton>
-                                   <Modal.Title>{editData?.name}</Modal.Title>
-                               </Modal.Header>
-                               <Modal.Body>
-                                   <YMaps>
-                                       <Map
-                                           state={{center: [editData?.latitude, editData?.longitude], zoom: 12}}
-                                           style={{width: '100%', height: '500px'}}
-                                       >
-                                           <FullscreenControl options={{float: "left"}}/>
-                                           <GeolocationControl options={{float: "right"}}/>
-                                           <TrafficControl options={{float: "right"}}/>
-                                           <ZoomControl options={{float: "left"}}/>
-                                           <TypeSelector options={{float: "right"}}/>
-                                           <SearchControl options={{float: "left"}}/>
+            <div className={'umodal'}>
+                {isYMapsLoaded && (
+                    <Modal show={clientMapModal} onHide={() => {
+                        dispatch(setOneClientMapModal())
+                        setIsYMapsLoaded(false)
+                    }} centered>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{editData?.name}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <YMaps>
+                                <Map
+                                    state={{center: [editData?.latitude, editData?.longitude], zoom: 12}}
+                                    style={{width: '100%', height: '500px'}}
+                                >
+                                    <FullscreenControl options={{float: "left"}}/>
+                                    <GeolocationControl options={{float: "right"}}/>
+                                    <TrafficControl options={{float: "right"}}/>
+                                    <ZoomControl options={{float: "left"}}/>
+                                    <TypeSelector options={{float: "right"}}/>
+                                    <SearchControl options={{float: "left"}}/>
 
                                            <Placemark
                                                key={editData?.id}

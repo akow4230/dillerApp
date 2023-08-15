@@ -2,11 +2,13 @@ import React, {useEffect, useState} from 'react';
 import Select from 'react-select';
 import {connect, useDispatch} from 'react-redux';
 import {changeCurrentPage, changeSearchParams} from "../../../redux/reducers/TableSlice";
+import {useLocation} from "react-router-dom";
 
 function Filter(props) {
     let param = props.param
     const dispatch = useDispatch();
     const searchParams = props.table.searchParams
+    const location = useLocation();
     const customStyles = {
         control: (provided) => ({
             ...provided,

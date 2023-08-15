@@ -49,8 +49,7 @@ public class TerritoryController {
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/getExcel")
     public ResponseEntity<Resource> getExcel(HttpServletResponse response,
-                                             @RequestParam(defaultValue = "") String active,
-                                             @RequestParam(defaultValue = "") String quickSearch
+                                             @RequestParam(defaultValue = "") String active, @RequestParam(defaultValue = "") String quickSearch
     ) throws IOException {
         if (quickSearch.equals("")){
             return territoryService.getExcel(response, active, "");

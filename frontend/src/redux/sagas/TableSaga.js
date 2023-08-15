@@ -24,7 +24,7 @@ function* watchGetTableData(action) {
     action.payload.search.weekDay?.map(item=>{
         weekDay.push(item.value)
     })
-     let territory=[]
+    let territory=[]
     action.payload.search.territory?.map(item=>{
         territory?.push(item?.value)
     })
