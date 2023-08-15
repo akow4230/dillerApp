@@ -188,7 +188,9 @@ function Clients(props) {
             placeholder: 'TIN'
         }
     ]
+
     return (
+
         <div>
             <div style={{
                 background: "#eeeeee",

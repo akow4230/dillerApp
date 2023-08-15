@@ -10,13 +10,15 @@ import {
     changeTableDataSize,
     getTableData,
     saveColumnsOrders,
-    toggleModal
+    toggleModal,
+    changeLoader
 } from '../../../redux/reducers/TableSlice';
 import Pagination from '@mui/material/Pagination';
 import Filter from '../filter/Filter';
 import axios from 'axios';
 import TableModal from './TableModal';
 import UModal from '../Modal/UModal';
+import Loader from "../../../ui/loader";
 
 function Table({isDark, columns, requestApi, filterParam, path}) {
     const dispatch = useDispatch();
@@ -27,7 +29,8 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
         currentPage,
         data,
         modal,
-        searchParams
+        searchParams,
+        isLoading
     } = useSelector((state) => state.table);
 
     function getData(search, changePage = false) {
@@ -54,6 +57,7 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
 
     useEffect(() => {
         getData(searchParams);
+
     }, [searchParams, columns, currentPage, dispatch, isDark, pageSize, requestApi]);
 
     function getExcel() {
@@ -106,135 +110,146 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
         );
         return values.join(" ");
     }
-
+    useEffect(()=>{
+        dispatch(changeLoader());
+        setTimeout(() => {
+            dispatch(changeLoader());
+        }, 1000);
+    },[])
     return (
-        <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
-            <Filter param={filterParam} func={getData}/>
-            <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
-                <button className={"btn btn-light"} onClick={() => setSettings(!settings)}><i
-                    className="fa-solid fa-sliders" style={{zIndex: "auto"}}></i></button>
-                {
-                    settings ? <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 10,
-                        overflowX: "auto"
-                    }}>
-                        <Button type={'dashed'} onClick={() => dispatch(toggleModal())}><i
-                            className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
-                        {
-                            data.columns?.map((item, index) => {
-                                return <FormControlLabel
-                                    key={item?.id}
-                                    value={item.id}
-                                    control={<Switch color="primary"/>}
-                                    label={item.title}
-                                    checked={item.show}
-                                    labelPlacement={item.title}
-                                    onChange={(e) => dispatch(changeTableColumns({
-                                        id: item.id,
-                                        checked: e.target.checked,
-                                        columns: data.columns
-                                    }))}
-                                />
-                            })
-                        }
-
-                    </div> : <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 10
-                    }}>
-
-                        <Select
-                            defaultValue={pageSize}
-                            style={{
-                                width: 70,
-                            }}
-                            onChange={(e) => dispatch(changeTableDataSize(e))}
-                            options={[
-                                {
-                                    value: '5',
-                                    label: '5',
-                                },
-                                {
-                                    value: '10',
-                                    label: '10',
-                                },
-                                {
-                                    value: '15',
-                                    label: '15',
-                                },
-                                {
-                                    value: '20',
-                                    label: '20'
-                                },
-                                {
-                                    value: '30',
-                                    label: '30'
-                                },
-                            ]}
-                        />
-                        <Button type={'dashed'} onClick={getExcel} style={{zIndex: "auto !important"}}><i
-                            className="fa-solid fa-table"></i> &nbsp; Excel</Button>
-                    </div>
-                }
-            </div>
-            <div className={'bottomUI'} style={{overflowY: 'auto'}}>
-                <div className={'my-table'}>
-                    <table className="table">
-                        <thead style={{position: "sticky", top: "-1"}}>
-                        <tr>
+        <div>
+            {isLoading ? <Loader />
+                :
+            <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
+                <Filter param={filterParam} func={getData}/>
+                <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
+                    <button className={"btn btn-light"} onClick={() => setSettings(!settings)}><i
+                        className="fa-solid fa-sliders" style={{zIndex: "auto"}}></i></button>
+                    {
+                        settings ? <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 10,
+                            overflowX: "auto"
+                        }}>
+                            <Button type={'dashed'} onClick={() => dispatch(toggleModal())}><i
+                                className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
                             {
-                                data?.columns?.map((item) => {
-                                    return <th key={item?.id}>
-                                        <p className={item?.show ? '' : 'hidden'}>{item?.title}</p>
-                                    </th>
+                                data.columns?.map((item, index) => {
+                                    return <FormControlLabel
+                                        key={item?.id}
+                                        value={item.id}
+                                        control={<Switch color="primary"/>}
+                                        label={item.title}
+                                        checked={item.show}
+                                        labelPlacement={item.title}
+                                        onChange={(e) => dispatch(changeTableColumns({
+                                            id: item.id,
+                                            checked: e.target.checked,
+                                            columns: data.columns
+                                        }))}
+                                    />
                                 })
                             }
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            data?.data?.map(item => <tr key={item?.id}>
-                                {
-                                    data?.columns?.map((col) => <td key={col?.id}>
-                                        {
-                                            col?.show &&
-                                            col.type === 'jsx' ? React.cloneElement(col.data, {
-                                                data: item
-                                            }) : col.show &&
-                                                <p>{getValueByKeys(item, col.key)}</p>
-                                        }
-                                    </td>)
-                                }
-                            </tr>)
-                        }
 
-                        </tbody>
-                    </table>
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '100%',
-                        height: 40
-                    }}>
-                        {data.totalPage > 1 &&
-                            <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))}
-                                        page={currentPage}
-                                        count={data.totalPage}
-                                        color={'primary'}
-                                        variant={"outlined"}
-                                        shape="rounded"/>}
+                        </div> : <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 10
+                        }}>
 
-                    </div>
+                            <Select
+                                defaultValue={pageSize}
+                                style={{
+                                    width: 70,
+                                }}
+                                onChange={(e) => dispatch(changeTableDataSize(e))}
+                                options={[
+                                    {
+                                        value: '5',
+                                        label: '5',
+                                    },
+                                    {
+                                        value: '10',
+                                        label: '10',
+                                    },
+                                    {
+                                        value: '15',
+                                        label: '15',
+                                    },
+                                    {
+                                        value: '20',
+                                        label: '20'
+                                    },
+                                    {
+                                        value: '30',
+                                        label: '30'
+                                    },
+                                ]}
+                            />
+                            <Button type={'dashed'} onClick={getExcel} style={{zIndex: "auto !important"}}><i
+                                className="fa-solid fa-table"></i> &nbsp; Excel</Button>
+                        </div>
+                    }
                 </div>
+                <div className={'bottomUI'} style={{overflowY: 'auto'}}>
+                    <div className={'my-table'}>
+                        <table className="table">
+                            <thead style={{position: "sticky", top: "-1"}}>
+                            <tr>
+                                {
+                                    data?.columns?.map((item) => {
+                                        return <th key={item?.id}>
+                                            <p className={item?.show ? '' : 'hidden'}>{item?.title}</p>
+                                        </th>
+                                    })
+                                }
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                data?.data?.map(item => <tr key={item?.id}>
+                                    {
+                                        data?.columns?.map((col) => <td key={col?.id}>
+                                            {
+                                                col?.show &&
+                                                col.type === 'jsx' ? React.cloneElement(col.data, {
+                                                    data: item
+                                                }) : col.show &&
+                                                    <p>{getValueByKeys(item, col.key)}</p>
+                                            }
+                                        </td>)
+                                    }
+                                </tr>)
+                            }
 
+                            </tbody>
+                        </table>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '100%',
+                            height: 40
+                        }}>
+                            {data.totalPage > 1 &&
+                                <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))}
+                                            page={currentPage}
+                                            count={data.totalPage}
+                                            color={'primary'}
+                                            variant={"outlined"}
+                                            shape="rounded"/>}
+
+                        </div>
+                    </div>
+
+                </div>
+                <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} title={'Change order'}
+                        onSave={() => dispatch(saveColumnsOrders())} elements={elements}/>
             </div>
-            <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} title={'Change order'}
-                    onSave={() => dispatch(saveColumnsOrders())} elements={elements}/>
+            }
         </div>
+
     );
 }
 

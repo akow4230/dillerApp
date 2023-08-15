@@ -90,10 +90,14 @@ const tableSlice = createSlice({
         },
         changeCurrentPage(state) {
             state.currentPage = 1;
+        },
+        changeLoader(state){
+            state.isLoading=!state.isLoading;
         }
     }
 })
 export const {
+    changeLoader,
     getTableData,
     getTableDataSuccess,
     changeTableDataSize,

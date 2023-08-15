@@ -18,6 +18,7 @@ import {Button, Dropdown} from 'react-bootstrap';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {Modal} from 'react-bootstrap';
 import '../../Components/UniversalUI/Modal/index.css'
+import Loader from "../../ui/loader";
 function ClientUpdateButton(props) {
     const dispatch = useDispatch();
     const {clientMapModal, editData} = useSelector((state) => state.clients);
@@ -67,49 +68,53 @@ function ClientUpdateButton(props) {
                     <Dropdown.Item></Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-            <div className={'umodal'}>
-                {isYMapsLoaded && (
-                    <Modal show={clientMapModal} onHide={() => {
-                        dispatch(setOneClientMapModal())
-                        setIsYMapsLoaded(false)
-                    }} centered>
-                        <Modal.Header closeButton>
-                            <Modal.Title>{editData?.name}</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <YMaps>
-                                <Map
-                                    state={{center: [editData?.latitude, editData?.longitude], zoom: 12}}
-                                    style={{width: '100%', height: '500px'}}
-                                >
-                                    <FullscreenControl options={{float: "left"}}/>
-                                    <GeolocationControl options={{float: "right"}}/>
-                                    <TrafficControl options={{float: "right"}}/>
-                                    <ZoomControl options={{float: "left"}}/>
-                                    <TypeSelector options={{float: "right"}}/>
-                                    <SearchControl options={{float: "left"}}/>
+           <div>
 
-                                    <Placemark
-                                        key={editData?.id}
-                                        geometry={[editData?.latitude, editData?.longitude]}
-                                        properties={{
-                                            iconCaption: `${editData?.name}`,
-                                            balloonContent: `phone:${editData?.phone}`,
-                                            hintContent: `address:${editData?.address}`,
-                                        }}
-                                        options={{
-                                            preset: 'islands#blueIcon',
-                                            iconColor: `${editData?.active?'#00FF00':'#FF0000'}`,
-                                            draggable: false,
-                                        }}
-                                        modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
-                                    />
-                                </Map>
-                            </YMaps>
-                        </Modal.Body>
-                    </Modal>
-                )}
-            </div>
+                   <div className={'umodal'}>
+                       {isYMapsLoaded && (
+                           <Modal show={clientMapModal} onHide={() => {
+                               dispatch(setOneClientMapModal())
+                               setIsYMapsLoaded(false)
+                           }} centered>
+                               <Modal.Header closeButton>
+                                   <Modal.Title>{editData?.name}</Modal.Title>
+                               </Modal.Header>
+                               <Modal.Body>
+                                   <YMaps>
+                                       <Map
+                                           state={{center: [editData?.latitude, editData?.longitude], zoom: 12}}
+                                           style={{width: '100%', height: '500px'}}
+                                       >
+                                           <FullscreenControl options={{float: "left"}}/>
+                                           <GeolocationControl options={{float: "right"}}/>
+                                           <TrafficControl options={{float: "right"}}/>
+                                           <ZoomControl options={{float: "left"}}/>
+                                           <TypeSelector options={{float: "right"}}/>
+                                           <SearchControl options={{float: "left"}}/>
+
+                                           <Placemark
+                                               key={editData?.id}
+                                               geometry={[editData?.latitude, editData?.longitude]}
+                                               properties={{
+                                                   iconCaption: `${editData?.name}`,
+                                                   balloonContent: `phone:${editData?.phone}`,
+                                                   hintContent: `address:${editData?.address}`,
+                                               }}
+                                               options={{
+                                                   preset: 'islands#blueIcon',
+                                                   iconColor: `${editData?.active?'#00FF00':'#FF0000'}`,
+                                                   draggable: false,
+                                               }}
+                                               modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
+                                           />
+                                       </Map>
+                                   </YMaps>
+                               </Modal.Body>
+                           </Modal>
+                       )}
+                   </div>
+
+           </div>
         </div>
 
     );
