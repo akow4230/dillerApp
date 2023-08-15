@@ -116,7 +116,6 @@ function Clients(props) {
 
                 return null;
             }
-
         }, {
             id: 10,
             title: "TIN",
