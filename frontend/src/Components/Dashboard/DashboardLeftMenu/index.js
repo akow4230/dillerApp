@@ -97,25 +97,9 @@ function Index(props) {
                 }} className="fa-solid fa-gears"></i>
                     <p style={{color: "white"}}>Settings</p>
                 </div>
-                            >
-                                <b>Client on map</b>
-                            </div>
-                        </div> : ""
-                    }
-                </div>
+
             </div>
-            <div className="box">
-                <i  className="fa-solid fa-user-secret icon-style"></i>
-                <p style={{ color: 'white' }}>Agents</p>
-            </div>
-            <div className="box">
-                <i  className="fa-solid fa-signal icon-style"></i>
-                <p style={{ color: 'white' }}>Reports</p>
-            </div>
-            <div onClick={() => navigate('/dashboard/settings')} className="box">
-                <i  className="fa-solid fa-gears icon-style"></i>
-                <p style={{ color: 'white' }}>Settings</p>
-            </div>
+
         </div>
     );
 }
