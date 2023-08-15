@@ -107,15 +107,25 @@ function Clients(props) {
             show: true,
             order: 9,
             render: (item) => {
-                const dateParts = item?.dateOfRegistration;
-                if (dateParts && dateParts.length >= 3) {
-                    const formattedDate = `${dateParts[2].toString().padStart(2, '0')}.${dateParts[1].toString().padStart(2, '0')}.${dateParts[0]}`;
-                    const formattedTime = `${dateParts[3].toString().padStart(2, '0')}:${dateParts[4].toString().padStart(2, '0')}`;
-                    return <p>{formattedDate} {formattedTime}</p>;
+                const dateOfRegistration = item?.dateOfRegistration;
+                if (dateOfRegistration) {
+                    const formattedDate = new Date(dateOfRegistration).toLocaleString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+
+                    });
+                    return <p>{formattedDate}</p>;
                 }
 
                 return null;
             }
+
+
+
+
         }, {
             id: 10,
             title: "TIN",
