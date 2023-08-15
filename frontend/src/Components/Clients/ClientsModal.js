@@ -48,6 +48,7 @@ function ClientsModal(props) {
         category: null,
     };
     useEffect(() => {
+        console.log(props.data)
         if (props.isEditing && props.visible) {
             reset({
                 territory: {value: props.data?.territory?.id, label: props.data?.territory?.title},
@@ -216,7 +217,6 @@ function ClientsModal(props) {
                                                 <div className='my-1 '>
                                                     <PhoneInput
                                                         {...field}
-                                                        value={"+998"}
                                                         defaultCountry='UZ'
                                                         limitMaxLength={true}
                                                         placeholder='+998'
