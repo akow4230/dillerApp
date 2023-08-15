@@ -20,6 +20,7 @@ import axios from 'axios';
 import TableModal from './TableModal';
 import UModal from '../Modal/UModal';
 import {useLocation} from "react-router-dom";
+import Loader from "../../../ui/loader";
 
 function Table({isDark, columns, requestApi, filterParam, path}) {
     const dispatch = useDispatch();
@@ -243,7 +244,10 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                     </div>
 
                 </div>
-                <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} title={'Change order'}
+                <UModal isOpen={modal} toggle={() => {
+                    alert("Hello")
+                    dispatch(toggleModal())
+                }} title={'Change order'}
                         onSave={() => dispatch(saveColumnsOrders())} elements={elements}/>
             </div>
             }

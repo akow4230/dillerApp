@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {
+    Clusterer,
     FullscreenControl,
     GeolocationControl,
     Map,
@@ -16,7 +17,8 @@ import {fetchClientsStart} from "../../redux/reducers/ClientsSlice";
 import {getTableData} from "../../redux/reducers/TableSlice";
 import {fetchTerritoryStart} from "../../redux/reducers/TerritorySlice";
 import Loader from "../../ui/loader";
-
+import client from './images/client.png'
+import territoryMark from './images/territory.png'
 function ClientsOnMap(props) {
     const dispatch = useDispatch();
     const {clients, loading}=useSelector(state=>(state.clients))
@@ -31,9 +33,29 @@ function ClientsOnMap(props) {
 
     return (
         <div className='container'>
-            <div>
+            <div >
                 <h1>Clients on Map </h1>
             </div>
+            <div className='my-2 d-flex justify-content-center align-items-center gap-5'>
+
+                <div className='d-flex align-items-center'>
+                    <span style={{backgroundColor:'#00FF00'}} className="translate-middle p-2 h-50 rounded-circle"></span>
+                    <p>Active clients: {clients.filter(item => item.active).length}</p>
+                </div>
+
+                <div className='d-flex align-items-center'>
+                    <span className="translate-middle p-2 bg-danger h-50 rounded-circle"></span>
+                    <p>No active clients:  {clients.filter(item => !item.active).length}</p>
+                </div>
+
+
+
+                <div className='d-flex align-items-center'>
+                    <span style={{backgroundColor:'#FF0000'}} className="translate-middle p-2 bg-primary h-50 rounded-circle"></span>
+                    <p>Territory: {territory?.length}</p>
+                </div>
+            </div>
+
             {loading?
                 <Loader/>
             :
@@ -53,24 +75,33 @@ function ClientsOnMap(props) {
                             <ZoomControl options={{float: "left"}}/>
                             <TypeSelector options={{float: "right"}}/>
                             <SearchControl options={{float: "left"}}/>
-                            {clients?.map(item=>
-                                <Placemark
-                                    key={item.id}
-                                    geometry={[item.latitude, item.longitude]}
-                                    properties={{
-                                        iconCaption: `${item.name}`,
-                                        balloonContent: `phone:${item.phone}`,
-                                        hintContent: `address:${item.address}`,
-                                    }}
-                                    options={{
-                                        preset: 'islands#blueIcon',
-                                        iconColor: '#00FF00',
-                                        draggable: false,
-                                    }}
-                                    modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
-                                />
+                            <Clusterer
+                                options={{
+                                    preset: "islands#invertedVioletClusterIcons",
+                                    groupByCoordinates: false,
+                                }}
+                            >
+                                {clients?.map(item=>
+                                    <Placemark
+                                        key={item.id}
+                                        geometry={[item.latitude, item.longitude]}
+                                        properties={{
+                                            iconCaption: `${item.name}`,
+                                            balloonContent: `phone:${item.phone}`,
+                                            hintContent: `address:${item.address}`,
+                                        }}
+                                        options={{
+                                            preset: 'islands#blueIcon',
+                                            iconColor: `${item?.active?'#00FF00':'#FF0000'}`,
+                                            draggable: false,
+                                        }}
+                                        modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
+                                    />
 
-                            )}
+                                )}
+
+                            </Clusterer>
+
                             {territory?.map(item=>
                                 <Placemark
                                     key={item.id}
@@ -82,7 +113,7 @@ function ClientsOnMap(props) {
                                     }}
                                     options={{
                                         preset: 'islands#blueIcon',
-                                        iconColor: '#FF0000',
+                                        iconColor: '#0000FF',
                                         draggable: false,
                                     }}
                                     modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}
@@ -96,6 +127,7 @@ function ClientsOnMap(props) {
                     </YMaps>
 
                 </div>
+
             </div>
             }
         </div>

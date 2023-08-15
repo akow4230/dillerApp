@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import {useDispatch} from "react-redux";
 import {setEditData, setEditDataUrl, setEditModalVisible} from "../../redux/reducers/CustomerCategorySlice";
 function CategoryUpdateButton(props) {
     const dispatch = useDispatch();
+useEffect(()=>{
 
+},[])
     function editTerritoryData() {
         dispatch(setEditData(props.data))
         console.log(props.data)

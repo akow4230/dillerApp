@@ -11,6 +11,7 @@ function UModal(props) {
         reset(
             props.data
         )
+        console.log(props.isNotSaving)
     },[props.isOpen])
     function saveValues(data) {
         dispatch({type:"modal/saveValuesAsync", payload:{url:props.url, data:data, hideModal:props.toggle(), reset:reset(), isEditing:props.isEditing}})
@@ -67,10 +68,11 @@ function UModal(props) {
                                 ))}
                             </form>}
                     </Modal.Body>
-                    <Modal.Footer style={{display: 'flex', justifyContent: 'center'}}>
-                        {!props.onSave ? <button className="blob-btn" type="submit" form={"modal"}>
-                            Save
-                            <span className="blob-btn__inner">
+                    {!props?.isNotSaving&&
+                        <Modal.Footer style={{display: 'flex', justifyContent: 'center'}}>
+                            {!props.onSave ? <button className="blob-btn" type="submit" form={"modal"}>
+                                Save
+                                <span className="blob-btn__inner">
                                 <span className="blob-btn__blobs">
                                     <span className="blob-btn__blob"></span>
                                     <span className="blob-btn__blob"></span>
@@ -78,21 +80,21 @@ function UModal(props) {
                                     <span className="blob-btn__blob"></span>
                                 </span>
                             </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style={{position: "absolute"}}>
-                                <defs>
-                                    <filter id="goo">
-                                        <feGaussianBlur in="SourceGraphic" result="blur"
-                                                        stdDeviation="10"></feGaussianBlur>
-                                        <feColorMatrix in="blur" mode="matrix"
-                                                       values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 21 -7"
-                                                       result="goo"></feColorMatrix>
-                                        <feBlend in2="goo" in="SourceGraphic" result="mix"></feBlend>
-                                    </filter>
-                                </defs>
-                            </svg>
-                        </button> : props.onSave ? <button className="blob-btn" onClick={props.onSave}>
-                            Save
-                            <span className="blob-btn__inner">
+                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style={{position: "absolute"}}>
+                                    <defs>
+                                        <filter id="goo">
+                                            <feGaussianBlur in="SourceGraphic" result="blur"
+                                                            stdDeviation="10"></feGaussianBlur>
+                                            <feColorMatrix in="blur" mode="matrix"
+                                                           values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 21 -7"
+                                                           result="goo"></feColorMatrix>
+                                            <feBlend in2="goo" in="SourceGraphic" result="mix"></feBlend>
+                                        </filter>
+                                    </defs>
+                                </svg>
+                            </button> : props.onSave ? <button className="blob-btn" onClick={props.onSave}>
+                                Save
+                                <span className="blob-btn__inner">
                                 <span className="blob-btn__blobs">
                                     <span className="blob-btn__blob"></span>
                                     <span className="blob-btn__blob"></span>
@@ -100,20 +102,21 @@ function UModal(props) {
                                     <span className="blob-btn__blob"></span>
                                 </span>
                             </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style={{position: "absolute"}}>
-                                <defs>
-                                    <filter id="goo">
-                                        <feGaussianBlur in="SourceGraphic" result="blur"
-                                                        stdDeviation="10"></feGaussianBlur>
-                                        <feColorMatrix in="blur" mode="matrix"
-                                                       values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 21 -7"
-                                                       result="goo"></feColorMatrix>
-                                        <feBlend in2="goo" in="SourceGraphic" result="mix"></feBlend>
-                                    </filter>
-                                </defs>
-                            </svg>
-                        </button> : ""}
-                    </Modal.Footer>
+                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style={{position: "absolute"}}>
+                                    <defs>
+                                        <filter id="goo">
+                                            <feGaussianBlur in="SourceGraphic" result="blur"
+                                                            stdDeviation="10"></feGaussianBlur>
+                                            <feColorMatrix in="blur" mode="matrix"
+                                                           values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 21 -7"
+                                                           result="goo"></feColorMatrix>
+                                            <feBlend in2="goo" in="SourceGraphic" result="mix"></feBlend>
+                                        </filter>
+                                    </defs>
+                                </svg>
+                            </button> : ""}
+                        </Modal.Footer>
+                    }
                 </Modal>
             </div>
         </div>

@@ -9,10 +9,11 @@ import TerritoryUpdateButton from "../Territory/TerritoryUpdateButton";
 import CategoryUpdateButton from "./CustomerCategoryUpdateButton";
 
 function CustomerCategory(props) {
+    const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(changeSearchParams({active:'', quickSearch: ""}))
-    }, [])
-    const dispatch = useDispatch();
+    }, [dispatch])
     const category = useSelector((state) => state.category);
     const elements = [{
         name: "Title*",

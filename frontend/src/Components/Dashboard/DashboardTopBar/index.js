@@ -33,8 +33,10 @@ function Index({data}) {
     }, []);
     return (
         <div className={"dashboardTopBar d-flex align-items-center"}>
-            <img onClick={() => navigate("/dashboard")} src={logo} alt="Image Not Found" width={70} height={70}
-                 style={{borderRadius: "50%", cursor: "pointer"}}/>
+            <div className={"d-flex justify-content-center"} style={{width: "4%"}}>
+                <img onClick={() => navigate("/dashboard")} src={logo} alt="Image Not Found" width={"100%"} height={"70%"}
+                     style={{borderRadius: "50%", cursor: "pointer"}}/>
+            </div>
             <div className={"top"}>
                 <div className="box mt-3">
                     <p>Supervisor</p>

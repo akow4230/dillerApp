@@ -101,7 +101,7 @@ function Clients(props) {
             }
         }, {
             id: 9,
-            title: "dateOfRegistration",
+            title: "date",
             key: "dateOfRegistration",
             type: "date",
             show: true,

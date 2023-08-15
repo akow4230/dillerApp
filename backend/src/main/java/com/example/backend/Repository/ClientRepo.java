@@ -33,7 +33,7 @@ public interface ClientRepo extends JpaRepository<Client, UUID> {
                     (:tin='true'  AND  c.tin != '')OR
                     ( :tin='false' AND c.tin = '')
                 )
-            order by c.id
+            order by c.date_of_registration
 """, nativeQuery = true)
     Page<Client> getClientsByActive(String active, String search, List<Integer> categoryIds, List<Integer> weekDayIds, String tin,List<UUID> territoryIds, PageRequest pageRequest);
 
