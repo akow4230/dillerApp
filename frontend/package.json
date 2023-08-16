@@ -20,11 +20,14 @@
     "load-script": "^2.0.0",
     "multiselect-react-dropdown": "^2.0.25",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-bootstrap": "^2.8.0",
+    "react-confirm-alert": "^3.0.6",
     "react-dom": "^18.2.0",
     "react-dropdown-select": "^4.10.0",
     "react-hook-form": "^7.45.2",
     "react-icons": "^4.10.1",
+    "react-modal": "^3.16.1",
     "react-phone-input-2": "^2.15.1",
     "react-phone-number-input": "^3.3.0",
     "react-redux": "^8.1.1",
@@ -43,7 +46,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"  ,
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

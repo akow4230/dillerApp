@@ -71,15 +71,14 @@ const tableSlice = createSlice({
             state.data.columns = state.modalColumns;
             state.modal = false
         },
-        changeTableColumns(state, action) {
-            state.data.columns = action.payload.columns;
-            // Find the column object with the matching ID and update its checked property
-            for (let i = 0; i < state.data.columns.length; i++) {
-                if (state.data.columns[i].id === action.payload.id) {
-                    state.data.columns[i].show = action.payload.checked;
-                    break;
-                }
-            }
+        changeTableColumns: (state, action) => {
+            const { sourceIndex, destinationIndex } = action.payload;
+            const updatedColumns = [...state.modalColumns];
+            const [draggedColumn] = updatedColumns.splice(sourceIndex, 1);
+            updatedColumns.splice(destinationIndex, 0, draggedColumn);
+
+            state.modalColumns = updatedColumns;
+
         },
         changeTheme(state, action) {
             state.darkTheme = action.payload
