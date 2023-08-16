@@ -25,8 +25,24 @@
     font-size: 13px;
     font-family: 'Quicksand', sans-serif;
     cursor: pointer;
+    position: relative;
 }
 
+.dashboardLeftMenu .client-dropdown{
+    position: absolute;
+    left: 100%;
+    width: 200px;
+    display: none;
+    z-index: 99;
+}
+
+.dashboardLeftMenu  .client-box:hover .client-dropdown{
+    display: block;
+    background: #416489;
+}
+.dashboardLeftMenu .client-box .client-dropdown .clientLink:hover{
+    background-color: #1890ff;
+}
 .dashboardLeftMenu .box:hover {
     border-bottom: 1px solid white;
 }

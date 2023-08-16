@@ -45,14 +45,6 @@ function CustomerCategory(props) {
     ]
     const columns = [
         {
-            id: 1,
-            title: "Id",
-            key: "id",
-            type: "int",
-            show: true,
-            order: 1
-        },
-        {
             id: 2,
             title: "Title",
             key: "title",

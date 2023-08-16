@@ -12,14 +12,6 @@ function CompanyProfile() {
   },[location.pathname])
   const columns = [
     {
-      id: 1,
-      title: "Id",
-      key: "id",
-      type: "int",
-      show: true,
-      order: 1
-    },
-    {
       id: 2,
       title: "Name",
       key: "name",

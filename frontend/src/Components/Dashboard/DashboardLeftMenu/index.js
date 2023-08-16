@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './style.css';
-import { Link, useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {Button, Dropdown} from 'react-bootstrap';
+
 function Index(props) {
     const [clients, setClients] = useState(false);
     const navigate = useNavigate();
 
-    const handleClientMouseEnter = () => {
-        setClients(true);
-    };
-
-    const handleClientMouseLeave = () => {
-            setClients(false);
-    };
 
     return (
         <div
             className={"dashboardLeftMenu d-flex flex-column justify-content-center align-items-center text-center gap-3"}>
-            <div style={{minHeight:"100%", gap:"5%", display:"flex", flexDirection:'column', paddingTop:"30px"}}>
+            <div style={{
+                minHeight: "100%",
+                width: "100%",
+                gap: "5%",
+                display: "flex",
+                flexDirection: 'column',
+                paddingTop: "30px"
+            }}>
                 <div className="box"><i style={{
                     color: "white", fontSize: "1.5vw",
                 }} className="fa-solid fa-rocket"></i>
@@ -34,53 +35,22 @@ function Index(props) {
                     <p style={{color: "white"}}>Stock</p>
                 </div>
                 <div
-                    onMouseEnter={handleClientMouseEnter}
-                    onMouseLeave={handleClientMouseLeave}
-                    className="box"><i style={{
+                    className="box client-box"><i style={{
                     color: "white", fontSize: "1.5vw"
                 }} className="fa-solid fa-users"></i>
                     <p style={{color: "white"}}>Clients</p>
-                    {
-                        clients ? <div
-                            style={{
-                                position: "absolute",
-                                left: 95,
-                                width: 200,
-                                background: "#415a77",
-                                color: "white",
-                                border: "1px solid",
-                                zIndex:"99"
-                            }}
-                        >
-                            <div
-                                onClick={() => navigate("/dashboard/clients")}
-                                style={{
-                                    width: "100%",
-                                    height: 50,
-                                    border: "1px solid",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <b>Client</b>
-                            </div>
-                            <div
-                                onClick={() => navigate("/dashboard/clients/map")}
-                                style={{
-                                    width: "100%",
-                                    height: 50,
-                                    border: "1px solid",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center"
-                                }}
-
-                            >
-                                <b>Client on map</b>
-                            </div>
-                        </div> : ""
-                    }
+                    <div
+                        className={"client-dropdown"}
+                    >
+                        <div style={{
+                            display:"flex",
+                            flexDirection:"column",
+                        }}>
+                            <Link className={"clientLink"} style={{textDecoration:"none",padding:"10px", color:"white", fontSize:'12pt'}} to={"/dashboard/clients"}>Clients</Link>
+                            <hr style={{color:"white", margin:"0"}}/>
+                            <Link className={"clientLink"} style={{textDecoration:"none",padding:"10px", color:"white", fontSize:"12pt"}} to={"/dashboard/clients/map"}>Clients on the map</Link>
+                        </div>
+                    </div>
                 </div>
                 <div className="box"><i style={{
                     color: "white", fontSize: "1.5vw",
