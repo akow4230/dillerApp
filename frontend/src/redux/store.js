@@ -10,6 +10,7 @@ import clients from "./reducers/ClientsSlice"
 import modal from "./reducers/ModalSlice"
 import categoryReducer from './reducers/CustomerCategorySlice'
 import weekDayReducer from "./reducers/WeekDaySlice";
+import preclose from "./reducers/PreCloseSlice";
 const sagaMiddleware = createSagaMiddleware();
 const rootReducer = combineReducers({
     login,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
     modal,
     category: categoryReducer,
     weekday: weekDayReducer,
-    clients
+    clients,
+    preclose
 
 });
 

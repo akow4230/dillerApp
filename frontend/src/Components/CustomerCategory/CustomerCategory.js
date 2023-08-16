@@ -7,6 +7,7 @@ import {changeSearchParams, saveColumnsOrders, toggleModal} from "../../redux/re
 import Table from "../UniversalUI/Table/Table";
 import TerritoryUpdateButton from "../Territory/TerritoryUpdateButton";
 import CategoryUpdateButton from "./CustomerCategoryUpdateButton";
+import PreClose from "../UniversalUI/preClose/PreClose";
 
 function CustomerCategory(props) {
     const dispatch = useDispatch();
@@ -105,9 +106,13 @@ function CustomerCategory(props) {
             placeholder: 'All'
         }
     ]
+    function handleCloseModal(){
+        dispatch(setModalVisible(false))
+    }
     return (
         <div style={{background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY: "auto"}}>
             <ToastContainer/>
+            <PreClose closeMainModal={handleCloseModal}/>
             <div className={"d-flex gap-3 align-items-center"}>
                 <p style={{fontSize: "25pt"}}>Client category</p>
                 <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add client
@@ -122,7 +127,8 @@ function CustomerCategory(props) {
                 filterParam={filterParam}
                 path={"customercategory"}
             />
-            <UModal isOpen={category.modalVisible} toggle={() => dispatch(setModalVisible(false))}
+
+            <UModal isOpen={category.modalVisible} toggle={handleCloseModal}
                     title={'Add client category'} url={"/api/v1/customercategory"} elements={elements}/>
             <UModal isOpen={category.editModalVisible} isEditing={true} toggle={() => dispatch(setEditModalVisible(false))}
                     title={'Edit client category'} url={category.editDataUrl} data={category.editData} elements={elements}/>

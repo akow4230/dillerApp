@@ -1,11 +1,16 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {Modal} from 'react-bootstrap';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import "./index.css"
-
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import {setShow} from "../../../redux/reducers/PreCloseSlice";
+import PreClose from "../preClose/PreClose";
 function UModal(props) {
     const dispatch = useDispatch();
+    const [confirmedClose, setConfirmedClose] = useState(false)
+    const [showAlert, setShowAlert] = useState(false)
+    const { show } = useSelector((state) => state.preclose);
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
     useEffect(()=>{
         reset(
@@ -16,14 +21,12 @@ function UModal(props) {
         dispatch({type:"modal/saveValuesAsync", payload:{url:props.url, data:data, hideModal:props.toggle(), reset:reset(), isEditing:props.isEditing}})
         console.log(data)
     }
-
     return (
         <div>
             <div className={'umodal'}>
                 <Modal show={props.isOpen} onHide={()=>{
-                    props.toggle()
-                    reset()
-                }} centered>
+                    dispatch(setShow(true))
+                }} centered style={show?{zIndex: 1000, overflowY:"hidden"}:{zIndex: 10000, overflowY:"hidden"}}>
                     <Modal.Header closeButton>
                         <Modal.Title>{props?.title}</Modal.Title>
                     </Modal.Header>

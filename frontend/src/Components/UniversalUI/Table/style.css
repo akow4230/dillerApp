@@ -44,3 +44,17 @@
 .tableUI .bottomUI .my-table .hidden {
     visibility: hidden;
 }
+.scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cccccc;
+    border-radius: 5px;
+}
+
+/* Styling for the track of the scrollbar */
+.scrollbar::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+}
+
+/* Apply the custom scrollbar width */
+.scrollbar::-webkit-scrollbar {
+    width: 10px;
+}
