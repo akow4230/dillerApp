@@ -102,6 +102,7 @@ function CustomerCategory(props) {
     ]
     function handleCloseModal(){
         dispatch(setModalVisible(false))
+        dispatch(changeSearchParams({active:'', quickSearch: ""}))
     }
     return (
         <div style={{background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY: "auto"}}>

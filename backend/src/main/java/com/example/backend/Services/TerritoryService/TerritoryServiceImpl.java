@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,6 +36,7 @@ public class TerritoryServiceImpl implements TerritoryService {
                 .region(reqTerritory.getRegion())
                 .title(reqTerritory.getTitle())
                 .code(reqTerritory.getCode())
+                .createdAt(LocalDateTime.now())
                 .active(reqTerritory.isActive())
                 .longitude(reqTerritory.getLongitude())
                 .latitude(reqTerritory.getLatitude())
@@ -54,7 +56,7 @@ public class TerritoryServiceImpl implements TerritoryService {
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
         List<Territory> territoryFilter = null;
         if (Objects.equals(active, "")) {
-            territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByRegion(search, search);
+            territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByCreatedAt(search, search);
         } else {
             territoryFilter = territoryRepo.findAllByActiveAndRegionAndTitle(Boolean.valueOf(active), search);
         }
@@ -95,7 +97,7 @@ public class TerritoryServiceImpl implements TerritoryService {
     private Page<Territory> getTerritoryFilter(String active, String search, PageRequest pageRequest) {
         Page<Territory> allTerritories = null;
         if (Objects.equals(active, "")) {
-            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCase(search, search, search, pageRequest);
+            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAt(search, search, search, pageRequest);
             return allTerritories;
         }
         allTerritories = territoryRepo.findWhitSearch(Boolean.valueOf(active), search, pageRequest);

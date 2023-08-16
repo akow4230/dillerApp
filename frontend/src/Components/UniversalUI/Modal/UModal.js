@@ -36,8 +36,8 @@ function UModal(props) {
                                     <div key={index}>
                                         {item.data ? React.cloneElement(item.data, {data: item}) :
                                             <div>
-                                                    <label className="d-flex gap-4 fs-6 align-items-center">
-                                                        <p className={"d-flex"}>{item?.name + ':'}</p>
+                                                    <label className={`m-0 w-100 ${item.type==="checkbox"&&"d-flex gap-2"}`}>
+                                                        <p style={{margin:"0"}}>{item?.name + ':'}</p>
                                                         <input
                                                             className={item.type==="checkbox"?"form-check":"form-control"}
                                                             type={item.type}
@@ -54,8 +54,8 @@ function UModal(props) {
                                     <div key={index}>
                                         {item.data ? React.cloneElement(item.data, {data: item}) :
                                             <div>
-                                                <label className="d-flex gap-2 fs-5">
-                                                    {item?.name + ':'}
+                                                <label className="fs-5">
+                                                    {item?.name + ':'} <br/>
                                                     <input
                                                         className="form-control"
                                                         type={item.type}

@@ -50,7 +50,7 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
     public Page<CustomerCategory> getCategoryFilter(String active, String search, PageRequest pageRequest) {
         Page<CustomerCategory> allTerritories = null;
         if (Objects.equals(active, "")) {
-            allTerritories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderById(search, pageRequest);
+            allTerritories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderByIdDesc(search, pageRequest);
             return allTerritories;
         }
         allTerritories = customerCategoryRepo.findBySearch(Boolean.valueOf(active), search, pageRequest);
@@ -83,7 +83,7 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
         List<CustomerCategory> customerCategories = null;
         if (Objects.equals(active, "")) {
-            customerCategories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderById(search);
+            customerCategories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderByIdDesc(search);
         } else {
             customerCategories = customerCategoryRepo.findAllByActiveAndTitleContaining(Boolean.valueOf(active), search);
         }
