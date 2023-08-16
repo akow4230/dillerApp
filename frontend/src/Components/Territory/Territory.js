@@ -9,13 +9,15 @@
     import Table from "../UniversalUI/Table/Table";
     import TerritoryUpdateButton from "./TerritoryUpdateButton";
     import {changeSearchParams} from "../../redux/reducers/TableSlice";
+    import {useLocation} from "react-router-dom";
 
     function Territory(props) {
         const dispatch = useDispatch();
         const { modalVisible, editModalVisible, defValueOfMap, mapState, editData } = useSelector((state) => state.territory);
+        const location= useLocation();
         useEffect(()=>{
             dispatch(changeSearchParams({active:'', quickSearch: ""}))
-        },[dispatch])
+        },[location.pathname])
         const columns = [
             {
                 id: 1,

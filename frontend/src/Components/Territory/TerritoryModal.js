@@ -114,40 +114,43 @@ function TerritoryModal(props) {
                         background: "#6690a7",
                         color: "white",
                         display: "flex",
-                        justifyContent:"space-between",
+                        justifyContent: "space-between",
                         alignItems: "center",
                         paddingLeft: "20px",
                         paddingRight: "20px",
                         paddingTop: "10px"
                     }}>
                         <p>{props.action}</p>
-                        <button style={{background:"none", border:"none"}} onClick={()=>props.onClose()}><CancelIcon /></button>
+                        <button style={{background: "none", border: "none"}} onClick={() => props.onClose()}>
+                            <CancelIcon/></button>
                     </header>
                     <div style={{display: "flex"}}>
                         <div className="left-side w-50 p-5">
                             <form onSubmit={handleSubmit(saveTerritory)}>
-                                <label className={"d-flex gap-4"}>
-                                    Title*
-                                    <input type="text"
-                                           className={"form-control my-2"} {...register("title", {required: "Title is required"})} />
-                                </label>
-                                {errors.title && <span className="error-message">{errors.title.message}</span>}
-                                <label className={"d-flex gap-4"}>
-                                    Region
-                                    <input type="text"
-                                           className={"form-control my-2"} {...register("region", {required: "Region is required"})} />
-                                </label>
-                                {errors.region && <span className="error-message">{errors.region.message}</span>}
-                                <label className={"d-flex gap-4"}>
-                                    Code
-                                    <input type="text"
-                                           className={"form-control my-2"} {...register("code", {required: "Code is required"})} />
-                                </label>
-                                {errors.code && <span className="error-message">{errors.code.message}</span>}
-                                <label className={"d-flex gap-2"}>
-                                    Active
-                                    <input type="checkbox" className={"form-check"} {...register("active")} />
-                                </label>
+                                <div className={"d-flex flex-column w-75"}>
+                                    <label className={" gap-4"}>
+                                        Title
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("title", {required: "Title is required"})} />
+                                    </label>
+                                    {errors.title && <span className="error-message">{errors.title.message}</span>}
+                                    <label className={" gap-4"}>
+                                        Region
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("region", {required: "Region is required"})} />
+                                    </label>
+                                    {errors.region && <span className="error-message">{errors.region.message}</span>}
+                                    <label className={" gap-4"}>
+                                        Code
+                                        <input type="text"
+                                               className={"form-control my-2"} {...register("code", {required: "Code is required"})} />
+                                    </label>
+                                    {errors.code && <span className="error-message">{errors.code.message}</span>}
+                                    <label className={"d-flex align gap-2 "}>
+                                        Active
+                                        <input type="checkbox" className={"form-check"} {...register("active")} />
+                                    </label>
+                                </div>
                                 <div style={{marginTop: "auto", display: "flex", justifyContent: "center"}}>
                                     <button className="btn btn-primary"
                                             style={{position: "absolute", bottom: "30px"}}>Add

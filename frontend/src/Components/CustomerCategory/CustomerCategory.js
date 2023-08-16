@@ -8,13 +8,15 @@ import Table from "../UniversalUI/Table/Table";
 import TerritoryUpdateButton from "../Territory/TerritoryUpdateButton";
 import CategoryUpdateButton from "./CustomerCategoryUpdateButton";
 import PreClose from "../UniversalUI/preClose/PreClose";
+import {useLocation} from "react-router-dom";
 
 function CustomerCategory(props) {
     const dispatch = useDispatch();
 
-    useEffect(() => {
+    const location= useLocation();
+    useEffect(()=>{
         dispatch(changeSearchParams({active:'', quickSearch: ""}))
-    }, [dispatch])
+    },[location.pathname])
     const category = useSelector((state) => state.category);
     const elements = [{
         name: "Title*",
@@ -127,7 +129,6 @@ function CustomerCategory(props) {
                 filterParam={filterParam}
                 path={"customercategory"}
             />
-
             <UModal isOpen={category.modalVisible} toggle={handleCloseModal}
                     title={'Add client category'} url={"/api/v1/customercategory"} elements={elements}/>
             <UModal isOpen={category.editModalVisible} isEditing={true} toggle={() => dispatch(setEditModalVisible(false))}

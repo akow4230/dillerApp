@@ -2,12 +2,14 @@ import React, { useEffect } from "react";
 import Table from "../UniversalUI/Table/Table";
 import { useDispatch } from "react-redux";
 import { changeSearchParams } from "../../redux/reducers/TableSlice";
+import {useLocation} from "react-router-dom";
 
 function CompanyProfile() {
   const dispatch = useDispatch();
-  useEffect(() => {
+  const location= useLocation();
+  useEffect(()=>{
     dispatch(changeSearchParams({active:'', quickSearch: ""}))
-  }, []);
+  },[location.pathname])
   const columns = [
     {
       id: 1,

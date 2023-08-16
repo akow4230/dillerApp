@@ -3,7 +3,6 @@ import {useForm} from 'react-hook-form';
 import {Modal} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
 import "./index.css"
-import 'react-confirm-alert/src/react-confirm-alert.css';
 import {setShow} from "../../../redux/reducers/PreCloseSlice";
 import PreClose from "../preClose/PreClose";
 function UModal(props) {

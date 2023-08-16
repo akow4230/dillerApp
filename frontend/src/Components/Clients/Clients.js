@@ -14,6 +14,7 @@ import {fetchCategoriesStart} from '../../redux/reducers/CustomerCategorySlice'
 import {fetchWeekdaysStart} from '../../redux/reducers/WeekDaySlice'
 import {fetchTerritoryStart} from "../../redux/reducers/TerritorySlice";
 import ClientUpdateButton from "./ClientUpdateButton";
+import {useLocation} from "react-router-dom";
 
 
 function Clients(props) {
@@ -31,13 +32,16 @@ function Clients(props) {
     const {weekdays} = useSelector((state) => state.weekday);
     const {territory} = useSelector((state) => state.territory)
     useEffect(() => {
-        dispatch(changeSearchParams({active:'', quickSearch: ""}))
+
         dispatch(fetchCategoriesStart())
         dispatch(fetchWeekdaysStart())
         dispatch(fetchTerritoryStart())
         dispatch(fetchClientsStart())
     }, [])
-
+    const location= useLocation();
+useEffect(()=>{
+    dispatch(changeSearchParams({active:'', quickSearch: ""}))
+},[location.pathname])
     // table columns
     const columns = [
         {

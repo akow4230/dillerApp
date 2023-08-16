@@ -19,12 +19,7 @@ function Filter(props) {
             // zIndex:100
         }),
     };
-    useEffect(() => {
-        if (searchParams.active === undefined) {
-            props.func({active: ' ', quickSearch: searchParams.quickSearch})
-        }
-        dispatch((changeSearchParams({quickSearch: ""})))
-    }, [])
+
 
     const handleCityChange = (obj) => {
         const {name, value} = obj;

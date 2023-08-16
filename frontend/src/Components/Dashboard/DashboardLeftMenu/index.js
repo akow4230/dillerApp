@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './style.css';
 import { Link, useNavigate } from 'react-router-dom';
-
+import {Button, Dropdown} from 'react-bootstrap';
 function Index(props) {
     const [clients, setClients] = useState(false);
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ function Index(props) {
     };
 
     const handleClientMouseLeave = () => {
-        setClients(false);
+            setClients(false);
     };
 
     return (
@@ -34,8 +34,8 @@ function Index(props) {
                     <p style={{color: "white"}}>Stock</p>
                 </div>
                 <div
-                    onMouseEnter={() => setClients(true)}
-                    onMouseLeave={() => setClients(false)}
+                    onMouseEnter={handleClientMouseEnter}
+                    onMouseLeave={handleClientMouseLeave}
                     className="box"><i style={{
                     color: "white", fontSize: "1.5vw"
                 }} className="fa-solid fa-users"></i>
