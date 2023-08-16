@@ -42,8 +42,7 @@ public class TerritoryController {
 
 
     ) {
-        HttpEntity<?> territory = territoryService.getTerritory(active, quickSearch, page, size);
-        return territory;
+        return territoryService.getTerritory(active, quickSearch, page, size);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")

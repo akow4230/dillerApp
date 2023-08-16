@@ -11,7 +11,6 @@ function UModal(props) {
         reset(
             props.data
         )
-        console.log(props.isNotSaving)
     },[props.isOpen])
     function saveValues(data) {
         dispatch({type:"modal/saveValuesAsync", payload:{url:props.url, data:data, hideModal:props.toggle(), reset:reset(), isEditing:props.isEditing}})
