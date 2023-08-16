@@ -1,27 +1,30 @@
 import React, {useEffect} from 'react';
 import {ToastContainer} from "react-toastify";
 import {
-    setCloseModals,
+    fetchCategoriesStart, setCloseModals,
+    setEditModalVisible,
     setModalVisible,
     setPreClose
 } from "../../redux/reducers/CustomerCategorySlice";
 import UModal from "../UniversalUI/Modal/UModal";
 import {useDispatch, useSelector} from "react-redux";
-import {changeSearchParams, changeTableDataSize} from "../../redux/reducers/TableSlice";
+import {changeSearchParams, changeTableDataSize, saveColumnsOrders, toggleModal} from "../../redux/reducers/TableSlice";
 import Table from "../UniversalUI/Table/Table";
+import TerritoryUpdateButton from "../Territory/TerritoryUpdateButton";
 import CategoryUpdateButton from "./CustomerCategoryUpdateButton";
 import PreClose from "../UniversalUI/preClose/PreClose";
 import {useLocation} from "react-router-dom";
 
 function CustomerCategory(props) {
     const dispatch = useDispatch();
-    const {preCloseShow} = useSelector((state)=>state.category)
+
     const location= useLocation();
     useEffect(()=>{
-        dispatch(changeTableDataSize(5))
         dispatch(changeSearchParams({active:'', quickSearch: ""}))
+        dispatch(changeTableDataSize(5))
     },[location.pathname])
     const category = useSelector((state) => state.category);
+    const {preCloseShow} = useSelector((state)=>state.category)
     const elements = [{
         name: "Title*",
         type: "text",
@@ -48,6 +51,7 @@ function CustomerCategory(props) {
         }
     ]
     const columns = [
+
         {
             id: 2,
             title: "Title",
@@ -76,12 +80,9 @@ function CustomerCategory(props) {
             id: 5,
             title: "Active",
             key: "active",
-            type: "date",
+            type: "str",
             show: true,
-            order: 5,
-            render: (item) => {
-                return item.active?"active":"no active"
-            }
+            order: 5
         },
         {
             id: 6,
@@ -115,7 +116,6 @@ function CustomerCategory(props) {
         <div style={{background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY: "auto"}}>
             <ToastContainer/>
             <PreClose closeMainModal={handleCloseModal} closePreClose={()=>dispatch(setPreClose(false))} show={preCloseShow}/>
-
             <div className={"d-flex gap-3 align-items-center"}>
                 <p style={{fontSize: "25pt"}}>Client category</p>
                 <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add client
@@ -131,9 +131,9 @@ function CustomerCategory(props) {
                 path={"customercategory"}
             />
             <UModal isOpen={category.modalVisible} toggle={handleCloseModal}
-                    title={'Add client category'} url={"/api/v1/customercategory"} elements={elements} openPreClose={()=>dispatch(setPreClose(true))} showPreClose={preCloseShow}/>
+                    action={'Add client category'} url={"/api/v1/customercategory"} elements={elements} openPreClose={()=>dispatch(setPreClose(true))} showPreClose={preCloseShow} title={"Client category"}/>
             <UModal isOpen={category.editModalVisible} isEditing={true} toggle={handleCloseModal}
-                    title={'Edit client category'} url={category.editDataUrl} data={category.editData} elements={elements} openPreClose={()=>dispatch(setPreClose(true))} showPreClose={preCloseShow}/>
+                    action={'Edit client category'} url={category.editDataUrl} data={category.editData} elements={elements} openPreClose={()=>dispatch(setPreClose(true))} showPreClose={preCloseShow} title={"Client category"}/>
         </div>
     );
 }

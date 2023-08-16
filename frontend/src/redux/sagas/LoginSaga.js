@@ -12,7 +12,7 @@ function* workLoginUser(action) {
     yield put(signUserStart());
     const response = yield call(() =>
         axios.post(
-            "http://localhost:8080/api/v1/auth/login",
+            "https://meprog.cf/api/v1/auth/login",
             action.payload.formData
         )
     );

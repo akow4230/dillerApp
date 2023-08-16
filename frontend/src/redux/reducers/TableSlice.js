@@ -18,7 +18,8 @@ const initialState = {
     },
     searchParams: {
     },
-    preCloseShow: false
+    preCloseShow: false,
+    defModalColumns: []
 };
 const tableSlice = createSlice({
     name: "table",
@@ -26,6 +27,7 @@ const tableSlice = createSlice({
     reducers: {
         getTableData: (state, action) => {
             state.modalColumns = action.payload.columns;
+            state.defModalColumns = action.payload.columns;
             action.payload.url = action.payload.url.replaceAll("{page}", action.payload.page)
             action.payload.url = action.payload.url.replaceAll("{limit}", action.payload.size)
             state.url = action.payload.url
@@ -50,6 +52,7 @@ const tableSlice = createSlice({
         },
         toggleModal(state, action) {
             state.modal = !state.modal
+            state.modalColumns = state.defModalColumns
         },
         setCurrentDragingColumn: (state, action) => {
             state.currentDragingColumn = action.payload;
@@ -65,6 +68,7 @@ const tableSlice = createSlice({
         },
         saveColumnsOrders: (state, action) => {
             state.data.columns = state.modalColumns;
+            state.defModalColumns = state.modalColumns;
             state.modal = false
         },
         changeTableColumns: (state, action) => {

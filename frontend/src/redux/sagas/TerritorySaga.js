@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 import {navigateTo} from "../reducers/DashboardSlice";
 function* saveTerritoryAsync(action) {
     try {
-        const { territory, isEditing } = action.payload;
+        const { territory, isEditing, reset } = action.payload;
         if (!territory.longitude || !territory.latitude) {
             toast.error("You must select territory");
             return;

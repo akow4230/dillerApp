@@ -95,12 +95,7 @@ function TerritoryModal(props) {
                 : saveTerritoryAction({
                     territory: {...data, longitude: territory?.longitude, latitude: territory?.latitude},
                     isEditing: false,
-                    reset: reset({
-                        title: "",
-                        region: "",
-                        code: "",
-                        active: ""
-                    })
+                    reset: reset
                 })
         );
 

@@ -119,12 +119,7 @@ function ClientsModal(props) {
                                 latitude: clients?.latitude
                             },
                             isEditing: false,
-                            reset: reset({
-                                title: "",
-                                region: "",
-                                code: "",
-                                active: ""
-                            })
+                            reset: reset
                         })
                 );
             } else {

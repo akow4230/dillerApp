@@ -15,11 +15,11 @@ import PreClose from "../UniversalUI/preClose/PreClose";
 function Territory(props) {
     const dispatch = useDispatch();
     const {modalVisible, editModalVisible, defValueOfMap, mapState, editData, preCloseShow} = useSelector((state) => state.territory);
-    const location = useLocation();
-    useEffect(() => {
+    const location= useLocation();
+    useEffect(()=>{
+        dispatch(changeSearchParams({active:'', quickSearch: ""}))
         dispatch(changeTableDataSize(5))
-        dispatch(changeSearchParams({active: '', quickSearch: ""}))
-    }, [location.pathname])
+    },[location.pathname])
     const columns = [
         {
             id: 1,
@@ -94,6 +94,7 @@ function Territory(props) {
     const closeModal = () => {
         dispatch({type: 'territory/handleMapClear', payload: {mapState: mapState, defValueOfMap: defValueOfMap}});
         dispatch(setCloseModal(false));
+        dispatch(changeSearchParams({active:'', quickSearch: ""}))
     };
     return (
         <div style={{background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY: "auto"}}>

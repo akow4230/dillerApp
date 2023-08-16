@@ -26,7 +26,7 @@ class CompanyServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-       underTest= new CompanyServiceImpl(companyRepo,authService);
+       underTest= new CompanyServiceImpl(companyRepo);
     }
 
     @Test

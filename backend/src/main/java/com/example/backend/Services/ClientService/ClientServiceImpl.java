@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -103,6 +105,9 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public HttpEntity<?> addClient(ClientDTO clientDTO) {
         try {
+            ZoneId gmt5Zone = ZoneId.of("GMT+5");
+            ZonedDateTime currentDateTime = ZonedDateTime.now(gmt5Zone);
+
             Client client = Client.builder()
                     .name(clientDTO.getName())
                     .company(clientDTO.getCompanyName())
@@ -113,14 +118,15 @@ public class ClientServiceImpl implements ClientService {
                     .tin(clientDTO.getTin())
                     .category(categoryRepo.findById(clientDTO.getCategory()).get())
                     .active(clientDTO.isActive())
-                    .dateOfRegistration(LocalDateTime.now())
+                    .dateOfRegistration(currentDateTime.toLocalDateTime())
                     .weekDay(clientDTO.getWeekdays())
                     .longitude(clientDTO.getLongitude())
                     .latitude(clientDTO.getLatitude())
                     .build();
+
             clientRepo.save(client);
-            return ResponseEntity.ok("Client Saved successfully");
-        }catch (Exception e){
+            return ResponseEntity.ok("Client saved successfully");
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while saving the client");
         }

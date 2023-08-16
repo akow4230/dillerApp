@@ -21,8 +21,8 @@ public class BackendApplication {
         SpringApplication.run(BackendApplication.class, args);
     }
 
-    @Bean
-    public TelegramBotsApi telegramBotsApi() throws TelegramApiException {
-        return new TelegramBotsApi(DefaultBotSession.class);
-    }
+//    @Bean
+//    public TelegramBotsApi telegramBotsApi() throws TelegramApiException {
+//        return new TelegramBotsApi(DefaultBotSession.class);
+//    }
 }
