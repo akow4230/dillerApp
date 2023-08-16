@@ -9,7 +9,6 @@ function UModal(props) {
     const dispatch = useDispatch();
     const [confirmedClose, setConfirmedClose] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
-    const { show } = useSelector((state) => state.preclose);
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
     useEffect(()=>{
         reset(
@@ -24,8 +23,8 @@ function UModal(props) {
         <div>
             <div className={'umodal'}>
                 <Modal show={props.isOpen} onHide={()=>{
-                    dispatch(setShow(true))
-                }} centered style={show?{zIndex: 1000, overflowY:"hidden"}:{zIndex: 10000, overflowY:"hidden"}}>
+                    props.openPreClose();
+                }} centered style={props.showPreClose?{zIndex: 1000, overflowY:"hidden"}:{zIndex: 10000, overflowY:"hidden"}} backdrop={!props.showPreClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>{props?.title}</Modal.Title>
                     </Modal.Header>

@@ -9,24 +9,24 @@ function PreClose(props) {
 
     function closeModal() {
         props.closeMainModal();
-        dispatch(setShow(false));
+        props.closePreClose();
+
     }
 
     const modalStyle = {
         zIndex: 100000,
-        margin: 'auto',          // Center the modal horizontally
         width: '300px',
         left:"50%",
         transform: "translateX(-50%)"
     };
 
     return (
-        <Modal show={show} centered style={modalStyle} backdrop={false}>
+        <Modal show={props.show} centered style={modalStyle}>
             <Modal.Body className={"d-flex gap-3 align-items-center flex-column justify-content-center"}>
                 Do you really want to leave?
                 <div className="d-flex gap-2 ">
                     <button className="btn btn-success" onClick={closeModal}>Yes</button>
-                    <button className="btn btn-danger" onClick={() => dispatch(setShow(false))}>No</button>
+                    <button className="btn btn-danger" onClick={() => props.closePreClose()}>No</button>
                 </div>
             </Modal.Body>
         </Modal>

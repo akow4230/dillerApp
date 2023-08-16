@@ -3,19 +3,21 @@ import {ToastContainer} from "react-toastify";
 import {useDispatch, useSelector} from "react-redux";
 import {
     setModalVisible,
-    setEditModalVisible,
+    setEditModalVisible, setCloseModal, setPreClose,
 } from "../../redux/reducers/TerritorySlice";
 import TerritoryModal from "./TerritoryModal";
 import Table from "../UniversalUI/Table/Table";
 import TerritoryUpdateButton from "./TerritoryUpdateButton";
-import {changeSearchParams} from "../../redux/reducers/TableSlice";
+import {changeSearchParams, changeTableDataSize, toggleModal} from "../../redux/reducers/TableSlice";
 import {useLocation} from "react-router-dom";
+import PreClose from "../UniversalUI/preClose/PreClose";
 
 function Territory(props) {
     const dispatch = useDispatch();
-    const {modalVisible, editModalVisible, defValueOfMap, mapState, editData} = useSelector((state) => state.territory);
+    const {modalVisible, editModalVisible, defValueOfMap, mapState, editData, preCloseShow} = useSelector((state) => state.territory);
     const location = useLocation();
     useEffect(() => {
+        dispatch(changeTableDataSize(5))
         dispatch(changeSearchParams({active: '', quickSearch: ""}))
     }, [location.pathname])
     const columns = [
@@ -91,15 +93,12 @@ function Territory(props) {
     ]
     const closeModal = () => {
         dispatch({type: 'territory/handleMapClear', payload: {mapState: mapState, defValueOfMap: defValueOfMap}});
-        dispatch(setModalVisible(false));
+        dispatch(setCloseModal(false));
     };
-    const closeEditModal = () => {
-        dispatch({type: 'territory/handleMapClear', payload: {mapState: mapState, defValueOfMap: defValueOfMap}});
-        dispatch(setEditModalVisible(false))
-    }
     return (
         <div style={{background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY: "auto"}}>
             <ToastContainer/>
+            <PreClose closeMainModal={closeModal} closePreClose={()=>dispatch(setPreClose(false))} show={preCloseShow}/>
             <div className={"d-flex gap-3 align-items-center"}>
                 <p style={{fontSize: "25pt"}}>Territory</p>
                 <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add
@@ -116,7 +115,7 @@ function Territory(props) {
             />
             <TerritoryModal action={"Add territory"} visible={modalVisible} onClose={closeModal}/>
             <TerritoryModal action={"Edit territory"} data={editData} isEditing={true} visible={editModalVisible}
-                            onClose={closeEditModal}/>
+                            onClose={closeModal}/>
         </div>
     );
 }

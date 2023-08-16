@@ -12,7 +12,8 @@ import {
     getTableData,
     saveColumnsOrders,
     toggleModal,
-    changeLoader
+    changeLoader,
+    setPreClose
 } from '../../../redux/reducers/TableSlice';
 import Pagination from '@mui/material/Pagination';
 import Filter from '../filter/Filter';
@@ -34,7 +35,8 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
         data,
         modal,
         searchParams,
-        isLoading
+        isLoading,
+        preCloseShow
     } = useSelector((state) => state.table);
     function getData(search, changePage = false) {
         if (changePage) {
@@ -126,9 +128,8 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
     },[])
     return (
         <div>
-            {isLoading?(<Loader/>):(
                 <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
-                    <PreClose closeMainModal={() => dispatch(toggleModal())}/>
+                    <PreClose closeMainModal={() => dispatch(toggleModal())} closePreClose={()=>dispatch(setPreClose(false))} show={preCloseShow}/>
                     <Filter param={filterParam} func={getData}/>
                     <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
 
@@ -172,7 +173,7 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                             }}>
 
                                 <Select
-                                    defaultValue={pageSize}
+                                    defaultValue={5}
                                     style={{
                                         width: 70,
                                     }}
@@ -210,6 +211,7 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                         }
                     </div>
                     <div className={'bottomUI scrollbar'} style={{overflowY: 'auto'}} >
+                        {isLoading?(<Loader/>):(
                         <div className={'my-table'}>
                             <table className="table table-hover table-bordered">
                                 <thead>
@@ -247,23 +249,30 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 width: '100%',
-                                height: 40
+                                height: 40,
+                                gap:"30px"
                             }}>
-                                {data.totalPage > 1 &&
-                                    <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))}
-                                                page={currentPage}
-                                                count={data.totalPage}
-                                                color={'primary'}
-                                                variant={"outlined"}
-                                                shape="rounded"/>}
+                                <div>
+                                    {currentPage}-{Math.min(pageSize,data.totalElements, data?.data?.length)}/{data.totalElements}
+                                </div>
+                                <div>
+                                    {data.totalPage > 1 &&
+                                        <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))}
+                                                    page={currentPage}
+                                                    count={data.totalPage}
+                                                    color={'primary'}
+                                                    variant={"outlined"}
+                                                    shape="rounded"/>}
+                                </div>
 
                             </div>
                         </div>
+                        )}
+
                         <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} title={'Change order'}
-                                onSave={() => dispatch(saveColumnsOrders())} elements={elements}/>
+                                onSave={() => dispatch(saveColumnsOrders())} elements={elements} openPreClose={()=>dispatch(setPreClose(true))} showPreClose={preCloseShow}/>
                     </div>
                 </div>
-            )}
 
         </div>
     );

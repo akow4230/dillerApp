@@ -16,7 +16,7 @@ import {
     setTemplate,
     setMapState,
     saveClientsAction,
-    editClientsAction, pushWeekday, deleteWeekday, setSelectedWeekdays
+    editClientsAction, pushWeekday, deleteWeekday, setSelectedWeekdays, setPreClose
 } from '../../redux/reducers/ClientsSlice';
 import "../Territory/styles.css"
 import {toast, ToastContainer} from "react-toastify";
@@ -74,7 +74,7 @@ function ClientsModal(props) {
     useEffect(() => {
         function handleClickOutside(event) {
             if (props.visible && !event.target.closest(".modal-content")) {
-                props.onClose();
+                dispatch(setPreClose(true))
             }
         }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeTableColumns } from '../../../redux/reducers/TableSlice';
+import {changeOrder} from '../../../redux/reducers/TableSlice';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import './style.css';
 
@@ -13,7 +13,7 @@ function TableModal(props) {
 
         const sourceIndex = result.source.index;
         const destinationIndex = result.destination.index;
-        dispatch(changeTableColumns({ sourceIndex, destinationIndex }));
+        dispatch(changeOrder({ sourceIndex, destinationIndex }));
     };
 
     return (

@@ -18,11 +18,12 @@ import {
     setTemplate,
     setMapState,
     saveTerritoryAction,
-    editTerritoryAction
+    editTerritoryAction, setPreClose
 } from '../../redux/reducers/TerritorySlice';
 import "./styles.css"
 import {ToastContainer, toast} from "react-toastify";
 import CancelIcon from "@mui/icons-material/Cancel";
+import {setShow} from "../../redux/reducers/PreCloseSlice";
 
 function TerritoryModal(props) {
     const dispatch = useDispatch();
@@ -47,7 +48,7 @@ function TerritoryModal(props) {
     useEffect(() => {
         function handleClickOutside(event) {
             if (props.visible && !event.target.closest(".modal-content")) {
-                props.onClose();
+                dispatch(setPreClose(true))
             }
         }
 

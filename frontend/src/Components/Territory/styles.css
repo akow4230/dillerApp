@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Ensure the modal appears above other components */
+    z-index: 1000; /* Ensure the modal appears above other components */
 }
 
 /* Styling for the modal content */
@@ -16,7 +16,7 @@
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    z-index: 10000; /* Ensure the modal content appears above the overlay */
+    z-index: 1000; /* Ensure the modal content appears above the overlay */
     max-width: 90%; /* Adjust the width of the modal content as needed */
 }
 
