@@ -251,14 +251,13 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
                             <table className="table table-hover table-bordered">
                                 <thead className={'table-dark'}>
                                 <tr>
-                                    {data?.columns?.map((item) => (
+                                    {data?.columns?.filter((col) => col?.show).map((item) => (
                                         <th key={item?.id}>{item?.title}</th>
                                     ))}
                                 </tr>
                                 </thead>
                                 {data?.data.length!==0?
                                     <tbody>
-
                                     {data?.data?.map((item) => (
                                         <tr key={item?.id} className={item.active?'':'table-warning'}>
                                             {data?.columns?.filter((col) => col?.show).map((col) => (

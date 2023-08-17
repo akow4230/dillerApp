@@ -86,13 +86,13 @@ public class ClientServiceImpl implements ClientService {
                         switch (column) {
                             case "Name" -> cell.setCellValue(client.getName());
                             case "Company" -> cell.setCellValue(client.getCompany());
-                            case "territory" -> cell.setCellValue(client.getTerritory().getTitle());
-                            case "address" -> cell.setCellValue(client.getAddress());
-                            case "phone" -> cell.setCellValue(client.getPhone());
-                            case "referencePoint" -> cell.setCellValue(client.getReferencePoint());
+                            case "Territory" -> cell.setCellValue(client.getTerritory().getTitle());
+                            case "Address" -> cell.setCellValue(client.getAddress());
+                            case "Phone" -> cell.setCellValue(client.getPhone());
+                            case "ReferencePoint" -> cell.setCellValue(client.getReferencePoint());
                             case "TIN" -> cell.setCellValue(client.getTin());
-                            case "category" -> cell.setCellValue(client.getCategory().getTitle());
-                            case "date" -> cell.setCellValue(client.getDateOfRegistration().toString());
+                            case "Category" -> cell.setCellValue(client.getCategory().getTitle());
+                            case "Date" -> cell.setCellValue(client.getDateOfRegistration().toString());
                         }
                     }
                 }

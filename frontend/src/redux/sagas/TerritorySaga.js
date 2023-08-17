@@ -34,7 +34,6 @@ function* saveTerritoryAsync(action) {
                 region: territory.region,
             }
         );
-        console.log(response)
         if (response!==undefined&&response.data===401){
             toast.error("Authorization problem")
             yield put(navigateTo("/404"))
@@ -84,7 +83,6 @@ function* fetchTerritorySaga() {
     try {
         const response = yield call(() => instance("/api/v1/territory/all", "GET"))
         yield put(fetchTerritorySuccess(response.data));
-        // console.log(response)
     } catch (error) {
         yield put(fetchTerritoryFailure(error.message));
     }

@@ -16,5 +16,5 @@ public interface TerritoryRepo extends JpaRepository<Territory, UUID> {
             """, nativeQuery = true)
     Page<Territory> findWhitSearch(Boolean active, String search, Pageable pageRequest);
 
-    Page<Territory> findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(String title, String region, String code, Pageable pageRequest);
+    Page<Territory> findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtDesc(String title, String region, String code, Pageable pageRequest);
 }

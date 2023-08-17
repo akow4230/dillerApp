@@ -46,6 +46,7 @@ public class ClientController {
                                              @RequestParam(defaultValue = "") String tin,
                                              @RequestParam(defaultValue = "") List<String> columns
     ) throws IOException {
+        System.out.println(columns.toString());
         return clientService.getExcel(response, active, quickSearch, category, weekDay, territory, tin,columns);
     }
 

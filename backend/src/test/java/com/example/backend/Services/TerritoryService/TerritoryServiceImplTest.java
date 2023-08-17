@@ -65,7 +65,7 @@ class TerritoryServiceImplTest {
         List<Territory> territoryList = List.of(territory);
         PageRequest pageRequest = PageRequest.of(0, 10);
         Page<Territory> mockPage = new PageImpl<>(territoryList, pageRequest, territoryList.size());
-        Mockito.when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(
+        Mockito.when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtDesc(
                         anyString(), anyString(), anyString(), any(PageRequest.class)))
                 .thenReturn(mockPage);
 

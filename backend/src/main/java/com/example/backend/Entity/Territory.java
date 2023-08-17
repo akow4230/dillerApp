@@ -25,7 +25,9 @@ public class Territory {
     private boolean active;
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
+    @Column(unique = true)
     private double longitude;
+    @Column(unique = true)
     private double latitude;
 
 }

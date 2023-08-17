@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.example.backend.Services.CompanyService.CompanyServiceImpl.getResourceResponseEntity;
@@ -29,17 +31,25 @@ public class TerritoryServiceImpl implements TerritoryService {
 
     @Override
     public HttpEntity<?> addTerritory(ReqTerritory reqTerritory) {
-        Territory newTerritory = Territory.builder()
-                .region(reqTerritory.getRegion())
-                .title(reqTerritory.getTitle())
-                .code(reqTerritory.getCode())
-                .createdAt(LocalDateTime.now())
-                .active(reqTerritory.isActive())
-                .longitude(reqTerritory.getLongitude())
-                .latitude(reqTerritory.getLatitude())
-                .build();
-        territoryRepo.save(newTerritory);
-        return ResponseEntity.ok("Territory is saved successfully");
+        try {
+            ZoneId gmt5Zone = ZoneId.of("GMT+5");
+            ZonedDateTime currentDateTime = ZonedDateTime.now(gmt5Zone);
+            Territory newTerritory = Territory.builder()
+                    .region(reqTerritory.getRegion())
+                    .title(reqTerritory.getTitle())
+                    .code(reqTerritory.getCode())
+                    .createdAt(currentDateTime.toLocalDateTime())
+                    .active(reqTerritory.isActive())
+                    .longitude(reqTerritory.getLongitude())
+                    .latitude(reqTerritory.getLatitude())
+                    .build();
+            territoryRepo.save(newTerritory);
+            return ResponseEntity.ok("Territory is saved successfully");
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while saving the territory");
+        }
+
     }
 
     @Override
@@ -54,7 +64,7 @@ public class TerritoryServiceImpl implements TerritoryService {
         List<Territory> territoryFilter = null;
         Pageable pageable = Pageable.unpaged();
         if (Objects.equals(active, "")) {
-            territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(search, search, search, pageable).getContent();
+            territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtDesc(search, search, search, pageable).getContent();
         } else {
             territoryFilter = territoryRepo.findWhitSearch(Boolean.valueOf(active), search, pageable).getContent();
         }
@@ -95,7 +105,7 @@ public class TerritoryServiceImpl implements TerritoryService {
     private Page<Territory> getTerritoryFilter(String active, String search, PageRequest pageRequest) {
         Page<Territory> allTerritories = null;
         if (Objects.equals(active, "")) {
-            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(search, search, search, pageRequest);
+            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtDesc(search, search, search, pageRequest);
             return allTerritories;
         }
         allTerritories = territoryRepo.findWhitSearch(Boolean.valueOf(active), search, pageRequest);
