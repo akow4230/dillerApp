@@ -19,16 +19,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+
 import static com.example.backend.Services.CompanyService.CompanyServiceImpl.*;
 
 @Service
@@ -56,51 +55,49 @@ public class ClientServiceImpl implements ClientService {
 
     @SneakyThrows
     @Override
-    public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String quickSearch, String category, String weekDay, String territory, String tin) {
+    public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String quickSearch, String category, String weekDay, String territory, String tin, List<String> columns) {
         List<Integer> categoryIds = getIdes(category);
         List<UUID> territoryIds = getUUIDes(territory);
         List<Integer> weekDayIds = getIdes(weekDay);
-        Pageable pageable=Pageable.unpaged();
-        List<Client> clientList = clientRepo.getClientsByActive(active, quickSearch, categoryIds, weekDayIds, tin, territoryIds,pageable).getContent();
+        Pageable pageable = Pageable.unpaged();
+        List<Client> clientList = clientRepo.getClientsByActive(active, quickSearch, categoryIds, weekDayIds, tin, territoryIds, pageable).getContent();
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Client");
         CellStyle cellStyle = ExcelTools.createHeaderCellStyle(workbook);
-        createHeaderRow(sheet, cellStyle);
-        generateColumns(clientList, sheet);
+        ExcelTools.createHeaderRow(sheet, cellStyle, columns);
+        generateColumns(clientList, sheet, columns);
         ExcelTools.autoSizeColumns(sheet);
         return getResourceResponseEntity(workbook);
     }
 
-    private static void generateColumns(List<Client> clientList, Sheet sheet) {
+    private static void generateColumns(List<Client> clientList, Sheet sheet, List<String> columns) {
         int counter = 1;
+        Map<String, Integer> columnIndexMap = ExcelTools.createColumnIndexMap(columns);
+
         for (Client client : clientList) {
             Row dataRow = sheet.createRow(counter);
             counter++;
-            dataRow.createCell(0).setCellValue(client.getId().toString());
-            dataRow.createCell(1).setCellValue(client.getName());
-            dataRow.createCell(2).setCellValue(client.getCompany());
-            dataRow.createCell(3).setCellValue(client.getTerritory().getTitle());
-            dataRow.createCell(4).setCellValue(client.getAddress());
-            dataRow.createCell(5).setCellValue(client.getPhone());
-            dataRow.createCell(6).setCellValue(client.getReferencePoint());
-            dataRow.createCell(7).setCellValue(client.getTin());
-            dataRow.createCell(8).setCellValue(client.getCategory().getTitle());
-            dataRow.createCell(9).setCellValue(client.getDateOfRegistration().toString());
-        }
-    }
 
-    private void createHeaderRow(Sheet sheet, CellStyle cellStyle) {
-        Row headerRow = sheet.createRow(0);
-        String[] headers = {
-                "ID", "Name", "Company", "Territory", "Address",
-                "Phone", "ReferencePoint",
-                "TIN", "Category", "DateOfRegistration"
-        };
-        for (int i = 0; i < headers.length; i++) {
-            Cell cell = headerRow.createCell(i);
-            cell.setCellValue(headers[i]);
-            cell.setCellStyle(cellStyle);
-            sheet.autoSizeColumn(i);
+            for (String column : columns) {
+                if (!column.equals("Update")){
+                    Integer columnIndex = columnIndexMap.get(column);
+                    if (columnIndex != null) {
+                        Cell cell = dataRow.createCell(columnIndex);
+                        switch (column) {
+                            case "Name" -> cell.setCellValue(client.getName());
+                            case "Company" -> cell.setCellValue(client.getCompany());
+                            case "territory" -> cell.setCellValue(client.getTerritory().getTitle());
+                            case "address" -> cell.setCellValue(client.getAddress());
+                            case "phone" -> cell.setCellValue(client.getPhone());
+                            case "referencePoint" -> cell.setCellValue(client.getReferencePoint());
+                            case "TIN" -> cell.setCellValue(client.getTin());
+                            case "category" -> cell.setCellValue(client.getCategory().getTitle());
+                            case "date" -> cell.setCellValue(client.getDateOfRegistration().toString());
+                        }
+                    }
+                }
+
+            }
         }
     }
 

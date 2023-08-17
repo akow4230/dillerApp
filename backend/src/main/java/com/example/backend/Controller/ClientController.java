@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin
@@ -42,9 +43,10 @@ public class ClientController {
                                              @RequestParam(defaultValue = "") String category,
                                              @RequestParam(defaultValue = "") String weekDay,
                                              @RequestParam(defaultValue = "") String territory,
-                                             @RequestParam(defaultValue = "") String tin
+                                             @RequestParam(defaultValue = "") String tin,
+                                             @RequestParam(defaultValue = "") List<String> columns
     ) throws IOException {
-        return clientService.getExcel(response, active, quickSearch, category, weekDay, territory, tin);
+        return clientService.getExcel(response, active, quickSearch, category, weekDay, territory, tin,columns);
     }
 
 

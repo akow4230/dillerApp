@@ -1,4 +1,5 @@
 package com.example.backend.Services.CompanyService;
+import com.example.backend.Entity.Client;
 import com.example.backend.Entity.User;
 import com.example.backend.ExcelTools;
 import com.example.backend.Projection.CompanyProfileProjection;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -42,14 +44,14 @@ public class CompanyServiceImpl implements CompanyService {
 
     @SneakyThrows
     @Override
-    public ResponseEntity<Resource> getExcel(HttpServletResponse response, String search,User user) {
+    public ResponseEntity<Resource> getExcel(HttpServletResponse response, String search, User user, List<String> columns) {
         Pageable pageable=Pageable.unpaged();
         List<CompanyProfileProjection> companyExcel = companyRepo.findByCompanyId(pageable,search,user.getId()).getContent();
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Company info");
         CellStyle cellStyle = ExcelTools.createHeaderCellStyle(workbook);
-        createHeaderRow(sheet, cellStyle);
-        populateDataRows(sheet, companyExcel);
+        ExcelTools.createHeaderRow(sheet, cellStyle,columns);
+        populateDataRows(sheet, companyExcel,columns);
         ExcelTools.autoSizeColumns(sheet);
         return getResourceResponseEntity(workbook);
     }
@@ -66,21 +68,31 @@ public class CompanyServiceImpl implements CompanyService {
         }
     }
 
-    private void populateDataRows(Sheet sheet, List<CompanyProfileProjection> companyExcel) {
+    private void populateDataRows(Sheet sheet, List<CompanyProfileProjection> companyExcel,List<String> columns) {
         int counter = 1;
-        for (CompanyProfileProjection company1 : companyExcel) {
+        Map<String, Integer> columnIndexMap = ExcelTools.createColumnIndexMap(columns);
+        for (CompanyProfileProjection company : companyExcel) {
             Row dataRow = sheet.createRow(counter);
             counter++;
-            dataRow.createCell(0).setCellValue(company1.getId().toString());
-            dataRow.createCell(1).setCellValue(company1.getRegion());
-            dataRow.createCell(2).setCellValue(company1.getName());
-            dataRow.createCell(3).setCellValue(company1.getSupportPhone());
-            dataRow.createCell(4).setCellValue(company1.getSupportPhone());
-            dataRow.createCell(5).setCellValue(company1.getEmail());
-            dataRow.createCell(6).setCellValue(company1.getTitle());
+            for (String column : columns) {
+                if (!column.equals("Update")){
+                    Integer columnIndex = columnIndexMap.get(column);
+                    if (columnIndex != null) {
+                        Cell cell = dataRow.createCell(columnIndex);
+                        switch (column) {
+                            case "Name" -> cell.setCellValue(company.getName());
+                            case "CompanyName" -> cell.setCellValue(company.getCompanyName());
+                            case "Region" -> cell.setCellValue(company.getRegion());
+                            case "Phone" -> cell.setCellValue(company.getSupportPhone());
+                            case "Email" -> cell.setCellValue(company.getEmail());
+                            case "Title" -> cell.setCellValue(company.getTitle());
+                        }
+                    }
+                }
+
+            }
         }
     }
-
     public static ResponseEntity<Resource> getResourceResponseEntity(XSSFWorkbook workbook) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         workbook.write(outputStream);

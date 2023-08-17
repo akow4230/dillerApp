@@ -34,7 +34,8 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
         modal,
         searchParams,
         isLoading,
-        preCloseShow
+        preCloseShow,
+        modalColumns
     } = useSelector((state) => state.table);
 
     function getData(search, changePage = false) {
@@ -112,7 +113,8 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
                     category: category.join(','),
                     weekDay: weekDay.join(','),
                     tin: searchParams.tin?.value,
-                    territory: territory.join(',')
+                    territory: territory.join(','),
+                    columns: modalColumns.filter(item => item.title !== "Update").map(item => item.title).join(',')
                 }
             })
             .then((res) => {

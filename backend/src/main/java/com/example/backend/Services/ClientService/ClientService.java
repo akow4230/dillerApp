@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ClientService {
@@ -19,5 +20,5 @@ public interface ClientService {
 
     HttpEntity<?> getAllClients();
 
-    ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String quickSearch, String category, String weekDay, String territory, String tin);
+    ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String quickSearch, String category, String weekDay, String territory, String tin, List<String> columns);
 }

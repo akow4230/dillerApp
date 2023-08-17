@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/company")
@@ -29,7 +30,6 @@ public class CompanyController {
                                            @RequestParam(defaultValue = "") String quickSearch,
                                            @RequestParam(defaultValue = "5") Integer size,
                                            @RequestParam(defaultValue = "1") Integer page) {
-        System.out.println(quickSearch);
         return companyService.getCompanyProfile(size, page, user, quickSearch);
     }
 
@@ -37,8 +37,9 @@ public class CompanyController {
     @GetMapping("/profile/getExcel")
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, @RequestParam(defaultValue = "") String search,
                                              @RequestParam(defaultValue = "") String active,
-                                             @CurrentUser User user
+                                             @CurrentUser User user,
+                                             @RequestParam(defaultValue = "") List<String> columns
     ) throws IOException {
-        return companyService.getExcel(response, search,user);
+        return companyService.getExcel(response, search,user,columns);
     }
 }

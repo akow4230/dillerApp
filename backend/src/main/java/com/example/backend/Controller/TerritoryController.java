@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -49,12 +50,13 @@ public class TerritoryController {
     @GetMapping("/getExcel")
     public ResponseEntity<Resource> getExcel(HttpServletResponse response,
                                              @RequestParam(defaultValue = "") String active,
-                                             @RequestParam(defaultValue = "") String quickSearch
+                                             @RequestParam(defaultValue = "") String quickSearch,
+                                             @RequestParam(defaultValue = "") List<String> columns
     ) throws IOException {
         if (quickSearch.equals("")){
-            return territoryService.getExcel(response, active, "");
+            return territoryService.getExcel(response, active, "",columns);
         }else {
-            return territoryService.getExcel(response, active, quickSearch);
+            return territoryService.getExcel(response, active, quickSearch,columns);
         }
     }
 

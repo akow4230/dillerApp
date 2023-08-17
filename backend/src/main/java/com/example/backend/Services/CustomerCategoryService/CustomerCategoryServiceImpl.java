@@ -1,32 +1,26 @@
 package com.example.backend.Services.CustomerCategoryService;
 
 import com.example.backend.Entity.CustomerCategory;
-import com.example.backend.Entity.Territory;
 import com.example.backend.ExcelTools;
-import com.example.backend.Payload.req.ReqEditTerritory;
+import com.example.backend.Projection.CompanyProfileProjection;
 import com.example.backend.Repository.CustomerCategoryRepo;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.example.backend.Services.CompanyService.CompanyServiceImpl.*;
 
@@ -69,33 +63,43 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
     }
 
     @Override
-    public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
-        Pageable pageable=Pageable.unpaged();
+    public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search, List<String> columns) throws IOException {
+        Pageable pageable = Pageable.unpaged();
         List<CustomerCategory> customerCategories = null;
         if (Objects.equals(active, "")) {
-            customerCategories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderByIdDesc(search,pageable).getContent();
+            customerCategories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderByIdDesc(search, pageable).getContent();
         } else {
-            customerCategories = customerCategoryRepo.findBySearch(Boolean.valueOf(active), search,pageable).getContent();
+            customerCategories = customerCategoryRepo.findBySearch(Boolean.valueOf(active), search, pageable).getContent();
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Category info");
         CellStyle cellStyle = ExcelTools.createHeaderCellStyle(workbook);
-        createHeaderRow(sheet, cellStyle);
-        generateColumns(customerCategories, sheet);
+        ExcelTools.createHeaderRow(sheet, cellStyle, columns);
+        generateColumns(customerCategories, sheet, columns);
         ExcelTools.autoSizeColumns(sheet);
         return getResourceResponseEntity(workbook);
     }
-
-    private static void generateColumns(List<CustomerCategory> customerCategories, Sheet sheet) {
+    private void generateColumns(List<CustomerCategory> customerCategories, Sheet sheet, List<String> columns) {
         int counter = 1;
-        for (CustomerCategory territory : customerCategories) {
+        Map<String, Integer> columnIndexMap = ExcelTools.createColumnIndexMap(columns);
+        for (CustomerCategory category : customerCategories) {
             Row dataRow = sheet.createRow(counter);
             counter++;
-            dataRow.createCell(0).setCellValue(territory.getId().toString());
-            dataRow.createCell(1).setCellValue(territory.getTitle());
-            dataRow.createCell(2).setCellValue(territory.getCode());
-            dataRow.createCell(3).setCellValue(territory.getDescription());
-            dataRow.createCell(4).setCellValue(territory.isActive() ? "active" : "No active");
+            for (String column : columns) {
+                if (!column.equals("Update")){
+                    Integer columnIndex = columnIndexMap.get(column);
+                    if (columnIndex != null) {
+                        Cell cell = dataRow.createCell(columnIndex);
+                        switch (column) {
+                            case "Title" -> cell.setCellValue(category.getTitle());
+                            case "Description" -> cell.setCellValue(category.getDescription());
+                            case "Code" -> cell.setCellValue(category.getCode());
+                            case "Active" -> cell.setCellValue(category.isActive());
+                        }
+                    }
+                }
+
+            }
         }
     }
 
@@ -112,6 +116,7 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
             sheet.autoSizeColumn(i);
         }
     }
+
     public Page<CustomerCategory> getCategoryFilter(String active, String search, Pageable pageRequest) {
         Page<CustomerCategory> customerCategories = null;
         if (Objects.equals(active, "")) {

@@ -13,17 +13,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.example.backend.Services.CompanyService.CompanyServiceImpl.getResourceResponseEntity;
 
@@ -55,19 +50,19 @@ public class TerritoryServiceImpl implements TerritoryService {
     }
 
     @Override
-    public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
+    public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search, List<String> columns) throws IOException {
         List<Territory> territoryFilter = null;
-        Pageable pageable=Pageable.unpaged();
+        Pageable pageable = Pageable.unpaged();
         if (Objects.equals(active, "")) {
-            territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(search, search,search,pageable).getContent();
+            territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(search, search, search, pageable).getContent();
         } else {
-            territoryFilter = territoryRepo.findWhitSearch(Boolean.valueOf(active), search,pageable).getContent();
+            territoryFilter = territoryRepo.findWhitSearch(Boolean.valueOf(active), search, pageable).getContent();
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Company info");
         CellStyle cellStyle = ExcelTools.createHeaderCellStyle(workbook);
-        createHeaderRow(sheet, cellStyle);
-        generateColumns(territoryFilter, sheet);
+        ExcelTools.createHeaderRow(sheet, cellStyle, columns);
+        generateColumns(territoryFilter, sheet, columns);
         ExcelTools.autoSizeColumns(sheet);
         return getResourceResponseEntity(workbook);
     }
@@ -107,18 +102,27 @@ public class TerritoryServiceImpl implements TerritoryService {
         return allTerritories;
     }
 
-    private static void generateColumns(List<Territory> territoryFilter, Sheet sheet) {
+    private static void generateColumns(List<Territory> territoryFilter, Sheet sheet, List<String> columns) {
         int counter = 1;
+        Map<String, Integer> columnIndexMap = ExcelTools.createColumnIndexMap(columns);
         for (Territory territory : territoryFilter) {
             Row dataRow = sheet.createRow(counter);
             counter++;
-            dataRow.createCell(0).setCellValue(territory.getId().toString());
-            dataRow.createCell(1).setCellValue(territory.getRegion());
-            dataRow.createCell(2).setCellValue(territory.getTitle());
-            dataRow.createCell(3).setCellValue(territory.getCode());
-            dataRow.createCell(4).setCellValue(territory.isActive() ? "active" : "No active");
-            dataRow.createCell(5).setCellValue(territory.getLongitude());
-            dataRow.createCell(6).setCellValue(territory.getLatitude());
+            for (String column : columns) {
+                if (!column.equals("Update")) {
+                    Integer columnIndex = columnIndexMap.get(column);
+                    if (columnIndex != null) {
+                        Cell cell = dataRow.createCell(columnIndex);
+                        switch (column) {
+                            case "Title" -> cell.setCellValue(territory.getTitle());
+                            case "Region" -> cell.setCellValue(territory.getRegion());
+                            case "Code" -> cell.setCellValue(territory.getCode());
+                            case "CreatedAt" -> cell.setCellValue(territory.getCreatedAt().toString());
+                        }
+                    }
+                }
+
+            }
         }
     }
 

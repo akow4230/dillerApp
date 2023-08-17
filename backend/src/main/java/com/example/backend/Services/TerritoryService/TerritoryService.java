@@ -8,6 +8,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public interface TerritoryService {
@@ -15,7 +16,7 @@ public interface TerritoryService {
 
     HttpEntity<?> getTerritory(String active, String search, Integer page, Integer size);
 
-    ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException;
+    ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search, List<String> columns) throws IOException;
 
     void editTerritory(UUID id, ReqEditTerritory reqEditTerritory);
 

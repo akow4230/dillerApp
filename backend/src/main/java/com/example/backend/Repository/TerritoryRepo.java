@@ -12,16 +12,9 @@ import java.util.UUID;
 
 public interface TerritoryRepo extends JpaRepository<Territory, UUID> {
     @Query(value = """
-            SELECT * from territory t where lower((t.title||''||t.region) ||''|| t.code) like lower(concat('%',:search,'%')) and active=:active order by t.created_at asc
+            SELECT * from territory t where lower((t.title||''||t.region) ||''|| t.code) like lower(concat('%',:search,'%')) and active=:active order by t.created_at desc
             """, nativeQuery = true)
     Page<Territory> findWhitSearch(Boolean active, String search, Pageable pageRequest);
 
     Page<Territory> findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(String title, String region, String code, Pageable pageRequest);
-
-
-    List<Territory> findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByCreatedAtAsc(String title, String region);
-    @Query(value = """
-            SELECT * from territory t where lower((t.title||''||t.region) ||''|| t.code) like lower(concat('%',:search,'%')) and active=:active order by t.created_at asc 
-            """, nativeQuery = true)
-    List<Territory> findAllByActiveAndRegionAndTitle(Boolean active, String search);
 }

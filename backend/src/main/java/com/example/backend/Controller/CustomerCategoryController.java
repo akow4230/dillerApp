@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping ("/api/v1/customercategory")
@@ -47,12 +48,13 @@ public class CustomerCategoryController {
     @GetMapping("/getExcel")
     public ResponseEntity<Resource> getExcel(HttpServletResponse response,
                                              @RequestParam(defaultValue = "") String active,
-                                             @RequestParam(defaultValue = "") String quickSearch
+                                             @RequestParam(defaultValue = "") String quickSearch,
+                                             @RequestParam(defaultValue = "") List<String> columns
     ) throws IOException {
         if (quickSearch.equals("")){
-            return customerCategoryService.getExcel(response, active, "");
+            return customerCategoryService.getExcel(response, active, "",columns);
         }else {
-            return customerCategoryService.getExcel(response, active, quickSearch);
+            return customerCategoryService.getExcel(response, active, quickSearch,columns);
         }
     }
 }

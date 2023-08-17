@@ -7,6 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface CustomerCategoryService {
 
@@ -17,5 +18,5 @@ public interface CustomerCategoryService {
 
     void editCustomerCategory(Integer id, CustomerCategory reqEditTerritory);
 
-    ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String s) throws IOException;
+    ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String s, List<String> columns) throws IOException;
 }
