@@ -20,7 +20,14 @@ import PreClose from "../UniversalUI/preClose/PreClose";
 
 function Clients(props) {
     const dispatch = useDispatch();
-    const {modalVisible, editModalVisible, defValueOfMap, mapState, editData, preCloseShow} = useSelector((state) => state.clients);
+    const {
+        modalVisible,
+        editModalVisible,
+        defValueOfMap,
+        mapState,
+        editData,
+        preCloseShow
+    } = useSelector((state) => state.clients);
     const closeModal = () => {
         dispatch({type: 'clients/handleMapClear', payload: {mapState: mapState, defValueOfMap: defValueOfMap}});
         dispatch(closeModals());
@@ -43,7 +50,7 @@ function Clients(props) {
     // table columns
     const columns = [
         {
-            id: 1,
+            id: 0,
             title: "Name",
             key: "name",
             type: "uuid",
@@ -52,7 +59,7 @@ function Clients(props) {
 
         },
         {
-            id: 2,
+            id: 1,
             title: "Company",
             key: "company",
             type: "str",
@@ -60,7 +67,7 @@ function Clients(props) {
             order: 2,
         },
         {
-            id: 3,
+            id: 2,
             title: "territory",
             key: "territory.title",
             type: "str",
@@ -71,35 +78,35 @@ function Clients(props) {
             }
         },
         {
-            id: 4,
+            id: 3,
             title: "address",
             key: "address",
             type: "str",
             show: true,
             order: 4
         }, {
-            id: 6,
+            id: 4,
             title: "phone",
             key: "phone",
             type: "str",
             show: true,
             order: 6
         }, {
-            id: 7,
+            id: 5,
             title: "referencePoint",
             key: "referencePoint",
             type: "str",
             show: true,
             order: 7
         }, {
-            id: 8,
+            id: 6,
             title: "category",
             key: "category.title",
             type: "str",
             show: true,
             order: 8,
         }, {
-            id: 9,
+            id: 7,
             title: "date",
             key: "dateOfRegistration",
             type: "date",
@@ -124,7 +131,7 @@ function Clients(props) {
 
 
         }, {
-            id: 10,
+            id: 8,
             title: "TIN",
             key: "tin",
             type: "str",
@@ -132,7 +139,7 @@ function Clients(props) {
             order: 10
         },
         {
-            id: 11,
+            id: 9,
             title: "Update",
             key: "update",
             type: "jsx",
@@ -200,7 +207,8 @@ function Clients(props) {
     return (
 
         <div>
-            <PreClose closeMainModal={closeModal} closePreClose={()=>dispatch(setPreClose(false))} show={preCloseShow}/>
+            <PreClose closeMainModal={closeModal} closePreClose={() => dispatch(setPreClose(false))}
+                      show={preCloseShow}/>
             <div style={{
                 background: "#eeeeee",
                 borderRadius: "15px",
@@ -227,6 +235,7 @@ function Clients(props) {
                     <div>
 
                         <Table
+                            localstoragePath={"clients"}
                             isDark={false}
                             requestApi={"/api/v1/client?page={page}&size={limit}"}
                             columns={columns}

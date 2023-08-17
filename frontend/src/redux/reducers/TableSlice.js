@@ -10,14 +10,14 @@ const initialState = {
     currentPage: 1,
     modalColumns: [],
     currentDragingColumn: 0,
+    localPath: "",
     data: {
         data: [],
         totalElements: 0,
         totalPage: 0,
         columns: []
     },
-    searchParams: {
-    },
+    searchParams: {},
     preCloseShow: false,
     defModalColumns: []
 };
@@ -27,6 +27,7 @@ const tableSlice = createSlice({
     reducers: {
         getTableData: (state, action) => {
             state.modalColumns = action.payload.columns;
+            state.localPath = action.payload.localPath;
             state.defModalColumns = action.payload.columns;
             action.payload.url = action.payload.url.replaceAll("{page}", action.payload.page)
             action.payload.url = action.payload.url.replaceAll("{limit}", action.payload.size)
@@ -59,14 +60,14 @@ const tableSlice = createSlice({
             console.log(state.currentDragingColumn)
         },
         changeOrder: (state, action) => {
-            const { sourceIndex, destinationIndex } = action.payload;
+            const {sourceIndex, destinationIndex} = action.payload;
             const updatedColumns = [...state.modalColumns];
             const [draggedColumn] = updatedColumns.splice(sourceIndex, 1);
             updatedColumns.splice(destinationIndex, 0, draggedColumn);
-
             state.modalColumns = updatedColumns;
         },
         saveColumnsOrders: (state, action) => {
+            localStorage.setItem(state.localPath, JSON.stringify(state.modalColumns.map((item, index) => item.id)));
             state.data.columns = state.modalColumns;
             state.defModalColumns = state.modalColumns;
             state.modal = false
@@ -91,10 +92,10 @@ const tableSlice = createSlice({
         changeCurrentPage(state) {
             state.currentPage = 1;
         },
-        changeLoader(state){
-            state.isLoading=!state.isLoading;
+        changeLoader(state) {
+            state.isLoading = !state.isLoading;
         },
-        setPreClose(state, action){
+        setPreClose(state, action) {
             state.preCloseShow = action.payload
         }
     }
