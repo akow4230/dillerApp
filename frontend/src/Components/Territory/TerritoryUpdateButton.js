@@ -1,8 +1,8 @@
 import React from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import {Button} from "antd";
 import {useDispatch} from "react-redux";
 import {setEditData, setEditModalVisible} from "../../redux/reducers/TerritorySlice";
+
 function TerritoryUpdateButton(props) {
     const dispatch = useDispatch();
 

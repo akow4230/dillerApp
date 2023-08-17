@@ -14,15 +14,22 @@ import PreClose from "../UniversalUI/preClose/PreClose";
 
 function Territory(props) {
     const dispatch = useDispatch();
-    const {modalVisible, editModalVisible, defValueOfMap, mapState, editData, preCloseShow} = useSelector((state) => state.territory);
-    const location= useLocation();
-    useEffect(()=>{
-        dispatch(changeSearchParams({active:'', quickSearch: ""}))
+    const {
+        modalVisible,
+        editModalVisible,
+        defValueOfMap,
+        mapState,
+        editData,
+        preCloseShow
+    } = useSelector((state) => state.territory);
+    const location = useLocation();
+    useEffect(() => {
+        dispatch(changeSearchParams({active: '', quickSearch: ""}))
         dispatch(changeTableDataSize(5))
-    },[location.pathname])
+    }, [location.pathname])
     const columns = [
         {
-            id: 1,
+            id: 0,
             title: "Region",
             key: "region",
             type: "str",
@@ -30,7 +37,7 @@ function Territory(props) {
             order: 1
         },
         {
-            id: 2,
+            id: 1,
             title: "Title",
             key: "title",
             type: "str",
@@ -38,7 +45,7 @@ function Territory(props) {
             order: 2
         },
         {
-            id: 3,
+            id: 2,
             title: "Code",
             key: "code",
             type: "str",
@@ -46,7 +53,7 @@ function Territory(props) {
             order: 3
         },
         {
-            id: 4,
+            id: 3,
             title: "CreatedAt",
             key: "CreatedAt",
             type: "date",
@@ -68,7 +75,7 @@ function Territory(props) {
             }
         },
         {
-            id: 5,
+            id: 4,
             title: "Update",
             key: "update",
             type: "jsx",
@@ -94,12 +101,13 @@ function Territory(props) {
     const closeModal = () => {
         dispatch({type: 'territory/handleMapClear', payload: {mapState: mapState, defValueOfMap: defValueOfMap}});
         dispatch(setCloseModal(false));
-        dispatch(changeSearchParams({active:'', quickSearch: ""}))
+        dispatch(changeSearchParams({active: '', quickSearch: ""}))
     };
     return (
         <div style={{background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY: "auto"}}>
             <ToastContainer/>
-            <PreClose closeMainModal={closeModal} closePreClose={()=>dispatch(setPreClose(false))} show={preCloseShow}/>
+            <PreClose closeMainModal={closeModal} closePreClose={() => dispatch(setPreClose(false))}
+                      show={preCloseShow}/>
             <div className={"d-flex gap-3 align-items-center"}>
                 <p style={{fontSize: "25pt"}}>Territory</p>
                 <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add
@@ -108,6 +116,7 @@ function Territory(props) {
             </div>
             <hr/>
             <Table
+                localstoragePath={"territory"}
                 isDark={false}
                 requestApi={"/api/v1/territory?page={page}&size={limit}"}
                 columns={columns}

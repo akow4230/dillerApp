@@ -5,28 +5,26 @@ import {useDispatch, useSelector} from 'react-redux';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import {
-    changeSearchParams,
+    changeLoader,
     changeTableColumns,
     changeTableDataPage,
     changeTableDataSize,
     getTableData,
     saveColumnsOrders,
-    toggleModal,
-    changeLoader, changeCurrentPage, setPreClose
+    setPreClose,
+    toggleModal
 } from '../../../redux/reducers/TableSlice';
 import Pagination from '@mui/material/Pagination';
 import Filter from '../filter/Filter';
 import axios from 'axios';
 import TableModal from './TableModal';
 import UModal from '../Modal/UModal';
-import {useLocation} from "react-router-dom";
 import Loader from "../../../ui/loader";
 import PreClose from "../preClose/PreClose";
 
-function Table({isDark, columns, requestApi, filterParam, path}) {
-    const baseURL = "https://meprog.cf"
+function Table({isDark, columns, requestApi, filterParam, path, localstoragePath}) {
+    const baseURL = "http://localhost:8080"
     const dispatch = useDispatch();
-    const location = useLocation()
     const [settings, setSettings] = useState(false);
     const {
         pageSize,
@@ -47,6 +45,7 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                 size: pageSize,
                 columns: columns,
                 isDark: isDark,
+                localPath: localstoragePath,
                 search
             }));
         } else {
@@ -56,13 +55,37 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                 size: pageSize,
                 columns: columns,
                 isDark: isDark,
+                localPath: localstoragePath,
                 search
             }));
         }
     }
 
     useEffect(() => {
-        getData(searchParams);
+        getData(searchParams)
+        try {
+            dispatch(getTableData({
+                columns: localStorage.getItem(localstoragePath)
+                    ? JSON.parse(localStorage.getItem(localstoragePath)).map(
+                        (item) => {
+                            if (columns[item] === undefined) {
+                                localStorage.removeItem(localstoragePath);
+                                return;
+                            }
+                            return columns[item];
+                        }
+                    )
+                    : columns,
+                url: requestApi,
+                page: currentPage,
+                size: pageSize,
+                isDark: isDark,
+                localPath: localstoragePath,
+                search: searchParams
+            }));
+        } catch (e) {
+            localStorage.removeItem(localstoragePath)
+        }
     }, [searchParams, currentPage, dispatch, pageSize, requestApi, columns]);
 
     function getExcel() {
@@ -132,7 +155,8 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
     return (
         <div>
             <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
-                <PreClose closeMainModal={() => dispatch(toggleModal())} closePreClose={()=>dispatch(setPreClose(false))} show={preCloseShow}/>
+                <PreClose closeMainModal={() => dispatch(toggleModal())}
+                          closePreClose={() => dispatch(setPreClose(false))} show={preCloseShow}/>
                 <Filter param={filterParam} func={getData}/>
                 <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
 
@@ -223,35 +247,42 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
 
                         <div className={'my-table'}>
                             <table className="table table-hover table-bordered">
-                                <thead>
+                                <thead className={'table-dark'}>
                                 <tr>
-                                    {data?.columns
-                                        ?.filter((item) => item?.show)
-                                        .map((item) => (
-                                            <th key={item?.id}>
-                                                <p>{item?.title}</p>
-                                            </th>
-                                        ))}
+                                    {data?.columns?.map((item) => (
+                                        <th key={item?.id}>{item?.title}</th>
+                                    ))}
                                 </tr>
                                 </thead>
-                                <tbody>
-                                {data?.data?.map((item) => (
-                                    <tr key={item?.id}>
-                                        {data?.columns?.filter((col) => col?.show).map((col) => (
-                                            <td key={col?.id}>
-                                                {col.type === 'jsx' ? (
-                                                    React.cloneElement(col.data, {
-                                                        data: item
-                                                    })
-                                                ) : col.type === 'date' ? col?.render(item) : (
-                                                    <p>{getValueByKeys(item, col.key)}</p>
-                                                )
-                                                }
-                                            </td>
-                                        ))}
+                                {data?.data.length!==0?
+                                    <tbody>
+
+                                    {data?.data?.map((item) => (
+                                        <tr key={item?.id} className={item.active?'':'table-warning'}>
+                                            {data?.columns?.filter((col) => col?.show).map((col) => (
+                                                <td key={col?.id}>
+                                                    {col.type === 'jsx' ? (
+                                                        React.cloneElement(col.data, {
+                                                            data: item
+                                                        })
+                                                    ) : col.type === 'date' ? col?.render(item) : (
+                                                        <p>{getValueByKeys(item, col.key)}</p>
+                                                    )
+                                                    }
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+
+                                    </tbody>
+                                    :<tbody>
+                                    <tr>
+                                        <td colSpan={data.columns.length} className='text-center'>
+                                            No  Data!
+                                        </td>
                                     </tr>
-                                ))}
-                                </tbody>
+                                    </tbody>
+                                }
                             </table>
                             <div style={{
                                 display: 'flex',
@@ -259,10 +290,10 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                                 justifyContent: 'center',
                                 width: '100%',
                                 height: 40,
-                                gap:"30px"
+                                gap: "30px"
                             }}>
                                 <div>
-                                    {currentPage}-{Math.min(pageSize,data.totalElements, data?.data?.length)}/{data.totalElements}
+                                    { data.totalElements!==0?currentPage:0}-{Math.min(pageSize, data.totalElements, data?.data?.length)}/{data.totalElements}
                                 </div>
                                 <div>
                                     {data.totalPage > 1 &&
@@ -278,7 +309,8 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                         </div>
                     )}
                     <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} action={'Change order'}
-                            onSave={() => dispatch(saveColumnsOrders())} elements={elements} openPreClose={()=>dispatch(setPreClose(true))} showPreClose={preCloseShow}/>
+                            onSave={() => dispatch(saveColumnsOrders())} elements={elements}
+                            openPreClose={() => dispatch(setPreClose(true))} showPreClose={preCloseShow}/>
 
                 </div>
             </div>

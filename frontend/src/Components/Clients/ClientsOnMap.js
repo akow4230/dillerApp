@@ -13,6 +13,7 @@ import {
     YMaps,
     ZoomControl
 } from "react-yandex-maps";
+import img from './images/pencil.png'
 import {fetchClientsStart} from "../../redux/reducers/ClientsSlice";
 import {getTableData} from "../../redux/reducers/TableSlice";
 import {fetchTerritoryStart} from "../../redux/reducers/TerritorySlice";
@@ -86,6 +87,7 @@ function ClientsOnMap(props) {
                                         key={item.id}
                                         geometry={[item.latitude, item.longitude]}
                                         properties={{
+
                                             iconCaption: `${item.name}`,
                                             balloonContent: `phone:${item.phone}`,
                                             hintContent: `address:${item.address}`,
@@ -107,13 +109,37 @@ function ClientsOnMap(props) {
                                     key={item.id}
                                     geometry={[item.latitude, item.longitude]}
                                     properties={{
-                                        iconCaption: `${item.title}`,
-                                        balloonContent: `region:${item.region}`,
-                                        hintContent: `code:${item.code}`,
+                                        iconCaption: `
+                                                    <div>
+                                                        <img src=${img} alt="Icon" width="20" height="20" />
+                                                        <table>
+                                                            <tr>
+                                                                <td>Name:</td>
+                                                                <td>${item.name}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Phone:</td>
+                                                                <td>${item.phone}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Address:</td>
+                                                                <td>${item.address}</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                `,
+                                        // iconCaption: `${item.title}`,
+                                        // balloonContent: `region:${item.region}`,
+                                        // hintContent: `code:${item.code}`,
                                     }}
                                     options={{
-                                        preset: 'islands#blueIcon',
-                                        iconColor: '#0000FF',
+                                        // preset: 'islands#blueIcon',
+                                        // iconColor: '#0000FF',
+                                        // draggable: false,
+                                        // iconLayout: 'default#image', // Specify that you're using an image for the icon
+                                        // iconImageHref: img,  // Path to the image for clients
+                                        iconImageSize: [30, 30],      // Size of the image
+                                        iconImageOffset: [-15, -15],  // Offset of the image
                                         draggable: false,
                                     }}
                                     modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}

@@ -18,13 +18,13 @@ import {useLocation} from "react-router-dom";
 function CustomerCategory(props) {
     const dispatch = useDispatch();
 
-    const location= useLocation();
-    useEffect(()=>{
-        dispatch(changeSearchParams({active:'', quickSearch: ""}))
+    const location = useLocation();
+    useEffect(() => {
+        dispatch(changeSearchParams({active: '', quickSearch: ""}))
         dispatch(changeTableDataSize(5))
-    },[location.pathname])
+    }, [location.pathname])
     const category = useSelector((state) => state.category);
-    const {preCloseShow} = useSelector((state)=>state.category)
+    const {preCloseShow} = useSelector((state) => state.category)
     const elements = [{
         name: "Title*",
         type: "text",
@@ -53,7 +53,7 @@ function CustomerCategory(props) {
     const columns = [
 
         {
-            id: 2,
+            id: 0,
             title: "Title",
             key: "title",
             type: "str",
@@ -61,7 +61,7 @@ function CustomerCategory(props) {
             order: 2
         },
         {
-            id: 3,
+            id: 1,
             title: "Description",
             key: "description",
             type: "str",
@@ -69,7 +69,7 @@ function CustomerCategory(props) {
             order: 3
         },
         {
-            id: 4,
+            id: 2,
             title: "Code",
             key: "code",
             type: "str",
@@ -77,15 +77,18 @@ function CustomerCategory(props) {
             order: 4
         },
         {
-            id: 5,
+            id: 3,
             title: "Active",
             key: "active",
-            type: "str",
+            type: "date",
             show: true,
-            order: 5
+            order: 5,
+            render: (item)=>{
+                return <p>{item.active?"Active":"InActive"}</p>
+            }
         },
         {
-            id: 6,
+            id: 4,
             title: "Update",
             key: "update",
             type: "jsx",
@@ -108,22 +111,26 @@ function CustomerCategory(props) {
             placeholder: 'All'
         }
     ]
-    function handleCloseModal(){
+
+    function handleCloseModal() {
         dispatch(setCloseModals())
-        dispatch(changeSearchParams({active:'', quickSearch: ""}))
+        dispatch(changeSearchParams({active: '', quickSearch: ""}))
     }
+
     return (
         <div style={{background: "#eeeeee", borderRadius: "15px", padding: "20px", width: "100%", overflowY: "auto"}}>
             <ToastContainer/>
-            <PreClose closeMainModal={handleCloseModal} closePreClose={()=>dispatch(setPreClose(false))} show={preCloseShow}/>
+            <PreClose closeMainModal={handleCloseModal} closePreClose={() => dispatch(setPreClose(false))}
+                      show={preCloseShow}/>
             <div className={"d-flex gap-3 align-items-center"}>
-                <p style={{fontSize: "25pt"}}>Client category</p>
-                <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add client
+                <p style={{fontSize: "25pt"}}>Customer category</p>
+                <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add customer
                     category
                 </button>
             </div>
             <hr/>
             <Table
+                localstoragePath={"custom_category"}
                 isDark={false}
                 requestApi={"/api/v1/customercategory?page={page}&size={limit}"}
                 columns={columns}
@@ -131,9 +138,13 @@ function CustomerCategory(props) {
                 path={"customercategory"}
             />
             <UModal isOpen={category.modalVisible} toggle={handleCloseModal}
-                    action={'Add client category'} url={"/api/v1/customercategory"} elements={elements} openPreClose={()=>dispatch(setPreClose(true))} showPreClose={preCloseShow} title={"Client category"}/>
+                    action={'Add client category'} url={"/api/v1/customercategory"} elements={elements}
+                    openPreClose={() => dispatch(setPreClose(true))} showPreClose={preCloseShow}
+                    title={"Customer category"}/>
             <UModal isOpen={category.editModalVisible} isEditing={true} toggle={handleCloseModal}
-                    action={'Edit client category'} url={category.editDataUrl} data={category.editData} elements={elements} openPreClose={()=>dispatch(setPreClose(true))} showPreClose={preCloseShow} title={"Client category"}/>
+                    action={'Edit client category'} url={category.editDataUrl} data={category.editData}
+                    elements={elements} openPreClose={() => dispatch(setPreClose(true))} showPreClose={preCloseShow}
+                    title={"Customer category"}/>
         </div>
     );
 }
