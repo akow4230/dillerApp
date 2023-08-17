@@ -29,25 +29,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .cors(Customizer.withDefaults())
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(
-//                        auth -> auth
-//                                .requestMatchers("/api/v1/bot").permitAll()
-//                                .requestMatchers("/api/v1/auth/register").permitAll()
-//                                .requestMatchers("/api/v1/auth/login").permitAll()
-//                                .requestMatchers("/api/v1/auth/refresh").permitAll()
-//                                .requestMatchers("/api/v1/auth/student").permitAll()
-//                                .requestMatchers("/dashboard").permitAll()
-//                                .requestMatchers("/").permitAll()
-//
-////                                .requestMatchers("/api/v1/territory/getExcel").permitAll()
-//                                .anyRequest().authenticated()
-//
-//                )
-//                .addFilterBefore(myFilter, UsernamePasswordAuthenticationFilter.class);
-        http
+       http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(

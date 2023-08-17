@@ -37,7 +37,7 @@ function TerritoryModal(props) {
                 code: props.data.code,
                 active: props.data.active
             })
-            dispatch(setMapState({center: [props.data.latitude, props.data.longitude], zoom: 10}))
+            dispatch(setMapState({center: [props.data.latitude, props.data.longitude], zoom: 5}))
             dispatch(setLatitude(props.data.latitude))
             dispatch(setLongitude(props.data.longitude))
             dispatch(setTemplate([props.data.latitude, props.data.longitude]))

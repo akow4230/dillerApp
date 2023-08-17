@@ -70,7 +70,7 @@ function* handleMapClickAsync(action) {
             yield put(setTemplate([latitude, longitude]));
             yield put(setLatitude(latitude));
             yield put(setLongitude(longitude));
-            yield put(setMapState({ center: [latitude, longitude], zoom: 5 }));
+            yield put(setMapState({ center: [latitude, longitude], zoom: 10 }));
         }
     } catch (error) {
     }

@@ -247,31 +247,42 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
 
                         <div className={'my-table'}>
                             <table className="table table-hover table-bordered">
-                                <thead>
+                                <thead className={'table-dark'}>
                                 <tr>
                                     {data?.columns?.map((item) => (
                                         <th key={item?.id}>{item?.title}</th>
                                     ))}
                                 </tr>
                                 </thead>
-                                <tbody>
-                                {data?.data?.map((item) => (
-                                    <tr key={item?.id}>
-                                        {data?.columns?.filter((col) => col?.show).map((col) => (
-                                            <td key={col?.id}>
-                                                {col.type === 'jsx' ? (
-                                                    React.cloneElement(col.data, {
-                                                        data: item
-                                                    })
-                                                ) : col.type === 'date' ? col?.render(item) : (
-                                                    <p>{getValueByKeys(item, col.key)}</p>
-                                                )
-                                                }
-                                            </td>
-                                        ))}
+                                {data?.data.length!==0?
+                                    <tbody>
+
+                                    {data?.data?.map((item) => (
+                                        <tr key={item?.id} className={item.active?'':'table-warning'}>
+                                            {data?.columns?.filter((col) => col?.show).map((col) => (
+                                                <td key={col?.id}>
+                                                    {col.type === 'jsx' ? (
+                                                        React.cloneElement(col.data, {
+                                                            data: item
+                                                        })
+                                                    ) : col.type === 'date' ? col?.render(item) : (
+                                                        <p>{getValueByKeys(item, col.key)}</p>
+                                                    )
+                                                    }
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+
+                                    </tbody>
+                                    :<tbody>
+                                    <tr>
+                                        <td colSpan={data.columns.length} className='text-center'>
+                                            No  Data!
+                                        </td>
                                     </tr>
-                                ))}
-                                </tbody>
+                                    </tbody>
+                                }
                             </table>
                             <div style={{
                                 display: 'flex',
@@ -282,7 +293,7 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
                                 gap: "30px"
                             }}>
                                 <div>
-                                    {currentPage}-{Math.min(pageSize, data.totalElements, data?.data?.length)}/{data.totalElements}
+                                    { data.totalElements!==0?currentPage:0}-{Math.min(pageSize, data.totalElements, data?.data?.length)}/{data.totalElements}
                                 </div>
                                 <div>
                                     {data.totalPage > 1 &&

@@ -68,7 +68,7 @@ function Clients(props) {
         },
         {
             id: 2,
-            title: "territory",
+            title: "Territory",
             key: "territory.title",
             type: "str",
             show: true,
@@ -79,35 +79,35 @@ function Clients(props) {
         },
         {
             id: 3,
-            title: "address",
+            title: "Address",
             key: "address",
             type: "str",
             show: true,
             order: 4
         }, {
             id: 4,
-            title: "phone",
+            title: "Phone",
             key: "phone",
             type: "str",
             show: true,
             order: 6
         }, {
             id: 5,
-            title: "referencePoint",
+            title: "ReferencePoint",
             key: "referencePoint",
             type: "str",
             show: true,
             order: 7
         }, {
             id: 6,
-            title: "category",
+            title: "Category",
             key: "category.title",
             type: "str",
             show: true,
             order: 8,
         }, {
             id: 7,
-            title: "date",
+            title: "Date",
             key: "dateOfRegistration",
             type: "date",
             show: true,

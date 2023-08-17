@@ -80,9 +80,12 @@ function CustomerCategory(props) {
             id: 3,
             title: "Active",
             key: "active",
-            type: "str",
+            type: "date",
             show: true,
-            order: 5
+            order: 5,
+            render: (item)=>{
+                return <p>{item.active?"Active":"InActive"}</p>
+            }
         },
         {
             id: 4,
@@ -121,7 +124,7 @@ function CustomerCategory(props) {
                       show={preCloseShow}/>
             <div className={"d-flex gap-3 align-items-center"}>
                 <p style={{fontSize: "25pt"}}>Customer category</p>
-                <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add client
+                <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add customer
                     category
                 </button>
             </div>
@@ -137,11 +140,11 @@ function CustomerCategory(props) {
             <UModal isOpen={category.modalVisible} toggle={handleCloseModal}
                     action={'Add client category'} url={"/api/v1/customercategory"} elements={elements}
                     openPreClose={() => dispatch(setPreClose(true))} showPreClose={preCloseShow}
-                    title={"Client category"}/>
+                    title={"Customer category"}/>
             <UModal isOpen={category.editModalVisible} isEditing={true} toggle={handleCloseModal}
                     action={'Edit client category'} url={category.editDataUrl} data={category.editData}
                     elements={elements} openPreClose={() => dispatch(setPreClose(true))} showPreClose={preCloseShow}
-                    title={"Client category"}/>
+                    title={"Customer category"}/>
         </div>
     );
 }
