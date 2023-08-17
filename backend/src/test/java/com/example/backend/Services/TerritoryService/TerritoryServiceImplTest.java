@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -64,7 +66,7 @@ class TerritoryServiceImplTest {
         List<Territory> territoryList = List.of(territory);
         PageRequest pageRequest = PageRequest.of(0, 10);
         Page<Territory> mockPage = new PageImpl<>(territoryList, pageRequest, territoryList.size());
-        Mockito.when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCase(
+        Mockito.when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(
                         anyString(), anyString(), anyString(), any(PageRequest.class)))
                 .thenReturn(mockPage);
 
@@ -104,7 +106,7 @@ class TerritoryServiceImplTest {
         Territory editingterritory = new Territory(
                 id, "reg",
                 reqEditTerritory.getTitle(),
-                reqEditTerritory.getCode(), reqEditTerritory.isActive(),
+                reqEditTerritory.getCode(), reqEditTerritory.isActive(), LocalDateTime.now(),
                 reqEditTerritory.getLongitude(), reqEditTerritory.getLatitude()
         );
         //When

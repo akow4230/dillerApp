@@ -36,8 +36,9 @@ public class CompanyController {
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/profile/getExcel")
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, @RequestParam(defaultValue = "") String search,
-                                             @RequestParam(defaultValue = "") String active
+                                             @RequestParam(defaultValue = "") String active,
+                                             @CurrentUser User user
     ) throws IOException {
-        return companyService.getExcel(response, search);
+        return companyService.getExcel(response, search,user);
     }
 }

@@ -31,8 +31,6 @@ public class ClientController {
                                    @RequestParam(defaultValue = "") String territory,
                                    @RequestParam(defaultValue = "") String tin
     ) {
-        System.out.println(active);
-        System.out.println(quickSearch);
         return clientService.getClients(active, quickSearch, page, size, category, weekDay, territory, tin);
     }
 

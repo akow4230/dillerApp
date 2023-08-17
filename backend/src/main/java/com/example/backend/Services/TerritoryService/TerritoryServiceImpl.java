@@ -12,6 +12,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -55,10 +57,11 @@ public class TerritoryServiceImpl implements TerritoryService {
     @Override
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
         List<Territory> territoryFilter = null;
+        Pageable pageable=Pageable.unpaged();
         if (Objects.equals(active, "")) {
-            territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrderByCreatedAt(search, search);
+            territoryFilter = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(search, search,search,pageable).getContent();
         } else {
-            territoryFilter = territoryRepo.findAllByActiveAndRegionAndTitle(Boolean.valueOf(active), search);
+            territoryFilter = territoryRepo.findWhitSearch(Boolean.valueOf(active), search,pageable).getContent();
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Company info");
@@ -97,7 +100,7 @@ public class TerritoryServiceImpl implements TerritoryService {
     private Page<Territory> getTerritoryFilter(String active, String search, PageRequest pageRequest) {
         Page<Territory> allTerritories = null;
         if (Objects.equals(active, "")) {
-            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAt(search, search, search, pageRequest);
+            allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(search, search, search, pageRequest);
             return allTerritories;
         }
         allTerritories = territoryRepo.findWhitSearch(Boolean.valueOf(active), search, pageRequest);

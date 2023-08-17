@@ -13,6 +13,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,15 +35,16 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public HttpEntity<?> getCompanyProfile(Integer size, Integer page, User user, String quickSearch) {
-        PageRequest pageRequest = PageRequest.of(page - 1, size);
-        Page<CompanyProfileProjection> byCompanyId = companyRepo.findByCompanyId(pageRequest, quickSearch);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<CompanyProfileProjection> byCompanyId = companyRepo.findByCompanyId(pageable, quickSearch,user.getId());
         return ResponseEntity.ok(byCompanyId);
     }
 
     @SneakyThrows
     @Override
-    public ResponseEntity<Resource> getExcel(HttpServletResponse response, String search) {
-        List<CompanyProfileProjection> companyExcel = companyRepo.findByCompanyIdExcel(search);
+    public ResponseEntity<Resource> getExcel(HttpServletResponse response, String search,User user) {
+        Pageable pageable=Pageable.unpaged();
+        List<CompanyProfileProjection> companyExcel = companyRepo.findByCompanyId(pageable,search,user.getId()).getContent();
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Company info");
         CellStyle cellStyle = ExcelTools.createHeaderCellStyle(workbook);

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,10 +26,10 @@ class TerritoryRepoTest {
     @Test
     void itShouldFindAllByActiveAndTitleContainingIgnoreCaseOrRegionContainingIgnoreCase() {
         Territory territory = new Territory(
-                null, "1reg", "1title", "1code", true, 1.1, 1.2
+                null, "1reg", "1title", "1code", true, LocalDateTime.now(), 1.1, 1.2
         );
         Territory territory2 = new Territory(
-                null, "2reg", "2title", "2code", true, 1.1, 1.2
+                null, "2reg", "2title", "2code", true,LocalDateTime.now(), 1.1, 1.2
         );
         boolean active = true;
         String search = "tit";
@@ -42,10 +43,10 @@ class TerritoryRepoTest {
     @Test
     void itShouldFindAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCase() {
         Territory territory = new Territory(
-                null, "1reg", "1title", "1code", true, 1.1, 1.2
+                null, "1reg", "1title", "1code", true,LocalDateTime.now(), 1.1, 1.2
         );
         Territory territory2 = new Territory(
-                null, "2reg", "2title", "2code", true, 1.1, 1.2
+                null, "2reg", "2title", "2code", true,LocalDateTime.now(), 1.1, 1.2
         );
         String title = "tit";
         String region = "reg";
@@ -53,9 +54,9 @@ class TerritoryRepoTest {
         PageRequest pageable = PageRequest.of(1, 5);
         Page<Territory> mockPage = new PageImpl<>(Arrays.asList(territory, territory2), pageable, 2);
 
-        when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCase(title, region, code, pageable)).thenReturn(mockPage);
+        when(territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(title, region, code, pageable)).thenReturn(mockPage);
 
-        Page<Territory> territoryPage = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCase(title, region, code, pageable);
+        Page<Territory> territoryPage = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtAsc(title, region, code, pageable);
         assertEquals(mockPage, territoryPage);
     }
 }

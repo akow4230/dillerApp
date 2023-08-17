@@ -40,8 +40,8 @@ public class CustomerCategoryController {
     }
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/{id}")
-    public void editTerritory(@PathVariable String id, @RequestBody CustomerCategory customerCategory) {
-        customerCategoryService.editTerritory(Integer.valueOf(id), customerCategory);
+    public void editCustomerCategory(@PathVariable String id, @RequestBody CustomerCategory customerCategory) {
+        customerCategoryService.editCustomerCategory(Integer.valueOf(id), customerCategory);
     }
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/getExcel")
@@ -49,13 +49,10 @@ public class CustomerCategoryController {
                                              @RequestParam(defaultValue = "") String active,
                                              @RequestParam(defaultValue = "") String quickSearch
     ) throws IOException {
-        System.out.println(active);
-        System.out.println("salom "+quickSearch+" valom");
         if (quickSearch.equals("")){
             return customerCategoryService.getExcel(response, active, "");
         }else {
             return customerCategoryService.getExcel(response, active, quickSearch);
-
         }
     }
 }

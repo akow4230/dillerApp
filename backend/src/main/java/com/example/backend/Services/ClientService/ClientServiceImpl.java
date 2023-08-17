@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.glassfish.grizzly.http.util.TimeStamp;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ResponseEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay, String territory, String tin) {
-        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        Pageable pageRequest = PageRequest.of(page - 1, size);
         List<Integer> categoryIds = getIdes(category);
         List<Integer> weekDayIds = getIdes(weekDay);
         List<UUID> territoryIds = getUUIDes(territory);
@@ -57,7 +58,8 @@ public class ClientServiceImpl implements ClientService {
         List<Integer> categoryIds = getIdes(category);
         List<UUID> territoryIds = getUUIDes(territory);
         List<Integer> weekDayIds = getIdes(weekDay);
-        List<Client> clientList = clientRepo.getClientsByActiveExcel(active, quickSearch, categoryIds, weekDayIds, tin, territoryIds);
+        Pageable pageable=Pageable.unpaged();
+        List<Client> clientList = clientRepo.getClientsByActive(active, quickSearch, categoryIds, weekDayIds, tin, territoryIds,pageable).getContent();
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Client");
         CellStyle cellStyle = ExcelTools.createHeaderCellStyle(workbook);

@@ -26,7 +26,7 @@ class CompanyServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-       underTest= new CompanyServiceImpl(companyRepo,authService);
+       underTest= new CompanyServiceImpl(companyRepo);
     }
 
     @Test
@@ -35,9 +35,7 @@ class CompanyServiceImplTest {
 //        String accessToken = "mock_access_token";
         User mockUser = new User();
         mockUser.setId(userId);
-
         DashboardProjection mockProjection = mock(DashboardProjection.class);
-//        when(authService.decode(accessToken)).thenReturn(mockUser);
         when(companyRepo.getDashboardInfo(userId)).thenReturn(mockProjection);
 
         DashboardProjection response = (DashboardProjection) underTest.getInfo(mockUser).getBody();

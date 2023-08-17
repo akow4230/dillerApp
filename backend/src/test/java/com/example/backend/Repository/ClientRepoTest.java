@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -78,9 +80,10 @@ class ClientRepoTest {
         String search = "";
         String tin = "";
         List<UUID> territoryId = List.of(UUID.randomUUID());
+        Pageable pageable=Pageable.unpaged();
         //When
-        Mockito.when(clientRepo.getClientsByActiveExcel(active, search, categoriesId, weekDays, tin, territoryId)).thenReturn(List.of(client));
-        List<Client> clientList = clientRepo.getClientsByActiveExcel(active, search, categoriesId, weekDays, tin, territoryId);
+        Mockito.when(clientRepo.getClientsByActive(active, search, categoriesId, weekDays, tin, territoryId,pageable).getContent()).thenReturn(List.of(client));
+        List<Client> clientList = clientRepo.getClientsByActive(active, search, categoriesId, weekDays, tin, territoryId,pageable).getContent();
         //Then
         Assertions.assertEquals(List.of(client), clientList);
     }

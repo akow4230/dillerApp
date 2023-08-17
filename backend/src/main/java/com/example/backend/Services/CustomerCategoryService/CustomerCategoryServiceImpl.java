@@ -14,6 +14,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,11 +35,9 @@ import static com.example.backend.Services.CompanyService.CompanyServiceImpl.*;
 public class CustomerCategoryServiceImpl implements CustomerCategoryService {
     private final CustomerCategoryRepo customerCategoryRepo;
 
-
     @Override
     public HttpEntity<?> getCategory() {
         List<CustomerCategory> all = customerCategoryRepo.findAll();
-        System.out.println(all);
         return ResponseEntity.ok(all);
     }
 
@@ -47,45 +46,36 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
         return ResponseEntity.ok(customerCategoryRepo.save(category));
     }
 
-    public Page<CustomerCategory> getCategoryFilter(String active, String search, PageRequest pageRequest) {
-        Page<CustomerCategory> allTerritories = null;
-        if (Objects.equals(active, "")) {
-            allTerritories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderByIdDesc(search, pageRequest);
-            return allTerritories;
-        }
-        allTerritories = customerCategoryRepo.findBySearch(Boolean.valueOf(active), search, pageRequest);
-        return allTerritories;
-    }
-
     @Override
     public HttpEntity<?> getFilterCategory(String active, String quickSearch, Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page - 1, size);
-        Page<CustomerCategory> territoryFilter = getCategoryFilter(active, quickSearch, pageRequest);
-        return ResponseEntity.ok(territoryFilter);
+        Pageable pageRequest = PageRequest.of(page - 1, size);
+        Page<CustomerCategory> categoryFilter = getCategoryFilter(active, quickSearch, pageRequest);
+        return ResponseEntity.ok(categoryFilter);
     }
 
     @Override
-    public void editTerritory(Integer id, CustomerCategory reqEditTerritory) {
+    public void editCustomerCategory(Integer id, CustomerCategory reCustomerCategory) {
         Optional<CustomerCategory> byId = customerCategoryRepo.findById(id);
         if (byId.isPresent()) {
             CustomerCategory customerCategory = byId.get();
-            customerCategory.setActive(reqEditTerritory.isActive());
-            customerCategory.setTitle(reqEditTerritory.getTitle());
-            customerCategory.setCode(reqEditTerritory.getCode());
-            customerCategory.setDescription(reqEditTerritory.getDescription());
+            customerCategory.setActive(reCustomerCategory.isActive());
+            customerCategory.setTitle(reCustomerCategory.getTitle());
+            customerCategory.setCode(reCustomerCategory.getCode());
+            customerCategory.setDescription(reCustomerCategory.getDescription());
             customerCategoryRepo.save(customerCategory);
         } else {
-            throw new IllegalArgumentException("Territory not found with ID: " + id);
+            throw new IllegalArgumentException("Category not found with ID: " + id);
         }
     }
 
     @Override
     public ResponseEntity<Resource> getExcel(HttpServletResponse response, String active, String search) throws IOException {
+        Pageable pageable=Pageable.unpaged();
         List<CustomerCategory> customerCategories = null;
         if (Objects.equals(active, "")) {
-            customerCategories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderByIdDesc(search);
+            customerCategories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderByIdDesc(search,pageable).getContent();
         } else {
-            customerCategories = customerCategoryRepo.findAllByActiveAndTitleContaining(Boolean.valueOf(active), search);
+            customerCategories = customerCategoryRepo.findBySearch(Boolean.valueOf(active), search,pageable).getContent();
         }
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Category info");
@@ -121,6 +111,15 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
             cell.setCellStyle(cellStyle);
             sheet.autoSizeColumn(i);
         }
+    }
+    public Page<CustomerCategory> getCategoryFilter(String active, String search, Pageable pageRequest) {
+        Page<CustomerCategory> customerCategories = null;
+        if (Objects.equals(active, "")) {
+            customerCategories = customerCategoryRepo.findAllByTitleContainingIgnoreCaseOrderByIdDesc(search, pageRequest);
+            return customerCategories;
+        }
+        customerCategories = customerCategoryRepo.findBySearch(Boolean.valueOf(active), search, pageRequest);
+        return customerCategories;
     }
 
 
