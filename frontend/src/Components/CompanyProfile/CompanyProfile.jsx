@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import Table from "../UniversalUI/Table/Table";
 import { useDispatch } from "react-redux";
-import { changeSearchParams } from "../../redux/reducers/TableSlice";
+import {changeSearchParams, changeTableDataSize} from "../../redux/reducers/TableSlice";
 import {useLocation} from "react-router-dom";
 
 function CompanyProfile() {
   const dispatch = useDispatch();
   const location= useLocation();
   useEffect(()=>{
+    dispatch(changeTableDataSize(5))
     dispatch(changeSearchParams({active:'', quickSearch: ""}))
   },[location.pathname])
   const columns = [

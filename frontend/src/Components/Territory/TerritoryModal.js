@@ -18,11 +18,12 @@ import {
     setTemplate,
     setMapState,
     saveTerritoryAction,
-    editTerritoryAction
+    editTerritoryAction, setPreClose
 } from '../../redux/reducers/TerritorySlice';
 import "./styles.css"
 import {ToastContainer, toast} from "react-toastify";
 import CancelIcon from "@mui/icons-material/Cancel";
+import {setShow} from "../../redux/reducers/PreCloseSlice";
 
 function TerritoryModal(props) {
     const dispatch = useDispatch();
@@ -47,7 +48,7 @@ function TerritoryModal(props) {
     useEffect(() => {
         function handleClickOutside(event) {
             if (props.visible && !event.target.closest(".modal-content")) {
-                props.onClose();
+                dispatch(setPreClose(true))
             }
         }
 
@@ -94,12 +95,7 @@ function TerritoryModal(props) {
                 : saveTerritoryAction({
                     territory: {...data, longitude: territory?.longitude, latitude: territory?.latitude},
                     isEditing: false,
-                    reset: reset({
-                        title: "",
-                        region: "",
-                        code: "",
-                        active: ""
-                    })
+                    reset: reset
                 })
         );
 
@@ -121,7 +117,7 @@ function TerritoryModal(props) {
                         paddingTop: "10px"
                     }}>
                         <p>{props.action}</p>
-                        <button style={{background: "none", border: "none"}} onClick={() => props.onClose()}>
+                        <button style={{background: "none", border: "none"}} onClick={() => dispatch(setPreClose(true))}>
                             <CancelIcon/></button>
                     </header>
                     <div style={{display: "flex"}}>

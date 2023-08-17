@@ -5,7 +5,7 @@ import {navigateTo} from "../reducers/DashboardSlice";
 
 function* saveValuesAsync(action) {
     try {
-        const { url, data, hideModal,reset, isEditing } = action.payload;
+        const { url, data, hideModal,reset, isEditing, title } = action.payload;
         console.log(url)
         const response = yield instance(url,isEditing?"PUT":"POST", data);
         console.log("hello")
@@ -13,7 +13,7 @@ function* saveValuesAsync(action) {
             toast.error("Authorization problem")
             yield put(navigateTo("/404"))
         }
-        toast.success(`Territory saved successfully`);
+        toast.success(`${title} saved successfully`);
         yield put(reset());
         yield put(hideModal());
     } catch (error) {

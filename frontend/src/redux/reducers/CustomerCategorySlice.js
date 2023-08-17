@@ -5,9 +5,10 @@ const initialState = {
     loading: false,
     error: null,
     modalVisible: false,
-    editModalVisible:false,
-    editData:{},
-    editDataUrl:""
+    editModalVisible: false,
+    editData: {},
+    editDataUrl: "",
+    preCloseShow:false
 };
 
 const categorySlice = createSlice({
@@ -30,17 +31,34 @@ const categorySlice = createSlice({
         setModalVisible: (state, action) => {
             state.modalVisible = action.payload
         },
-        setEditModalVisible:(state, action)=>{
+        setEditModalVisible: (state, action) => {
             state.editModalVisible = action.payload
         },
-        setEditData:(state, action)=>{
+        setEditData: (state, action) => {
             state.editData = action.payload
         },
-        setEditDataUrl:(state, action)=>{
+        setEditDataUrl: (state, action) => {
             state.editDataUrl = action.payload;
+        },
+        setCloseModals: (state, action) => {
+            state.editModalVisible = false
+            state.modalVisible = false
+        },
+        setPreClose:(state,action)=>{
+            state.preCloseShow=action.payload
         }
     },
 });
 
-export const {fetchCategoriesStart, fetchCategoriesSuccess, fetchCategoriesFailure, setModalVisible, setEditModalVisible, setEditData, setEditDataUrl} = categorySlice.actions;
+export const {
+    fetchCategoriesStart,
+    fetchCategoriesSuccess,
+    fetchCategoriesFailure,
+    setModalVisible,
+    setEditModalVisible,
+    setEditData,
+    setEditDataUrl,
+    setCloseModals,
+    setPreClose
+} = categorySlice.actions;
 export default categorySlice.reducer;

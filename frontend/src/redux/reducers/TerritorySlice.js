@@ -13,7 +13,8 @@ const initialState = {
     placeName: "",
     latitude: "",
     longitude: "",
-    editData:{}
+    editData:{},
+    preCloseShow:false
 };
 
 export const territorySlice = createSlice({
@@ -25,6 +26,10 @@ export const territorySlice = createSlice({
         },
         setEditModalVisible(state, action) {
             state.editModalVisible = action.payload
+        },
+        setCloseModal(state, action) {
+          state.modalVisible = false;
+          state.editModalVisible = false;
         },
         setPlaceName: (state, action) => {
             state.placeName = action.payload;
@@ -67,6 +72,9 @@ export const territorySlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+        setPreClose:(state, action)=>{
+            state.preCloseShow = action.payload
+        }
     }
 });
 export const {
@@ -84,6 +92,8 @@ export const {
     setEditData,
     fetchTerritoryStart,
     fetchTerritoryFailure,
-    fetchTerritorySuccess
+    fetchTerritorySuccess,
+    setCloseModal,
+    setPreClose
 } = territorySlice.actions
 export default territorySlice.reducer;

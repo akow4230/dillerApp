@@ -15,7 +15,8 @@ const initialState = {
     longitude: "",
     editData: {},
     selectedWeekdays: [],
-    clientMapModal:false
+    clientMapModal:false,
+    preCloseShow:false
 };
 
 export const territorySlice = createSlice({
@@ -83,6 +84,13 @@ export const territorySlice = createSlice({
         },
         deleteWeekday: (state, action) => {
             state.selectedWeekdays = state.selectedWeekdays.filter(day => day.id !== action.payload.id);
+        },
+        closeModals:(state, action)=>{
+            state.editModalVisible = false
+            state.modalVisible = false
+        },
+        setPreClose:(state, action)=>{
+            state.preCloseShow = action.payload
         }
     }
 });
@@ -105,6 +113,8 @@ export const {
     setSelectedWeekdays,
     pushWeekday,
     deleteWeekday,
-    setOneClientMapModal
+    setOneClientMapModal,
+    setPreClose,
+    closeModals
 } = territorySlice.actions
 export default territorySlice.reducer;

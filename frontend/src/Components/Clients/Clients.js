@@ -3,31 +3,28 @@ import ClientsModal from "./ClientsModal";
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchClientsStart,
-    setEditModalVisible,
+    closeModals,
     setModalVisible,
-    setOneClientMapModal
+    setPreClose
 } from "../../redux/reducers/ClientsSlice";
 import {ToastContainer} from "react-toastify";
 import Table from "../UniversalUI/Table/Table";
-import {changeSearchParams} from "../../redux/reducers/TableSlice";
+import {changeSearchParams, changeTableDataSize} from "../../redux/reducers/TableSlice";
 import {fetchCategoriesStart} from '../../redux/reducers/CustomerCategorySlice'
 import {fetchWeekdaysStart} from '../../redux/reducers/WeekDaySlice'
 import {fetchTerritoryStart} from "../../redux/reducers/TerritorySlice";
 import ClientUpdateButton from "./ClientUpdateButton";
 import {useLocation} from "react-router-dom";
+import PreClose from "../UniversalUI/preClose/PreClose";
 
 
 function Clients(props) {
     const dispatch = useDispatch();
-    const {modalVisible, editModalVisible, defValueOfMap, mapState, editData} = useSelector((state) => state.clients);
+    const {modalVisible, editModalVisible, defValueOfMap, mapState, editData, preCloseShow} = useSelector((state) => state.clients);
     const closeModal = () => {
         dispatch({type: 'clients/handleMapClear', payload: {mapState: mapState, defValueOfMap: defValueOfMap}});
-        dispatch(setModalVisible(false));
+        dispatch(closeModals());
     };
-    const closeEditModal = () => {
-        dispatch({type: 'clients/handleMapClear', payload: {mapState: mapState, defValueOfMap: defValueOfMap}});
-        dispatch(setEditModalVisible(false))
-    }
     const {categories} = useSelector((state) => state.category);
     const {weekdays} = useSelector((state) => state.weekday);
     const {territory} = useSelector((state) => state.territory)
@@ -38,10 +35,11 @@ function Clients(props) {
         dispatch(fetchTerritoryStart())
         dispatch(fetchClientsStart())
     }, [])
-    const location= useLocation();
-useEffect(()=>{
-    dispatch(changeSearchParams({active:'', quickSearch: ""}))
-},[location.pathname])
+    const location = useLocation();
+    useEffect(() => {
+        dispatch(changeTableDataSize(5))
+        dispatch(changeSearchParams({active: '', quickSearch: ""}))
+    }, [location.pathname])
     // table columns
     const columns = [
         {
@@ -100,9 +98,6 @@ useEffect(()=>{
             type: "str",
             show: true,
             order: 8,
-            render: (item, show) => {
-                return <p>{item?.category?.title}</p>
-            }
         }, {
             id: 9,
             title: "date",
@@ -126,8 +121,6 @@ useEffect(()=>{
 
                 return null;
             }
-
-
 
 
         }, {
@@ -207,6 +200,7 @@ useEffect(()=>{
     return (
 
         <div>
+            <PreClose closeMainModal={closeModal} closePreClose={()=>dispatch(setPreClose(false))} show={preCloseShow}/>
             <div style={{
                 background: "#eeeeee",
                 borderRadius: "15px",
@@ -228,7 +222,7 @@ useEffect(()=>{
 
                 <ClientsModal action={"Add client"} visible={modalVisible} onClose={closeModal}/>
                 <ClientsModal action={"Edit client"} data={editData} isEditing={true} visible={editModalVisible}
-                              onClose={closeEditModal}/>
+                              onClose={closeModal}/>
                 <div>
                     <div>
 

@@ -12,7 +12,7 @@ import {
     getTableData,
     saveColumnsOrders,
     toggleModal,
-    changeLoader
+    changeLoader, changeCurrentPage, setPreClose
 } from '../../../redux/reducers/TableSlice';
 import Pagination from '@mui/material/Pagination';
 import Filter from '../filter/Filter';
@@ -24,8 +24,9 @@ import Loader from "../../../ui/loader";
 import PreClose from "../preClose/PreClose";
 
 function Table({isDark, columns, requestApi, filterParam, path}) {
-    const baseURL="http://localhost:8080"
+    const baseURL = "https://meprog.cf"
     const dispatch = useDispatch();
+    const location = useLocation()
     const [settings, setSettings] = useState(false);
     const {
         pageSize,
@@ -34,8 +35,10 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
         data,
         modal,
         searchParams,
-        isLoading
+        isLoading,
+        preCloseShow
     } = useSelector((state) => state.table);
+
     function getData(search, changePage = false) {
         if (changePage) {
             dispatch(getTableData({
@@ -60,12 +63,12 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
 
     useEffect(() => {
         getData(searchParams);
-    }, [searchParams, columns, currentPage, dispatch, isDark, pageSize, requestApi]);
+    }, [searchParams, currentPage, dispatch, pageSize, requestApi, columns]);
 
     function getExcel() {
-        let category=[]
+        let category = []
 
-        searchParams.category?.map(item=>{
+        searchParams.category?.map(item => {
             category.push(item.value)
         })
         let weekDay = []
@@ -118,98 +121,106 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
         );
         return values.join(" ");
     }
-    useEffect(()=>{
+
+    useEffect(() => {
         dispatch(changeLoader());
         setTimeout(() => {
             dispatch(changeLoader());
         }, 1000);
-    },[])
+    }, [])
+
     return (
         <div>
-            {isLoading?(<Loader/>):(
-                <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
-                    <PreClose closeMainModal={() => dispatch(toggleModal())}/>
-                    <Filter param={filterParam} func={getData}/>
-                    <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
+            <div className={darkTheme ? 'tableUI-dark' : 'tableUI'}>
+                <PreClose closeMainModal={() => dispatch(toggleModal())} closePreClose={()=>dispatch(setPreClose(false))} show={preCloseShow}/>
+                <Filter param={filterParam} func={getData}/>
+                <div className={darkTheme ? 'topUI-dark text-white' : 'topUI'}>
 
-                        <button className={"btn btn-light"} onClick={() => setSettings(!settings)}><i
-                            className="fa-solid fa-sliders" style={{zIndex: "auto"}}></i></button>
-                        {
-                            settings ? <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 10,
-                                overflowX: "auto"
-                            }}>
-                                <Button type={'dashed'} onClick={() => dispatch(toggleModal())}><i
-                                    className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
-                                {
-                                    data.columns?.map((item, index) => {
-                                        return <FormControlLabel
-                                            key={item?.id}
-                                            value={item.id}
-                                            control={<Switch color="primary"/>}
-                                            label={
-                                                <div style={{ display: 'flex', flexDirection: 'column-reverse', alignItems: 'center',margin:0 }}>
-                                                    <span style={{fontSize:"14px"}}>{item.title}</span>
-                                                </div>
-                                            }
-                                            checked={item.show}
-                                            labelPlacement="top"
-                                            onChange={(e) => dispatch(changeTableColumns({
-                                                id: item.id,
-                                                checked: e.target.checked,
-                                                columns: data.columns
-                                            }))}
-                                        />
-                                    })
-                                }
+                    <button className={"btn btn-light"} onClick={() => setSettings(!settings)}><i
+                        className="fa-solid fa-sliders" style={{zIndex: "auto"}}></i></button>
+                    {
+                        settings ? <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 10,
+                            overflowX: "auto"
+                        }}>
+                            <Button type={'dashed'} onClick={() => dispatch(toggleModal())}><i
+                                className="fa-solid fa-gears"></i> &nbsp; Menu Control</Button>
+                            {
+                                data.columns?.map((item, index) => {
+                                    return <FormControlLabel
+                                        key={item?.id}
+                                        value={item.id}
+                                        control={<Switch color="primary"/>}
+                                        label={
+                                            <div style={{
+                                                display: 'flex',
+                                                flexDirection: 'column-reverse',
+                                                alignItems: 'center',
+                                                margin: 0
+                                            }}>
+                                                <span style={{fontSize: "14px"}}>{item.title}</span>
+                                            </div>
+                                        }
+                                        checked={item.show}
+                                        labelPlacement="top"
+                                        onChange={(e) => dispatch(changeTableColumns({
+                                            id: item.id,
+                                            checked: e.target.checked,
+                                            columns: data.columns
+                                        }))}
+                                    />
+                                })
+                            }
 
-                            </div> : <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 10
-                            }}>
+                        </div> : <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 10
+                        }}>
 
-                                <Select
-                                    defaultValue={pageSize}
-                                    style={{
-                                        width: 70,
-                                    }}
-                                    onChange={(e) => dispatch(changeTableDataSize(e))}
-                                    options={[
-                                        {
-                                            value:data.totalElements,
-                                            label:'All'
-                                        },
-                                        {
-                                            value: '5',
-                                            label: '5',
-                                        },
-                                        {
-                                            value: '10',
-                                            label: '10',
-                                        },
-                                        {
-                                            value: '15',
-                                            label: '15',
-                                        },
-                                        {
-                                            value: '20',
-                                            label: '20'
-                                        },
-                                        {
-                                            value: '30',
-                                            label: '30'
-                                        },
-                                    ]}
-                                />
-                                <Button type={'dashed'} onClick={getExcel} style={{zIndex: "auto !important"}}><i
-                                    className="fa-solid fa-table"></i> &nbsp; Excel</Button>
-                            </div>
-                        }
-                    </div>
-                    <div className={'bottomUI scrollbar'} style={{overflowY: 'auto'}} >
+                            <Select
+                                defaultValue={5}
+                                style={{
+                                    width: 70,
+                                }}
+                                onChange={(e) => dispatch(changeTableDataSize(e))}
+                                options={[
+                                    {
+                                        value: data.totalElements,
+                                        label: 'All'
+                                    },
+                                    {
+                                        value: '5',
+                                        label: '5',
+                                    },
+                                    {
+                                        value: '10',
+                                        label: '10',
+                                    },
+                                    {
+                                        value: '15',
+                                        label: '15',
+                                    },
+                                    {
+                                        value: '20',
+                                        label: '20'
+                                    },
+                                    {
+                                        value: '30',
+                                        label: '30'
+                                    },
+                                ]}
+                            />
+                            <Button type={'dashed'} onClick={getExcel} style={{zIndex: "auto !important"}}><i
+                                className="fa-solid fa-table"></i> &nbsp; Excel</Button>
+                        </div>
+                    }
+                </div>
+                <div className={'bottomUI scrollbar'} style={{overflowY: 'auto'}}>
+                    {isLoading ? (<Loader/>) : (
+
                         <div className={'my-table'}>
                             <table className="table table-hover table-bordered">
                                 <thead>
@@ -247,23 +258,31 @@ function Table({isDark, columns, requestApi, filterParam, path}) {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 width: '100%',
-                                height: 40
+                                height: 40,
+                                gap:"30px"
                             }}>
-                                {data.totalPage > 1 &&
-                                    <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))}
-                                                page={currentPage}
-                                                count={data.totalPage}
-                                                color={'primary'}
-                                                variant={"outlined"}
-                                                shape="rounded"/>}
+                                <div>
+                                    {currentPage}-{Math.min(pageSize,data.totalElements, data?.data?.length)}/{data.totalElements}
+                                </div>
+                                <div>
+                                    {data.totalPage > 1 &&
+                                        <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))}
+                                                    page={currentPage}
+                                                    count={data.totalPage}
+                                                    color={'primary'}
+                                                    variant={"outlined"}
+                                                    shape="rounded"/>}
+                                </div>
 
                             </div>
                         </div>
-                        <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} title={'Change order'}
-                                onSave={() => dispatch(saveColumnsOrders())} elements={elements}/>
-                    </div>
+                    )}
+                    <UModal isOpen={modal} toggle={() => dispatch(toggleModal())} action={'Change order'}
+                            onSave={() => dispatch(saveColumnsOrders())} elements={elements} openPreClose={()=>dispatch(setPreClose(true))} showPreClose={preCloseShow}/>
+
                 </div>
-            )}
+            </div>
+
 
         </div>
     );
