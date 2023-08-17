@@ -117,7 +117,7 @@ function TerritoryModal(props) {
                         paddingTop: "10px"
                     }}>
                         <p>{props.action}</p>
-                        <button style={{background: "none", border: "none"}} onClick={() => props.onClose()}>
+                        <button style={{background: "none", border: "none"}} onClick={() => dispatch(setPreClose(true))}>
                             <CancelIcon/></button>
                     </header>
                     <div style={{display: "flex"}}>
