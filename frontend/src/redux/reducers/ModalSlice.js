@@ -1,8 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
     show: true,
-    data: null
+    data: null,
+    loading: false
 };
 
 const modalSlice = createSlice({
@@ -17,8 +18,15 @@ const modalSlice = createSlice({
             state.show = false;
             state.data = null;
         },
+        changeLoading(state) {
+            state.loading = !state.loading
+        }
     },
 });
 
-export const { showModal, hideModal } = modalSlice.actions;
+export const {
+ showModal,
+    hideModal,
+    changeLoading
+    } = modalSlice.actions;
 export default modalSlice.reducer;

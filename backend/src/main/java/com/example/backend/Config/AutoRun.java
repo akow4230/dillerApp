@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +45,7 @@ public class AutoRun implements CommandLineRunner {
     }
 
     private void saveSettings(List<Settings> all) {
-        if (all.size() == 0) {
+        if (all.isEmpty()) {
             Settings companyProfile = new Settings(1, "Company Profile", "/dashboard/settings/company-profile");
             Settings territory = new Settings(2, "Territory", "/dashboard/settings/territory");
             Settings customerCategory = new Settings(3, "Customer Category", "/dashboard/settings/customer-category");
@@ -62,8 +63,9 @@ public class AutoRun implements CommandLineRunner {
                     .build();
             userRepo.save(user);
             Territory territory = Territory.builder()
-                    .title("Bukhara city, Muhammad Iqbol district")
-                    .region("territory region 1")
+                    .title("Shift Academy")
+                    .region("Bukhara")
+                    .createdAt(LocalDateTime.now())
                     .code("T0001")
                     .build();
             Territory savedTerritory = territoryRepo.save(territory);

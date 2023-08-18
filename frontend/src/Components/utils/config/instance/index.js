@@ -3,7 +3,7 @@ import axios from "axios";
 export default function (url, method, data, param) {
     let token = localStorage.getItem("access_token");
     return axios({
-        url: "http://localhost:8080" + url,
+        url: "https://diller-application-088570450272.herokuapp.com" + url,
         method: method,
         data: data,
         headers: {
@@ -26,12 +26,12 @@ export default function (url, method, data, param) {
                 };
             }
             return axios({
-                url: `http://localhost:8080/api/v1/auth/refresh?refreshToken=${localStorage.getItem("refresh_token")}`,
+                url: `https://diller-application-088570450272.herokuapp.com/api/v1/auth/refresh?refreshToken=${localStorage.getItem("refresh_token")}`,
                 method: "POST"
             }).then((res) => {
                 localStorage.setItem("access_token", res.data);
                 return axios({
-                    url: "http://localhost:8080" + url,
+                    url: "https://diller-application-088570450272.herokuapp.com" + url,
                     method: method,
                     data: data,
                     headers: {

@@ -15,6 +15,7 @@ public class CustomerCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String  title;
+    @Column(unique = true)
     private  String code;
     private String description;
     private boolean active;

@@ -62,7 +62,7 @@ function ClientsModal(props) {
                 category: {value: props.data?.category?.id, label: props.data?.category?.title}
             });
             dispatch(setSelectedWeekdays(props.data?.weekDay));
-            dispatch(setMapState({center: [props.data?.latitude, props.data?.longitude], zoom: 15}));
+            dispatch(setMapState({center: [props.data?.latitude, props.data?.longitude], zoom: 10}));
             dispatch(setLatitude(props.data?.latitude));
             dispatch(setLongitude(props.data?.longitude));
             dispatch(setTemplate([props.data?.latitude, props.data?.longitude]));

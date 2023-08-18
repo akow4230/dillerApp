@@ -68,9 +68,8 @@ const tableSlice = createSlice({
         },
 
         saveColumnsOrders: (state, action) => {
-            localStorage.setItem(state.localPath, JSON.stringify(state.modalColumns.map((item, index) => item.id)));
+            localStorage.setItem(state.localPath, JSON.stringify(state.modalColumns.map((item, index) => ({id:item.id, show:item.show}))));
             state.data.columns = state.modalColumns;
-            console.log(state.modalColumns)
             state.defModalColumns = state.modalColumns;
             state.modal = false
         },
@@ -91,6 +90,7 @@ const tableSlice = createSlice({
             if (dataIndex !== -1) {
                 state.data.columns[dataIndex].show = checked;
             }
+            localStorage.setItem(state.localPath, JSON.stringify(state.modalColumns.map((item, index) => ({id:item.id, show:item.show}))));
         },
         changeTheme(state, action) {
             state.darkTheme = action.payload

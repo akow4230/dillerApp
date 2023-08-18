@@ -23,7 +23,7 @@ import Loader from "../../../ui/loader";
 import PreClose from "../preClose/PreClose";
 
 function Table({isDark, columns, requestApi, filterParam, path, localstoragePath}) {
-    const baseURL = "http://localhost:8080"
+    const baseURL = "https://diller-application-088570450272.herokuapp.com"
     const dispatch = useDispatch();
     const [settings, setSettings] = useState(false);
     const {
@@ -63,17 +63,16 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
     }
 
     useEffect(() => {
-        getData(searchParams)
         try {
             dispatch(getTableData({
                 columns: localStorage.getItem(localstoragePath)
                     ? JSON.parse(localStorage.getItem(localstoragePath)).map(
                         (item) => {
-                            if (columns[item] === undefined) {
+                            if (columns[item.id] === undefined) {
                                 localStorage.removeItem(localstoragePath);
                                 return;
                             }
-                            return columns[item];
+                            return {...columns[item.id], show: item.show};
                         }
                     )
                     : columns,
@@ -103,6 +102,9 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
         searchParams.territory?.map(item => {
             territory?.push(item?.value)
         })
+        const columns  = data.columns.filter(item => item.title !== "Update" && item.show).map(item => item.title)
+        console.log(columns)
+        console.log(modalColumns)
         axios
             .get(`${baseURL}/api/v1/${path}/getExcel`, {
                 responseType: 'arraybuffer', headers: {
@@ -114,7 +116,7 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
                     weekDay: weekDay.join(','),
                     tin: searchParams.tin?.value,
                     territory: territory.join(','),
-                    columns: modalColumns.filter(item => item.title !== "Update").map(item => item.title).join(',')
+                    columns: columns.join(',')
                 }
             })
             .then((res) => {
@@ -151,7 +153,7 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
         dispatch(changeLoader());
         setTimeout(() => {
             dispatch(changeLoader());
-        }, 1000);
+        }, 2000);
     }, [])
 
     return (

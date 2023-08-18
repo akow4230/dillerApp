@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import PhoneInput from "react-phone-number-input";
 import { CgSpinner } from "react-icons/cg";
+import instance from "../utils/config/instance";
 
 function Index() {
   const {  isLoading, error } = useSelector((state) => state.login);
@@ -17,6 +18,15 @@ function Index() {
     control,
     formState: { errors }
   } = useForm();
+  useEffect(()=>{
+    async function check(){
+      const res = await instance("/api/v1/security", "GET");
+      if (!res.error){
+        navigate("/dashboard")
+      }
+    }
+    check()
+  },[])
   const loginUser = (formData) => {
     if (formData.phone.startsWith("+998")) {
       if (formData.phone.length === 13) {

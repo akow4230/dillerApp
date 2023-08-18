@@ -6,6 +6,7 @@ import "./index.css"
 function UModal(props) {
     const dispatch = useDispatch();
     const {handleSubmit, register, control, formState: {errors}, reset} = useForm();
+    const {loading} = useSelector((state)=>state.modal)
     useEffect(()=>{
         reset(
             props.data
@@ -66,7 +67,7 @@ function UModal(props) {
                     </Modal.Body>
                     {!props?.isNotSaving&&
                         <Modal.Footer style={{display: 'flex', justifyContent: 'center'}}>
-                            {!props.onSave ? <button className="blob-btn" type="submit" form={"modal"}>
+                            {!props.onSave ? <button className="blob-btn" type="submit" form={"modal"} disabled={loading}>
                                 Save
                                 <span className="blob-btn__inner">
                                 <span className="blob-btn__blobs">
@@ -88,7 +89,7 @@ function UModal(props) {
                                         </filter>
                                     </defs>
                                 </svg>
-                            </button> : props.onSave ? <button className="blob-btn" onClick={props.onSave}>
+                            </button> : props.onSave ? <button className="blob-btn" onClick={props.onSave} disabled={loading}>
                                 Save
                                 <span className="blob-btn__inner">
                                 <span className="blob-btn__blobs">

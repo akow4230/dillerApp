@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,12 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
 
     @Override
     public HttpEntity<?> save(CustomerCategory category) {
-        return ResponseEntity.ok(customerCategoryRepo.save(category));
+        try{
+            return ResponseEntity.ok(customerCategoryRepo.save(category));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while saving the customer category");
+        }
     }
 
     @Override
