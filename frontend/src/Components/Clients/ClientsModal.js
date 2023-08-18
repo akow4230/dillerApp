@@ -276,7 +276,7 @@ function ClientsModal(props) {
                                         <span className="error-message">{errors.category.message}</span>}
                                     <br/>
                                     <br/>
-                                    <label style={{width: "300px"}}>
+                                    <div style={{width: "300px"}}>
                                         Visiting days
                                         <br/>
                                         <span className="d-flex justify-content-center gap-3 flex-wrap">
@@ -291,7 +291,7 @@ function ClientsModal(props) {
                                                   </label>
                                               )}
                                         </span>
-                                    </label>
+                                    </div>
                                 </div>
                                 <div style={{
                                     display: "flex",

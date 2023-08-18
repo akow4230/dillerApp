@@ -127,7 +127,7 @@ public class TerritoryServiceImpl implements TerritoryService {
                             case "Title" -> cell.setCellValue(territory.getTitle());
                             case "Region" -> cell.setCellValue(territory.getRegion());
                             case "Code" -> cell.setCellValue(territory.getCode());
-                            case "CreatedAt" -> cell.setCellValue(territory.getCreatedAt().toString());
+                            case "CreatedAt" -> cell.setCellValue(territory.getCreatedAt()!=null?territory.getCreatedAt().toString():"No created at");
                         }
                     }
                 }

@@ -45,7 +45,7 @@ function Index({data}) {
                     <p>Sales</p>
                 </div>
                 <div className="box">
-                    <FormControl sx={{m: 1, minWidth: 120}} size="small">
+                    <FormControl sx={{m: 1, maxWidth: 120, minWidth:100}} size="small">
                         <InputLabel style={{color: "white"}} id="demo-select-small-label">Cash register</InputLabel>
                         <Select
                             style={{zIndex:100000}}
@@ -60,7 +60,7 @@ function Index({data}) {
                     </FormControl>
                 </div>
                 <div className="box">
-                    <FormControl sx={{m: 1, minWidth: 120}} size="small">
+                    <FormControl sx={{m: 1, mmaxWidth: 120, minWidth:100}} size="small">
                         <InputLabel style={{color: "white"}} id="demo-select-small-label"><i
                             className="fa-solid fa-location-dot"></i> GPS</InputLabel>
                         <Select
@@ -84,7 +84,7 @@ function Index({data}) {
                 </div>
             </div>
             <div style={{padding: 10}} className={"top"}>
-                <div style={{background: "#219ebc", width: "150px"}}
+                <div style={{background: "#219ebc", maxWidth: 120, minWidth:100}}
                      className="box d-flex align-items-center justify-content-center gap-2">
                     <i className="fa-solid fa-calendar-days"></i><p
                     className={"my-3"}>{data?.currentDateAndTime ? data.currentDateAndTime : ""}</p>
