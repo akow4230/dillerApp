@@ -60,26 +60,36 @@ const tableSlice = createSlice({
             console.log(state.currentDragingColumn)
         },
         changeOrder: (state, action) => {
-            const {sourceIndex, destinationIndex} = action.payload;
+            const { sourceIndex, destinationIndex } = action.payload;
             const updatedColumns = [...state.modalColumns];
             const [draggedColumn] = updatedColumns.splice(sourceIndex, 1);
             updatedColumns.splice(destinationIndex, 0, draggedColumn);
             state.modalColumns = updatedColumns;
         },
+
         saveColumnsOrders: (state, action) => {
             localStorage.setItem(state.localPath, JSON.stringify(state.modalColumns.map((item, index) => item.id)));
             state.data.columns = state.modalColumns;
+            console.log(state.modalColumns)
             state.defModalColumns = state.modalColumns;
             state.modal = false
         },
         changeTableColumns: (state, action) => {
-            state.data.columns = action.payload.columns;
-            // Find the column object with the matching ID and update its checked property
-            for (let i = 0; i < state.data.columns.length; i++) {
-                if (state.data.columns[i].id === action.payload.id) {
-                    state.data.columns[i].show = action.payload.checked;
-                    break;
+            const { id, checked } = action.payload;
+
+            // Update modalColumns state
+            const updatedModalColumns = state.modalColumns.map(column => {
+                if (column.id === id) {
+                    return { ...column, show: checked };
                 }
+                return column;
+            });
+            state.modalColumns = updatedModalColumns;
+
+            // Update data columns state
+            const dataIndex = state.data.columns.findIndex(column => column.id === id);
+            if (dataIndex !== -1) {
+                state.data.columns[dataIndex].show = checked;
             }
         },
         changeTheme(state, action) {
@@ -97,6 +107,9 @@ const tableSlice = createSlice({
         },
         setPreClose(state, action) {
             state.preCloseShow = action.payload
+        },
+        setModalColumns(state,action){
+            state.modalColumns = action.payload
         }
     }
 })
@@ -112,6 +125,7 @@ export const {
     toggleModal,
     changeTableColumns,
     changeSearchParams,
+    setModalColumns,
     changeTheme,
     changeCurrentPage,
     setPreClose

@@ -10,7 +10,7 @@ import {
     changeTableDataPage,
     changeTableDataSize,
     getTableData,
-    saveColumnsOrders,
+    saveColumnsOrders, setModalColumns,
     setPreClose,
     toggleModal
 } from '../../../redux/reducers/TableSlice';
@@ -191,11 +191,16 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
                                         }
                                         checked={item.show}
                                         labelPlacement="top"
-                                        onChange={(e) => dispatch(changeTableColumns({
-                                            id: item.id,
-                                            checked: e.target.checked,
-                                            columns: data.columns
-                                        }))}
+                                        onChange={(e) => {
+                                            dispatch(changeTableColumns({
+                                                id: item.id,
+                                                checked: e.target.checked,
+                                                columns: data.columns
+                                            }))
+                                            dispatch(setModalColumns(
+                                                data.columns
+                                            ))
+                                        }}
                                     />
                                 })
                             }
