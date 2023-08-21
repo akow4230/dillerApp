@@ -23,7 +23,7 @@ import Loader from "../../../ui/loader";
 import PreClose from "../preClose/PreClose";
 
 function Table({isDark, columns, requestApi, filterParam, path, localstoragePath}) {
-    const baseURL = "https://diller-application-088570450272.herokuapp.com"
+    const baseURL = "http://localhost:8080"
     const dispatch = useDispatch();
     const [settings, setSettings] = useState(false);
     const {

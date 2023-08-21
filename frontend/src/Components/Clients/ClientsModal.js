@@ -6,24 +6,28 @@ import {
     Map,
     Placemark,
     SearchControl,
-    TrafficControl, TypeSelector,
+    TrafficControl,
+    TypeSelector,
     ZoomControl
 } from 'react-yandex-maps';
 import {Controller, useForm} from 'react-hook-form';
 import {
+    deleteWeekday,
+    editClientsAction,
+    pushWeekday,
+    saveClientsAction,
     setLatitude,
     setLongitude,
-    setTemplate,
     setMapState,
-    saveClientsAction,
-    editClientsAction, pushWeekday, deleteWeekday, setSelectedWeekdays, setPreClose
+    setPreClose,
+    setSelectedWeekdays,
+    setTemplate
 } from '../../redux/reducers/ClientsSlice';
 import "../Territory/styles.css"
 import {toast, ToastContainer} from "react-toastify";
 import {fetchWeekdaysStart} from "../../redux/reducers/WeekDaySlice";
 import Select from "react-select";
 import CancelIcon from '@mui/icons-material/Cancel';
-import {UserLogIn} from "../../redux/reducers/LoginSlice";
 import PhoneInput from "react-phone-number-input";
 
 function ClientsModal(props) {
