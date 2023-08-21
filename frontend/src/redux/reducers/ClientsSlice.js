@@ -16,7 +16,8 @@ const initialState = {
     editData: {},
     selectedWeekdays: [],
     clientMapModal:false,
-    preCloseShow:false
+    preCloseShow:false,
+    loading:false
 };
 
 export const territorySlice = createSlice({
@@ -91,6 +92,9 @@ export const territorySlice = createSlice({
         },
         setPreClose:(state, action)=>{
             state.preCloseShow = action.payload
+        },
+        changeLoading:(state)=>{
+            state.loading = !state.loading
         }
     }
 });
@@ -115,6 +119,7 @@ export const {
     deleteWeekday,
     setOneClientMapModal,
     setPreClose,
-    closeModals
+    closeModals,
+    changeLoading
 } = territorySlice.actions
 export default territorySlice.reducer;

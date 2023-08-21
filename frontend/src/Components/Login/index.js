@@ -50,6 +50,15 @@ function Index() {
       toast.error(error);
     }
   }, [error]);
+  useEffect(()=>{
+    async function check(){
+      const res = await instance("/api/v1/security", "GET");
+      if (!res.error){
+        navigate("/dashboard")
+      }
+    }
+    check()
+  },[])
   return (
       <div className='Father-Login'>
         <ToastContainer />

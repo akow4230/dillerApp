@@ -11,10 +11,11 @@ import {
     setTemplate,
     setEditModalVisible,
     fetchClientsFailure,
-    fetchClientsStart, fetchClientsSuccess,
+    fetchClientsStart, fetchClientsSuccess, changeLoading,
 } from "../reducers/ClientsSlice";
 import { toast } from "react-toastify";
 import {navigateTo} from "../reducers/DashboardSlice";
+import {change} from "react-beautiful-dnd/src/state/auto-scroller/can-scroll";
 function* saveClientsAsync(action) {
     try {
         const { longitude,latitude, id,data,reset } = action.payload.clients;
@@ -54,6 +55,7 @@ function* saveClientsAsync(action) {
         toast.success(`Client ${isEditing ? "edited" : "saved"} successfully`);
         yield put(setModalVisible(false));
         yield put(setEditModalVisible(false));
+        yield put(changeLoading())
     } catch (error) {
         toast.error("An error occurred. Please try again later.");
     }

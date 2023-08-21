@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     territory:[],
     isLoading: false,
+    loading:false,
     error: false,
     navigation: "",
     modalVisible: false,
@@ -74,6 +75,9 @@ export const territorySlice = createSlice({
         },
         setPreClose:(state, action)=>{
             state.preCloseShow = action.payload
+        },
+        changeLoading:(state, action)=>{
+            state.loading = !state.loading
         }
     }
 });
@@ -94,6 +98,7 @@ export const {
     fetchTerritoryFailure,
     fetchTerritorySuccess,
     setCloseModal,
-    setPreClose
+    setPreClose,
+    changeLoading
 } = territorySlice.actions
 export default territorySlice.reducer;
