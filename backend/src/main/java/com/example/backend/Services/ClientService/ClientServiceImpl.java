@@ -41,12 +41,24 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ResponseEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay, String territory, String tin) {
-        Pageable pageRequest = PageRequest.of(page - 1, size);
+        Pageable pageRequest;
+        System.out.println(page);
+        if (page != null && page == -1) {
+            pageRequest = Pageable.unpaged();
+        } else {
+            // Ensure size is at least 1
+            size = (size != null && size > 0) ? size : 10; // Set a default size if necessary
+            pageRequest = PageRequest.of(page - 1, size);
+        }
+
         List<Integer> categoryIds = getIdes(category);
         List<Integer> weekDayIds = getIdes(weekDay);
         List<UUID> territoryIds = getUUIDes(territory);
+
         return ResponseEntity.ok(clientRepo.getClientsByActive(active, quickSearch, categoryIds, weekDayIds, tin, territoryIds, pageRequest));
     }
+
+
 
     @Override
     public HttpEntity<?> getAllClients() {

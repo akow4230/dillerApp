@@ -5,7 +5,7 @@ import {
     fetchClientsStart,
     closeModals,
     setModalVisible,
-    setPreClose
+    setPreClose, changeLoader
 } from "../../redux/reducers/ClientsSlice";
 import {ToastContainer} from "react-toastify";
 import Table from "../UniversalUI/Table/Table";
@@ -16,6 +16,7 @@ import {fetchTerritoryStart} from "../../redux/reducers/TerritorySlice";
 import ClientUpdateButton from "./ClientUpdateButton";
 import {useLocation} from "react-router-dom";
 import PreClose from "../UniversalUI/preClose/PreClose";
+import {CgSpinner} from "react-icons/cg";
 
 
 function Clients(props) {
@@ -26,7 +27,8 @@ function Clients(props) {
         defValueOfMap,
         mapState,
         editData,
-        preCloseShow
+        preCloseShow,
+        isLoading
     } = useSelector((state) => state.clients);
     const closeModal = () => {
         dispatch({type: 'clients/handleMapClear', payload: {mapState: mapState, defValueOfMap: defValueOfMap}});
@@ -36,7 +38,6 @@ function Clients(props) {
     const {weekdays} = useSelector((state) => state.weekday);
     const {territory} = useSelector((state) => state.territory)
     useEffect(() => {
-
         dispatch(fetchCategoriesStart())
         dispatch(fetchWeekdaysStart())
         dispatch(fetchTerritoryStart())

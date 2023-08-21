@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     FullscreenControl,
@@ -13,9 +13,7 @@ import {
 import {Controller, useForm} from 'react-hook-form';
 import {
     deleteWeekday,
-    editClientsAction,
-    pushWeekday,
-    saveClientsAction,
+    editClientsAction, pushWeekday, saveClientsAction,
     setLatitude,
     setLongitude,
     setMapState,
@@ -28,6 +26,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {fetchWeekdaysStart} from "../../redux/reducers/WeekDaySlice";
 import Select from "react-select";
 import CancelIcon from '@mui/icons-material/Cancel';
+import {UserLogIn} from "../../redux/reducers/LoginSlice";
 import PhoneInput from "react-phone-number-input";
 
 function ClientsModal(props) {
@@ -346,7 +345,7 @@ function ClientsModal(props) {
                                         <input type="text" className={"w-75"} disabled={true} value={clients.latitude}/>
                                     </label> <br/>
                                 </div>
-                                <button className="btn btn-danger" onClick={handleMapClear}>clear</button>
+                                <button  className={"btn btn-danger"} onClick={handleMapClear}>clear</button>
                             </div>
                         </div>
                     </div>

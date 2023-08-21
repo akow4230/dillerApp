@@ -93,7 +93,7 @@ export const territorySlice = createSlice({
         setPreClose:(state, action)=>{
             state.preCloseShow = action.payload
         },
-        changeLoading:(state)=>{
+        changeLoading:(state) =>{
             state.loading = !state.loading
         }
     }
@@ -106,6 +106,7 @@ export const {
     setRegion,
     setTemplate,
     setPlaceName,
+    changeLoading,
     resetTerritory,
     setEditModalVisible,
     saveClientsAction,
@@ -119,7 +120,6 @@ export const {
     deleteWeekday,
     setOneClientMapModal,
     setPreClose,
-    closeModals,
-    changeLoading
+    closeModals
 } = territorySlice.actions
 export default territorySlice.reducer;

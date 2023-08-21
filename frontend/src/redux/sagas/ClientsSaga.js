@@ -11,13 +11,14 @@ import {
     setTemplate,
     setEditModalVisible,
     fetchClientsFailure,
-    fetchClientsStart, fetchClientsSuccess,
+    fetchClientsStart, fetchClientsSuccess, changeLoader,
 } from "../reducers/ClientsSlice";
 import { toast } from "react-toastify";
 import {navigateTo} from "../reducers/DashboardSlice";
 import {changeLoading} from "../reducers/ClientsSlice";
 function* saveClientsAsync(action) {
     try {
+
         const { longitude,latitude, id,data,reset } = action.payload.clients;
         const { isEditing } = action.payload;
         if (!longitude || !latitude) {

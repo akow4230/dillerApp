@@ -29,6 +29,7 @@ function Filter(props) {
                 dispatch(changeLoader());
             }, 1000);
         }
+
         // set searchParams
         dispatch(changeSearchParams({
             ...searchParams,

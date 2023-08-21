@@ -103,8 +103,7 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
             territory?.push(item?.value)
         })
         const columns  = data.columns.filter(item => item.title !== "Update" && item.show).map(item => item.title)
-        console.log(columns)
-        console.log(modalColumns)
+
         axios
             .get(`${baseURL}/api/v1/${path}/getExcel`, {
                 responseType: 'arraybuffer', headers: {
@@ -221,7 +220,7 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
                                 onChange={(e) => dispatch(changeTableDataSize(e))}
                                 options={[
                                     {
-                                        value: data.totalElements,
+                                        value: '-1',
                                         label: 'All'
                                     },
                                     {
@@ -263,7 +262,7 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
                                     ))}
                                 </tr>
                                 </thead>
-                                {data?.data.length!==0?
+                                {data?.data?.length!==0?
                                     <tbody>
                                     {data?.data?.map((item) => (
                                         <tr key={item?.id} className={item.active?'':'table-warning'}>
@@ -285,7 +284,7 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
                                     </tbody>
                                     :<tbody>
                                     <tr>
-                                        <td colSpan={data.columns.length} className='text-center'>
+                                        <td colSpan={data?.columns?.length} className='text-center'>
                                             No  Data!
                                         </td>
                                     </tr>
@@ -307,7 +306,7 @@ function Table({isDark, columns, requestApi, filterParam, path, localstoragePath
                                     {data.totalPage > 1 &&
                                         <Pagination onChange={(e, page) => dispatch(changeTableDataPage({page: page}))}
                                                     page={currentPage}
-                                                    count={data.totalPage}
+                                                   count={data.totalPage}
                                                     color={'primary'}
                                                     variant={"outlined"}
                                                     shape="rounded"/>}
