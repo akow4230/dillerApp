@@ -26,7 +26,7 @@ function ClientsOnMap(props) {
         dispatch(fetchClientsStart())
         dispatch(fetchTerritoryStart())
     }, [ dispatch ]);
-    console.log(loading)
+
 
     return (
         <div className='container'>

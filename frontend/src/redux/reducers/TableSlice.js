@@ -45,8 +45,11 @@ const tableSlice = createSlice({
             state.data.totalPage = action.payload.totalPage
         },
         changeTableDataSize(state, action) {
-            state.pageSize = action.payload
+
+                state.pageSize = action.payload
+
             state.currentPage = 1
+
         },
         changeTableDataPage(state, action) {
             state.currentPage = action.payload.page
