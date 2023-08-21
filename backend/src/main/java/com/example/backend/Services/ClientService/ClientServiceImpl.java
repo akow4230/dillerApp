@@ -43,7 +43,8 @@ public class ClientServiceImpl implements ClientService {
     public ResponseEntity<?> getClients(String active, String quickSearch, Integer page, Integer size, String category, String weekDay, String territory, String tin) {
         Pageable pageRequest;
         System.out.println(page);
-        if (page != null && page == -1) {
+        if (page != null && size == -1) {
+            System.out.println(size);
             pageRequest = Pageable.unpaged();
         } else {
             // Ensure size is at least 1
