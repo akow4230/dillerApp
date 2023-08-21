@@ -14,7 +14,8 @@ const initialState = {
     latitude: "",
     longitude: "",
     editData:{},
-    preCloseShow:false
+    preCloseShow:false,
+    loading:false
 };
 
 export const territorySlice = createSlice({
@@ -74,6 +75,9 @@ export const territorySlice = createSlice({
         },
         setPreClose:(state, action)=>{
             state.preCloseShow = action.payload
+        },
+        changeLoading:(state)=>{
+            state.loading = !state.loading
         }
     }
 });
@@ -82,6 +86,7 @@ export const {
     setLatitude,
     setLongitude,
     setMapState,
+    changeLoading,
     setRegion,
     setTemplate,
     setPlaceName,

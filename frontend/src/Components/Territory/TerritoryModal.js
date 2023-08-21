@@ -149,7 +149,7 @@ function TerritoryModal(props) {
                                 </div>
                                 <div style={{marginTop: "auto", display: "flex", justifyContent: "center"}}>
                                     <button className="btn btn-primary"
-                                            style={{position: "absolute", bottom: "30px"}}>Add
+                                            style={{position: "absolute", bottom: "30px"}} disabled={territory.loading}>Add
                                     </button>
                                 </div>
                             </form>

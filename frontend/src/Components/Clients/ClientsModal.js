@@ -304,7 +304,7 @@ function ClientsModal(props) {
                                     width: "100%"
                                 }}>
                                     <button className="btn btn-primary"
-                                            style={{position: "absolute", bottom: "30px", left: "50px"}}>Save
+                                            style={{position: "absolute", bottom: "30px", left: "50px"}} disabled={clients.loading}>Save
                                     </button>
                                 </div>
                             </form>
