@@ -17,6 +17,7 @@ function* saveValuesAsync(action) {
             toast.success(`${title} saved successfully`);
             yield put(changeLoading())
         }else{
+            yield put(changeLoading())
             toast.error("An error occurred please try again")
         }
     } catch (error) {
