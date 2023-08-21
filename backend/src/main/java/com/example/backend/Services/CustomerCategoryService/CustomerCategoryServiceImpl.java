@@ -48,7 +48,13 @@ public class CustomerCategoryServiceImpl implements CustomerCategoryService {
 
     @Override
     public HttpEntity<?> getFilterCategory(String active, String quickSearch, Integer page, Integer size) {
-        Pageable pageRequest = PageRequest.of(page - 1, size);
+        Pageable pageRequest;
+        if (page != null && size == -1) {
+            pageRequest = Pageable.unpaged();
+        } else {
+            size = (size != null && size > 0) ? size : 10;
+            pageRequest = PageRequest.of(page - 1, size);
+        }
         Page<CustomerCategory> categoryFilter = getCategoryFilter(active, quickSearch, pageRequest);
         return ResponseEntity.ok(categoryFilter);
     }

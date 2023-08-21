@@ -54,7 +54,13 @@ public class TerritoryServiceImpl implements TerritoryService {
 
     @Override
     public HttpEntity<?> getTerritory(String active, String search, Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        Pageable pageRequest;
+        if (page != null && size == -1) {
+            pageRequest = Pageable.unpaged();
+        } else {
+            size = (size != null && size > 0) ? size : 10;
+            pageRequest = PageRequest.of(page - 1, size);
+        }
         Page<Territory> territoryFilter = getTerritoryFilter(active, search, pageRequest);
         return ResponseEntity.ok(territoryFilter);
     }
@@ -102,7 +108,7 @@ public class TerritoryServiceImpl implements TerritoryService {
         return ResponseEntity.ok(all);
     }
 
-    private Page<Territory> getTerritoryFilter(String active, String search, PageRequest pageRequest) {
+    private Page<Territory> getTerritoryFilter(String active, String search, Pageable pageRequest) {
         Page<Territory> allTerritories = null;
         if (Objects.equals(active, "")) {
             allTerritories = territoryRepo.findAllByTitleContainingIgnoreCaseOrRegionContainingIgnoreCaseOrCodeContainingIgnoreCaseOrderByCreatedAtDesc(search, search, search, pageRequest);

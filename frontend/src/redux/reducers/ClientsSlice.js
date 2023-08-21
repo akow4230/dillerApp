@@ -28,7 +28,6 @@ export const territorySlice = createSlice({
             state.modalVisible = action.payload
         },
         setEditModalVisible(state, action) {
-            console.log(action)
             state.editModalVisible = action.payload
         },
         setPlaceName: (state, action) => {

@@ -37,7 +37,13 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public HttpEntity<?> getCompanyProfile(Integer size, Integer page, User user, String quickSearch) {
-        Pageable pageable = PageRequest.of(page - 1, size);
+        Pageable pageable;
+        if (page != null && size == -1) {
+            pageable = Pageable.unpaged();
+        } else {
+            size = (size != null && size > 0) ? size : 10;
+            pageable = PageRequest.of(page - 1, size);
+        }
         Page<CompanyProfileProjection> byCompanyId = companyRepo.findByCompanyId(pageable, quickSearch,user.getId());
         return ResponseEntity.ok(byCompanyId);
     }

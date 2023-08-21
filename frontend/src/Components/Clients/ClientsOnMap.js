@@ -21,7 +21,7 @@ function ClientsOnMap(props) {
     const {clients, loading}=useSelector(state=>(state.clients))
     const {territory } = useSelector((state)=>state.territory)
 
-    // console.log(clients)
+    console.log(clients)
     useEffect(() => {
         dispatch(fetchClientsStart())
         dispatch(fetchTerritoryStart())

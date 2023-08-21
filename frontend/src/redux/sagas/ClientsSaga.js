@@ -54,10 +54,12 @@ function* saveClientsAsync(action) {
         }
         yield put(resetTerritory());
         toast.success(`Client ${isEditing ? "edited" : "saved"} successfully`);
+        yield call(changeLoading())
         yield put(setModalVisible(false));
         yield put(setEditModalVisible(false));
-        yield put(changeLoading())
+        yield call(changeLoading())
     } catch (error) {
+        yield  call(changeLoading())
         toast.error("An error occurred. Please try again later.");
     }
 }
@@ -90,8 +92,8 @@ function* handleMapClickAsync(action) {
 
 function* fetchClientsSaga() {
     try {
-        const response = yield call(() => instance("/api/v1/client", "GET"))
-        yield put(fetchClientsSuccess(response.data.content));
+        const response = yield call(() => instance("/api/v1/client/all", "GET"))
+        yield put(fetchClientsSuccess(response.data));
     } catch (error) {
         yield put(fetchClientsFailure(error.message));
     }
@@ -102,5 +104,4 @@ export function* clientsSaga() {
     yield takeLatest("clients/handleMapClear", handleMapClearAsync);
     yield takeLatest("clients/handleMapClick", handleMapClickAsync);
     yield takeLatest(fetchClientsStart.type, fetchClientsSaga);
-
 }

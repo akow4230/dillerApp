@@ -12,6 +12,7 @@ import {
 } from 'react-yandex-maps';
 import {Controller, useForm} from 'react-hook-form';
 import {
+    changeLoading,
     deleteWeekday,
     editClientsAction, pushWeekday, saveClientsAction,
     setLatitude,
@@ -51,7 +52,6 @@ function ClientsModal(props) {
         category: null,
     };
     useEffect(() => {
-        console.log(props.data)
         if (props.isEditing && props.visible) {
             reset({
                 territory: {value: props.data?.territory?.id, label: props.data?.territory?.title},
@@ -125,11 +125,12 @@ function ClientsModal(props) {
                             reset: reset
                         })
                 );
+                dispatch(changeLoading())
             } else {
                 toast.error("Phone number must be 13 digits like +998 XX XXX-XX-XX");
             }
         } else {
-            toast.error("Please choose Uzbekistan");
+            toast.error("Please choose Uzbekistan Phone Number");
         }
     }
 
@@ -222,8 +223,6 @@ function ClientsModal(props) {
                                                 </div>
                                             )}
                                         />
-                                        {/*<input type="text"*/}
-                                        {/*       className={"form-control my-2"} {...register("phone", {required: "Phone number is required"})} />*/}
                                     </label>
                                     <label style={{width: "300px"}}>
                                         TIN
