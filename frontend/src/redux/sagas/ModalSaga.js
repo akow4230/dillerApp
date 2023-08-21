@@ -8,10 +8,7 @@ function* saveValuesAsync(action) {
     try {
         yield put(changeLoading())
         const { url, data, hideModal,reset, isEditing, title } = action.payload;
-        console.log(url)
         const response = yield instance(url,isEditing?"PUT":"POST", data);
-        console.log("hello")
-        console.log(response)
         if (response!==undefined&&response.data===401){
             toast.error("Authorization problem")
             yield put(navigateTo("/404"))
