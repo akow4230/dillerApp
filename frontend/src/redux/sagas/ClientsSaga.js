@@ -1,4 +1,4 @@
-import {call, put, takeLatest, select } from "redux-saga/effects";
+import {call, put, takeLatest,takeEvery, select } from "redux-saga/effects";
 import instance from "../../Components/utils/config/instance";
 import {
     saveClientsAction,
@@ -11,18 +11,19 @@ import {
     setTemplate,
     setEditModalVisible,
     fetchClientsFailure,
-    fetchClientsStart, fetchClientsSuccess, changeLoader,
+    fetchClientsStart, fetchClientsSuccess, setLoading,
 } from "../reducers/ClientsSlice";
 import { toast } from "react-toastify";
 import {navigateTo} from "../reducers/DashboardSlice";
 import {changeLoading} from "../reducers/ClientsSlice";
 function* saveClientsAsync(action) {
     try {
-
+        console.log("Hello")
         const { longitude,latitude, id,data,reset } = action.payload.clients;
         const { isEditing } = action.payload;
         if (!longitude || !latitude) {
             toast.error("You must select territory");
+            yield put(setLoading(false))
             return;
         }
         const response = yield instance(
@@ -49,17 +50,15 @@ function* saveClientsAsync(action) {
         }else if(response?.error){
          if (response?.data==='An error occurred while saving the client'){
                 toast.error("Company Name is unique")
+                return;
             }
-            throw new Error("Unique error")
         }
         yield put(resetTerritory());
         toast.success(`Client ${isEditing ? "edited" : "saved"} successfully`);
-        yield call(changeLoading())
         yield put(setModalVisible(false));
         yield put(setEditModalVisible(false));
-        yield call(changeLoading())
     } catch (error) {
-        yield  call(changeLoading())
+        yield  call(setLoading(false))
         toast.error("An error occurred. Please try again later.");
     }
 }

@@ -66,9 +66,9 @@ public class ClientController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/{id}")
-    public void editClient(@RequestBody ClientDTO clientDTO, @PathVariable UUID id) {
+    public HttpEntity<?> editClient(@RequestBody ClientDTO clientDTO, @PathVariable UUID id) {
         System.out.println(clientDTO);
-        clientService.editClient(clientDTO, id);
+        return clientService.editClient(clientDTO, id);
     }
 
 

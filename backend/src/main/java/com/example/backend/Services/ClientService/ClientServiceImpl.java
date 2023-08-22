@@ -142,22 +142,28 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void editClient(ClientDTO clientDTO, UUID id) {
-        Client currentClient = clientRepo.findById(id).orElseThrow();
-        currentClient.setId(id);
-        currentClient.setName(clientDTO.getName());
-        currentClient.setCompany(clientDTO.getCompanyName());
-        currentClient.setTerritory(territoryRepo.findById(clientDTO.getTerritory()).orElseThrow());
-        currentClient.setAddress(clientDTO.getAddress());
-        currentClient.setPhone(clientDTO.getPhone());
-        currentClient.setReferencePoint(clientDTO.getReferencePoint());
-        currentClient.setTin(clientDTO.getTin());
-        currentClient.setCategory(categoryRepo.findById(clientDTO.getCategory()).orElseThrow());
-        currentClient.setWeekDay(clientDTO.getWeekdays());
-        currentClient.setLongitude(clientDTO.getLongitude());
-        currentClient.setLatitude(clientDTO.getLatitude());
-        currentClient.setActive(clientDTO.isActive());
-        clientRepo.save(currentClient);
+    public HttpEntity<?> editClient(ClientDTO clientDTO, UUID id) {
+        try{
+            Client currentClient = clientRepo.findById(id).orElseThrow();
+            currentClient.setId(id);
+            currentClient.setName(clientDTO.getName());
+            currentClient.setCompany(clientDTO.getCompanyName());
+            currentClient.setTerritory(territoryRepo.findById(clientDTO.getTerritory()).orElseThrow());
+            currentClient.setAddress(clientDTO.getAddress());
+            currentClient.setPhone(clientDTO.getPhone());
+            currentClient.setReferencePoint(clientDTO.getReferencePoint());
+            currentClient.setTin(clientDTO.getTin());
+            currentClient.setCategory(categoryRepo.findById(clientDTO.getCategory()).orElseThrow());
+            currentClient.setWeekDay(clientDTO.getWeekdays());
+            currentClient.setLongitude(clientDTO.getLongitude());
+            currentClient.setLatitude(clientDTO.getLatitude());
+            currentClient.setActive(clientDTO.isActive());
+            clientRepo.save(currentClient);
+            return ResponseEntity.ok(null);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while saving the client");
+        }
     }
 
     private static List<UUID> getUUIDes(String word) {

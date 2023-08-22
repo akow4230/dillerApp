@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import {FullscreenControl, GeolocationControl, Map, Placemark, SearchControl, TrafficControl, TypeSelector, YMaps, ZoomControl } from "react-yandex-maps";
 import {useDispatch, useSelector} from "react-redux";
-import {setOneClientMapModal, setEditData, setEditModalVisible} from "../../redux/reducers/ClientsSlice";
+import {setOneClientMapModal, setEditData, setEditModalVisible, setLoading} from "../../redux/reducers/ClientsSlice";
 import {changeLoader, saveColumnsOrders, toggleModal} from "../../redux/reducers/TableSlice";
 import {Button, Dropdown} from 'react-bootstrap';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -17,6 +17,7 @@ function ClientUpdateButton(props) {
 
     function editClientData() {
         dispatch(setEditData(props.data))
+        dispatch(setLoading(false));
         dispatch(setEditModalVisible(true))
     }
 

@@ -15,11 +15,13 @@ import {
 } from "../reducers/TerritorySlice";
 import { toast } from "react-toastify";
 import {navigateTo} from "../reducers/DashboardSlice";
+import {setLoading} from "../reducers/TerritorySlice";
 function* saveTerritoryAsync(action) {
     try {
         const { territory, isEditing, reset } = action.payload;
         if (!territory.longitude || !territory.latitude) {
             toast.error("You must select territory");
+            yield put(setLoading(false))
             return;
         }
         const response = yield instance(
@@ -42,7 +44,6 @@ function* saveTerritoryAsync(action) {
         toast.success(`Territory ${isEditing ? "edited" : "saved"} successfully`);
         yield put(setModalVisible(false));
         yield put(setEditModalVisible(false));
-        yield put(changeLoading())
     } catch (error) {
         toast.error("An error occurred. Please try again later.");
     }

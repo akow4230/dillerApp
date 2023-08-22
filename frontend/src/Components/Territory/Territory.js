@@ -11,6 +11,7 @@ import TerritoryUpdateButton from "./TerritoryUpdateButton";
 import {changeSearchParams, changeTableDataSize, toggleModal} from "../../redux/reducers/TableSlice";
 import {useLocation} from "react-router-dom";
 import PreClose from "../UniversalUI/preClose/PreClose";
+import {setLoading} from "../../redux/reducers/ClientsSlice";
 
 function Territory(props) {
     const dispatch = useDispatch();
@@ -101,6 +102,7 @@ function Territory(props) {
     const closeModal = () => {
         dispatch({type: 'territory/handleMapClear', payload: {mapState: mapState, defValueOfMap: defValueOfMap}});
         dispatch(setCloseModal(false));
+        dispatch(setLoading(false))
         dispatch(changeSearchParams({active: '', quickSearch: ""}))
     };
     return (
@@ -110,7 +112,10 @@ function Territory(props) {
                       show={preCloseShow}/>
             <div className={"d-flex gap-3 align-items-center"}>
                 <p style={{fontSize: "25pt"}}>Territory</p>
-                <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add
+                <button className="btn btn-success h-50" onClick={() => {
+                    dispatch(setLoading(false));
+                    dispatch(setModalVisible(true))
+                }}>+ Add
                     Territory
                 </button>
             </div>

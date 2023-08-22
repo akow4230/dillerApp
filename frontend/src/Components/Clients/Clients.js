@@ -5,7 +5,7 @@ import {
     fetchClientsStart,
     closeModals,
     setModalVisible,
-    setPreClose, changeLoader
+    setPreClose, changeLoader, setLoading
 } from "../../redux/reducers/ClientsSlice";
 import {ToastContainer} from "react-toastify";
 import Table from "../UniversalUI/Table/Table";
@@ -33,6 +33,8 @@ function Clients(props) {
     const closeModal = () => {
         dispatch({type: 'clients/handleMapClear', payload: {mapState: mapState, defValueOfMap: defValueOfMap}});
         dispatch(closeModals());
+        dispatch(setLoading(false))
+        dispatch(changeSearchParams({active: '', quickSearch: ""}))
     };
     const {categories} = useSelector((state) => state.category);
     const {weekdays} = useSelector((state) => state.weekday);
@@ -222,7 +224,10 @@ function Clients(props) {
                 <ToastContainer/>
                 <div className={"d-flex gap-3 align-items-center"}>
                     <p style={{fontSize: "25pt"}}>Clients</p>
-                    <button className="btn btn-success h-50" onClick={() => dispatch(setModalVisible(true))}>+ Add
+                    <button className="btn btn-success h-50" onClick={() => {
+                        dispatch(setLoading(false));
+                        dispatch(setModalVisible(true))
+                    }}>+ Add
                         Client
                     </button>
 

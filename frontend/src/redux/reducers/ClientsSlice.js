@@ -94,6 +94,9 @@ export const territorySlice = createSlice({
         },
         changeLoading:(state) =>{
             state.loading = !state.loading
+        },
+        setLoading:(state, action)=>{
+            state.loading = action.payload
         }
     }
 });
@@ -119,6 +122,7 @@ export const {
     deleteWeekday,
     setOneClientMapModal,
     setPreClose,
-    closeModals
+    closeModals,
+    setLoading
 } = territorySlice.actions
 export default territorySlice.reducer;

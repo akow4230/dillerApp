@@ -11,11 +11,7 @@ function Settings() {
         state => state.settings
     );
     const location = useLocation();
-    const navigate = useNavigate()
     useEffect(() => {
-        if (location.pathname === "/dashboard/settings") {
-            navigate("/dashboard/settings/company-profile")
-        }
         dispatch(getSettings());
     }, [dispatch]);
 

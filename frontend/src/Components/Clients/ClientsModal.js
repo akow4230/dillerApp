@@ -15,7 +15,7 @@ import {
     changeLoading,
     deleteWeekday,
     editClientsAction, pushWeekday, saveClientsAction,
-    setLatitude,
+    setLatitude, setLoading,
     setLongitude,
     setMapState,
     setPreClose,
@@ -27,7 +27,6 @@ import {toast, ToastContainer} from "react-toastify";
 import {fetchWeekdaysStart} from "../../redux/reducers/WeekDaySlice";
 import Select from "react-select";
 import CancelIcon from '@mui/icons-material/Cancel';
-import {UserLogIn} from "../../redux/reducers/LoginSlice";
 import PhoneInput from "react-phone-number-input";
 
 function ClientsModal(props) {
@@ -104,34 +103,39 @@ function ClientsModal(props) {
 
     function saveClients(data) {
         if (data.phone.startsWith("+998")) {
+            console.log(data)
             if (data.phone.length === 13) {
-                dispatch(
-                    props.isEditing
-                        ? editClientsAction({
-                            clients: {
-                                data: {...data, weekdays: clients.selectedWeekdays},
-                                longitude: clients?.longitude,
-                                latitude: clients?.latitude,
-                                id: props.data.id
-                            }, isEditing: true
-                        })
-                        : saveClientsAction({
-                            clients: {
-                                data: {...data, weekdays: clients.selectedWeekdays},
-                                longitude: clients?.longitude,
-                                latitude: clients?.latitude
-                            },
-                            isEditing: false,
-                            reset: reset
-                        })
-                );
+                console.log("HIIIIIIIIIIIIIIIIIIIIIIII")
+                dispatch(setLoading(true))
+                props.isEditing ? dispatch(
+                    editClientsAction({
+                        clients: {
+                            data: {...data, weekdays: clients.selectedWeekdays},
+                            longitude: clients?.longitude,
+                            latitude: clients?.latitude,
+                            id: props.data.id
+                        }, isEditing: true
+                    })) : dispatch(saveClientsAction({
+                    clients: {
+                        data: {...data, weekdays: clients.selectedWeekdays},
+                        longitude: clients?.longitude,
+                        latitude: clients?.latitude
+                    },
+                    isEditing: false,
+                    reset: reset
+                })
+            )
+                dispatch(setLoading(false))
                 dispatch(changeLoading())
             } else {
                 toast.error("Phone number must be 13 digits like +998 XX XXX-XX-XX");
+                dispatch(setLoading(false))
             }
         } else {
             toast.error("Please choose Uzbekistan Phone Number");
+            dispatch(setLoading(false))
         }
+        dispatch(setLoading(false))
     }
 
     function selectWeekday(item, selected) {
@@ -158,15 +162,16 @@ function ClientsModal(props) {
                         paddingTop: "10px"
                     }}>
                         <p>{props.action}</p>
-                        <button style={{background: "none", border: "none"}} onClick={() => dispatch(setPreClose(true))}>
+                        <button style={{background: "none", border: "none"}}
+                                onClick={() => dispatch(setPreClose(true))}>
                             <CancelIcon/></button>
                     </header>
-                    <div style={{display: "flex",justifyContent:"center"}}>
+                    <div style={{display: "flex", justifyContent: "center"}}>
                         <div className="left-side w-75 py-4" style={{paddingLeft: "50px"}}>
                             <form onSubmit={handleSubmit(saveClients)} className={"d-flex gap-5"}>
                                 <div>
-                                    <label style={{width: "300px",marginBottom:"15px"}}>
-                                        <p style={{marginBottom:"10px"}}>Territory</p>
+                                    <label style={{width: "300px", marginBottom: "15px"}}>
+                                        <p style={{marginBottom: "10px"}}>Territory</p>
                                         <Controller
                                             name='territory'
                                             control={control}
@@ -190,29 +195,41 @@ function ClientsModal(props) {
                                     {errors.clients && <span className="error-message">{errors.clients.message}</span>}
                                     <br/>
                                     <label style={{width: "300px"}}>
-                                        <span style={{fontSize:"17px",color:errors.name?"red":""}}>Name</span> {errors.name && <span style={{fontSize:"17px"}} className="error-message">{errors.name.message}</span>}
+                                        <span style={{
+                                            fontSize: "17px",
+                                            color: errors.name ? "red" : ""
+                                        }}>Name</span> {errors.name && <span style={{fontSize: "17px"}}
+                                                                             className="error-message">{errors.name.message}</span>}
                                         <input type="text"
                                                className={"form-control my-2"} {...register("name", {required: "is required"})} />
                                     </label>
 
                                     <br/>
                                     <label style={{width: "300px"}}>
-                                        <span style={{fontSize:"17px",color:errors.address?"red":""}}>Address</span> {errors.address && <span style={{fontSize:"17px"}} className="error-message">{errors.address.message}</span>}
+                                        <span style={{
+                                            fontSize: "17px",
+                                            color: errors.address ? "red" : ""
+                                        }}>Address</span> {errors.address && <span style={{fontSize: "17px"}}
+                                                                                   className="error-message">{errors.address.message}</span>}
                                         <input type="text"
                                                className={"form-control my-2"} {...register("address", {required: " is required"})} />
                                     </label>
 
                                     <br/>
                                     <label style={{width: "300px"}}>
-                                        <span style={{fontSize:"17px",color:errors.phone?"red":""}}>Phone Number</span>   {errors.phone && (
-                                        <span style={{fontSize:"17px"}} className='error-message'>{errors.phone.message}!</span>
+                                        <span style={{
+                                            fontSize: "17px",
+                                            color: errors.phone ? "red" : ""
+                                        }}>Phone Number</span> {errors.phone && (
+                                        <span style={{fontSize: "17px"}}
+                                              className='error-message'>{errors.phone.message}!</span>
                                     )}
                                         <Controller
                                             name='phone'
                                             control={control}
                                             defaultValue='+998'
-                                            rules={{ required: " is required" }}
-                                            render={({ field }) => (
+                                            rules={{required: " is required"}}
+                                            render={({field}) => (
                                                 <div className='my-1 '>
                                                     <PhoneInput
                                                         {...field}
@@ -239,22 +256,24 @@ function ClientsModal(props) {
                                 </div>
                                 <div>
                                     <label style={{width: "300px"}}>
-                                        <span style={{fontSize:"17px",color:errors.companyName?"red":""}}>Company Name</span>  {errors.companyName &&
-                                        <span style={{fontSize:"17px"}} className="error-message">{errors.companyName.message}</span>}
+                                        <span style={{fontSize: "17px", color: errors.companyName ? "red" : ""}}>Company Name</span> {errors.companyName &&
+                                        <span style={{fontSize: "17px"}}
+                                              className="error-message">{errors.companyName.message}</span>}
                                         <input type="text"
                                                className={"form-control my-2"} {...register("companyName", {required: " is required"})} />
                                     </label>
                                     <br/>
                                     <label style={{width: "300px"}}>
-                                        <span style={{fontSize:"17px",color:errors.referencePoint?"red":""}}>Reference point</span> {errors.referencePoint &&
-                                        <span style={{fontSize:"17px"}} className="error-message">{errors.referencePoint.message}</span>}
+                                        <span style={{fontSize: "17px", color: errors.referencePoint ? "red" : ""}}>Reference point</span> {errors.referencePoint &&
+                                        <span style={{fontSize: "17px"}}
+                                              className="error-message">{errors.referencePoint.message}</span>}
                                         <input type="text"
                                                className={"form-control my-2"} {...register("referencePoint", {required: " is required"})} />
                                     </label>
 
                                     <br/>
                                     <label style={{width: "300px"}}>
-                                        <p style={{marginBottom:"10px"}}>Category</p>
+                                        <p style={{marginBottom: "10px"}}>Category</p>
                                         <Controller
                                             name='category'
                                             control={control}
@@ -302,12 +321,14 @@ function ClientsModal(props) {
                                     width: "100%"
                                 }}>
                                     <button className="btn btn-primary"
-                                            style={{position: "absolute", bottom: "30px", left: "50px"}} disabled={clients.loading}>Save
+                                            style={{position: "absolute", bottom: "30px", left: "50px"}}
+                                            disabled={clients.loading}>Save
                                     </button>
+                                    {clients.loading && "hi"}
                                 </div>
                             </form>
                         </div>
-                        <div  className="right-side col-md-5 p-5">
+                        <div className="right-side col-md-5 p-5">
                             <Map
                                 onLoad={(e) => {
                                     console.log(e);
@@ -344,7 +365,7 @@ function ClientsModal(props) {
                                         <input type="text" className={"w-75"} disabled={true} value={clients.latitude}/>
                                     </label> <br/>
                                 </div>
-                                <button  className={"btn btn-danger"} onClick={handleMapClear}>clear</button>
+                                <button className={"btn btn-danger"} onClick={handleMapClear}>clear</button>
                             </div>
                         </div>
                     </div>
