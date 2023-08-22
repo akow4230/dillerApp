@@ -44,7 +44,6 @@ export default function (url, method, data, param) {
                     };
                 }).catch((err) => {
                     return {
-
                         error: true,
                         data: err.response.data
                     };
